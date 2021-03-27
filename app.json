@@ -1,0 +1,12 @@
+{
+  "name": "scout-app",
+  "displayName": "scout-app",
+  "expo": {
+    "name": "scout-app",
+    "slug": "scout-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
