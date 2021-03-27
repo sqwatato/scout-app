@@ -1,7 +1,5 @@
 # Super Scout App
 
-[based on this article](https://heartbeat.fritz.ai/getting-started-with-stack-navigator-using-react-navigation-5-in-react-native-and-expo-apps-4c516becaee1)
-
 ## Install the Expo IOS or Android App on your phone
 
 ## Create an Expo project
