@@ -20,6 +20,8 @@ expo install react-native-gesture-handler react-native-reanimated react-native-s
 
 expo install firebase
 
+touch tsconfig.json
+
 expo start
 ```
 

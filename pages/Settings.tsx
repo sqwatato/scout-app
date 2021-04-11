@@ -2,7 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, Button, View } from 'react-native';
 
-export default function Settings({ navigation }) {
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
+
+interface Props {
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+const Settings: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>Settings Page</Text>
@@ -10,7 +20,7 @@ export default function Settings({ navigation }) {
       <Button title="Go To Home?" onPress={() => navigation.navigate('Home')} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -20,3 +30,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default Settings;

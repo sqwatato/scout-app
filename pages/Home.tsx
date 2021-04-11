@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, Button, View } from 'react-native';
 
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
+
 import { db } from '../firebase';
 
 /*
@@ -13,9 +19,14 @@ div -> View
 img -> Image
 input -> TextInput
 */
-export default function Home({ navigation }) {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState('');
+
+interface Props {
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+const Home: React.FC<Props> = ({ navigation }) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<string>('');
 
   useEffect(() => {
     (async () => {
@@ -54,7 +65,7 @@ export default function Home({ navigation }) {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -64,3 +75,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default Home;
