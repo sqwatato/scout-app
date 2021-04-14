@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Button, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View, Alert, TouchableOpacity } from "react-native";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 import {
   NavigationParams,
   NavigationScreenProp,
   NavigationState,
-} from 'react-navigation';
+} from "react-navigation";
 
-import { db } from '../firebase';
+import { db } from "../firebase";
+import { Layout, Card, Button, Text } from "@ui-kitten/components";
 
 /*
 Since this app is using React Native, you can not use the normal HTML elements.
@@ -26,7 +28,20 @@ interface Props {
 
 const Home: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<string>('');
+  const [data, setData] = useState<string>("");
+
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
+  const [scanned, setScanned] = useState<boolean>(false);
+
+  const [scanning, setScanning] = useState<boolean>(false);
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    setScanning(false);
+    Alert.alert(
+      `Bar code with type ${type} and data ${data} has been scanned!`
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -34,45 +49,88 @@ const Home: React.FC<Props> = ({ navigation }) => {
         // In the app, we will be only setting data
         // Just for the demo, we will fetch a document
         const query = await db
-          .collection('regional')
-          .doc('CAVE')
-          .collection('matches')
-          .doc('1')
-          .collection('blue')
-          .doc('7650')
+          .collection("regional")
+          .doc("CAVE")
+          .collection("matches")
+          .doc("1")
+          .collection("blue")
+          .doc("7650")
           .get();
-        setData(JSON.stringify(query.data()['data']));
+        setData(JSON.stringify(query.data()["data"]));
       } catch (e) {
         console.log(e);
       }
       setLoading(false);
     })();
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
   }, []);
   return (
-    <View style={styles.container}>
-      <Text>Home Page</Text>
+    <Layout style={styles.container}>
+      <Text category="h1">Home Page</Text>
       <StatusBar style="auto" />
       {loading ? (
         <Text>loading...</Text>
       ) : (
-        <>
-          <Text>{data}</Text>
-        </>
+        <Card>
+          <Text category="c1">{data}</Text>
+        </Card>
       )}
       <Button
-        title="Go To Settings?"
-        onPress={() => navigation.navigate('Settings')}
-      />
-    </View>
+        style={styles.button}
+        onPress={() => navigation.navigate("Settings")}
+      >
+        Go To Settings?
+      </Button>
+
+      {hasPermission && (
+        <View>
+          {scanned && (
+            <Button onPress={() => setScanned(false)} style={styles.button}>
+              Tap to Scan Again
+            </Button>
+          )}
+          <Button
+            onPress={() => {
+              setScanned(false);
+              setScanning(!scanning);
+              console.log("scan");
+            }}
+          >
+            Tap to Scan
+          </Button>
+        </View>
+      )}
+      {hasPermission && scanning && (
+        <BarCodeScanner
+          onBarCodeScanned={handleBarCodeScanned}
+          style={StyleSheet.absoluteFillObject}
+        />
+      )}
+      <Button
+        onPress={() => navigation.navigate("Match")}
+        style={styles.button}
+      >
+        Go To Match
+      </Button>
+    </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    paddingHorizontal: 10,
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    margin: 2,
   },
 });
 
