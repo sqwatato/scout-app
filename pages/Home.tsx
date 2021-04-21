@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Alert, TouchableOpacity } from "react-native";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import { StyleSheet } from "react-native";
 
 import {
   NavigationParams,
@@ -30,19 +29,6 @@ const Home: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<string>("");
 
-  const [hasPermission, setHasPermission] = useState<boolean>(false);
-  const [scanned, setScanned] = useState<boolean>(false);
-
-  const [scanning, setScanning] = useState<boolean>(false);
-
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    setScanning(false);
-    Alert.alert(
-      `Bar code with type ${type} and data ${data} has been scanned!`
-    );
-  };
-
   useEffect(() => {
     (async () => {
       try {
@@ -62,10 +48,6 @@ const Home: React.FC<Props> = ({ navigation }) => {
       }
       setLoading(false);
     })();
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
   }, []);
   return (
     <Layout style={styles.container}>
@@ -84,36 +66,17 @@ const Home: React.FC<Props> = ({ navigation }) => {
       >
         Go To Settings?
       </Button>
-
-      {hasPermission && (
-        <View>
-          {scanned && (
-            <Button onPress={() => setScanned(false)} style={styles.button}>
-              Tap to Scan Again
-            </Button>
-          )}
-          <Button
-            onPress={() => {
-              setScanned(false);
-              setScanning(!scanning);
-              console.log("scan");
-            }}
-          >
-            Tap to Scan
-          </Button>
-        </View>
-      )}
-      {hasPermission && scanning && (
-        <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-      )}
       <Button
         onPress={() => navigation.navigate("Match")}
         style={styles.button}
       >
         Go To Match
+      </Button>
+      <Button
+        onPress={() => navigation.navigate("QRScanner")}
+        style={styles.button}
+      >
+        Go To Scanner
       </Button>
     </Layout>
   );

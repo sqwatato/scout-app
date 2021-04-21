@@ -10,6 +10,7 @@ import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
 import Match from "./pages/Match";
+import QRScanner from "./pages/QRScanner";
 
 enableScreens();
 const Stack = createNativeStackNavigator();
@@ -21,7 +22,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Settings" component={Settings} />
-
+          <Stack.Screen name="QRScanner" component={QRScanner} />
           <Stack.Screen name="Match" component={Match} />
         </Stack.Navigator>
       </NavigationContainer>
