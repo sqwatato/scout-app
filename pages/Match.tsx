@@ -1,6 +1,4 @@
-import React from "react";
-import { StyleSheet, Text, Button, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Auton from "./Auton";
 import Teleop from "./Teleop";
@@ -10,12 +8,18 @@ import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
-export default function Match() {
+const Match: FC = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName:
+            | "car"
+            | "car-outline"
+            | "game-controller"
+            | "game-controller-outline"
+            | "alarm"
+            | "alarm-outline";
 
           if (route.name === "Auton") {
             iconName = focused ? "car" : "car-outline";
@@ -39,4 +43,6 @@ export default function Match() {
       <Tab.Screen name="PostGame" component={PostGame} />
     </Tab.Navigator>
   );
-}
+};
+
+export default Match;

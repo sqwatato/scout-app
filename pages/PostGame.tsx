@@ -1,12 +1,20 @@
-import * as React from "react";
-import { StyleSheet, Text, Button, View } from "react-native";
+import React, { FC } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-function PostGame() {
+const PostGame: FC = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={styles.container}>
       <Text>Post Game!</Text>
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default PostGame;
