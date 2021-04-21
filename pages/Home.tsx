@@ -31,21 +31,22 @@ const Home: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      try {
-        // In the app, we will be only setting data
-        // Just for the demo, we will fetch a document
-        const query = await db
-          .collection("regional")
-          .doc("CAVE")
-          .collection("matches")
-          .doc("1")
-          .collection("blue")
-          .doc("7650")
-          .get();
-        setData(JSON.stringify(query.data()["data"]));
-      } catch (e) {
-        console.log(e);
-      }
+      // try {
+      //   // In the app, we will be only setting data
+      //   // Just for the demo, we will fetch a document
+      //   const query = await db
+      //     .collection("regional")
+      //     .doc("CAVE")
+      //     .collection("matches")
+      //     .doc("1")
+      //     .collection("blue")
+      //     .doc("7650")
+      //     .get();
+      //   setData(JSON.stringify(query.data()["data"]));
+      // } catch (e) {
+      //   console.log(e);
+      // }
+
       setLoading(false);
     })();
   }, []);
@@ -67,7 +68,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
         Go To Settings?
       </Button>
       <Button
-        onPress={() => navigation.navigate("Match")}
+        onPress={() => navigation.navigate("Match", { data: "" })}
         style={styles.button}
       >
         Go To Match

@@ -1,11 +1,13 @@
 import React, { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Layout, Card, Button, Text } from "@ui-kitten/components";
+import { MatchProps } from "./Match";
 
-const Teleop: FC = () => {
+const Teleop: FC<MatchProps> = ({ data }) => {
   return (
-    <View style={styles.container}>
-      <Text>Teleop!</Text>
-    </View>
+    <Layout style={styles.container}>
+      <Text category="h1">Teleop!</Text>
+    </Layout>
   );
 };
 

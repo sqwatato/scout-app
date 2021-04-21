@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { MatchProps } from "./Match";
 
-const PostGame: FC = () => {
+const PostGame: FC<MatchProps> = ({ data }) => {
   return (
     <View style={styles.container}>
       <Text>Post Game!</Text>

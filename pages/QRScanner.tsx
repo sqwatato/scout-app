@@ -2,18 +2,31 @@ import { Button } from "@ui-kitten/components";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import React, { FC, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from "react-navigation";
 
-const QRScanner: FC = () => {
+interface Props {
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+const QRScanner: FC<Props> = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState<boolean>(false);
   const [scannedData, setScannedData] = useState<string>("");
   const [scanning, setScanning] = useState<boolean>(false);
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanning(false);
-    Alert.alert(
-      `Bar code with type ${type} and data ${data} has been scanned!`
-    );
-    setScannedData(data);
+    // Alert.alert(
+    //   `Bar code with type ${type} and data ${data} has been scanned!`
+    // );
+
+    //go to data filling in page
+    navigation.navigate("Match", { data });
+
+    // setScannedData(data);
   };
 
   useEffect(() => {
