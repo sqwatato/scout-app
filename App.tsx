@@ -5,12 +5,8 @@ import { enableScreens } from "react-native-screens";
 import * as eva from "@eva-design/eva";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
-import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
-
-import Home from "./pages/Home";
-import Settings from "./pages/Settings";
-import Match from "./pages/Match";
-import QRScanner from "./pages/QRScanner";
+import { ApplicationProvider } from "@ui-kitten/components";
+import { Home, Settings, QRScanner, Match } from "./pages";
 
 enableScreens();
 const Stack = createNativeStackNavigator();

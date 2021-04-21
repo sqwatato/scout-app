@@ -1,9 +1,6 @@
 import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Auton from "./Auton";
-import Teleop from "./Teleop";
-import PostGame from "./PostGame";
-
+import { Auton, Teleop, PostGame } from "./";
 import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
