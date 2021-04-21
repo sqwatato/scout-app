@@ -23,6 +23,8 @@ type Props = {
   route: DataProp;
 };
 
+
+
 const Match: FC<Props> = ({ route }) => {
   const [data, setData] = useState();
   const [matchInfo, setMatchInfo] = useState<MInfo>();
@@ -40,6 +42,34 @@ const Match: FC<Props> = ({ route }) => {
       teams: [parseInt(stuff[3]), parseInt(stuff[4]), parseInt(stuff[5])],
     });
   }, []);
+
+  
+  const AutonComponent = props =>
+  (
+    <Auton
+    matchInfo={matchInfo}
+    data={data}
+    onChange={(data) => setData(data)}
+    />
+  )
+
+  const TeleopComponent = props =>
+  (
+    <Teleop
+    matchInfo={matchInfo}
+    data={data}
+    onChange={(data) => setData(data)}
+    />
+  )
+
+  const PostGameComponent = props =>
+  (
+    <PostGame
+    matchInfo={matchInfo}
+    data={data}
+    onChange={(data) => setData(data)}
+    />
+  )
 
   return (
     <Tab.Navigator
@@ -66,39 +96,18 @@ const Match: FC<Props> = ({ route }) => {
         },
       })}
       tabBarOptions={{
-        activeTintColor: "tomato",
+        activeTintColor: "purple",
         inactiveTintColor: "gray",
       }}
     >
       <Tab.Screen
         name="Auton"
-        component={() => (
-          <Auton
-            matchInfo={matchInfo}
-            data={data}
-            onChange={(data) => setData(data)}
-          />
-        )}
+        component={AutonComponent}
       />
-      <Tab.Screen
-        name="Teleop"
-        component={() => (
-          <Teleop
-            matchInfo={matchInfo}
-            data={data}
-            onChange={(data) => setData(data)}
-          />
-        )}
-      />
+      <Tab.Screen name="Teleop" component = {TeleopComponent}/>
       <Tab.Screen
         name="PostGame"
-        component={() => (
-          <PostGame
-            matchInfo={matchInfo}
-            data={data}
-            onChange={(data) => setData(data)}
-          />
-        )}
+        component={PostGameComponent}
       />
     </Tab.Navigator>
   );

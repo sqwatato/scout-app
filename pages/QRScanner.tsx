@@ -2,11 +2,16 @@ import { Button } from "@ui-kitten/components";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import React, { FC, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   NavigationParams,
   NavigationScreenProp,
   NavigationState,
 } from "react-navigation";
+
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableNativeFeedback, TouchableOpacity } from "react-native-gesture-handler";
+import * as Haptics from 'expo-haptics';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -19,11 +24,8 @@ const QRScanner: FC<Props> = ({ navigation }) => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanning(false);
-    // Alert.alert(
-    //   `Bar code with type ${type} and data ${data} has been scanned!`
-    // );
 
-    //go to data filling in page
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     navigation.navigate("Match", { data });
 
     // setScannedData(data);
@@ -33,6 +35,7 @@ const QRScanner: FC<Props> = ({ navigation }) => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
+      setScanning(true)
     })();
   });
 
@@ -45,7 +48,7 @@ const QRScanner: FC<Props> = ({ navigation }) => {
           style={StyleSheet.absoluteFillObject}
         />
       )}
-      <View style={styles.buttonContainer}>
+      {/* <View style={styles.buttonContainer}>
         {hasPermission && !scanning && (
           <View>
             <Button onPress={() => setScanning(true)}>Tap to Scan</Button>
@@ -56,7 +59,17 @@ const QRScanner: FC<Props> = ({ navigation }) => {
             <Button onPress={() => setScanning(false)}>Cancel</Button>
           </View>
         )}
-      </View>
+      </View> */}
+      <SafeAreaView style={styles.backButtonContainer}>
+        <TouchableOpacity 
+          onPress = {() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              navigation.goBack();
+            } 
+        }>
+          <Ionicons name = "chevron-back-outline" size = {35} color = {"white"}/>
+        </TouchableOpacity>
+      </SafeAreaView>
     </View>
   );
 };
@@ -76,8 +89,13 @@ const styles = StyleSheet.create({
     bottom: 20,
     width: "100%",
   },
+  backButtonContainer: {
+    position: "absolute",
+    left: 10,
+    top: 10,
+  },
   button: {
-    margin: 2,
+    marginBottom: 2,
   },
 });
 

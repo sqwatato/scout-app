@@ -1,6 +1,7 @@
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, ButtonGroup, Divider, Layout, Text } from "@ui-kitten/components";
 import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
+import * as Haptics from 'expo-haptics';
 
 interface Props {
   name: string | undefined;
@@ -8,27 +9,39 @@ interface Props {
   value: number;
 }
 
+
 const Counter: FC<Props> = ({ name, onChange, value }) => {
   return (
-    <View style={styles.container}>
-      <Text category="h6" style={styles.child}>{`${name}: `}</Text>
-      <Text>{value}</Text>
+    <Layout style={styles.container}>
+      <Text category="s1" style={styles.child}>{`${name}: `}</Text>
+      <Text category = "h6" style = {
+        { 
+          borderColor: "#ddf", 
+          borderWidth: 1, 
+          padding: 6, 
+          paddingHorizontal: 10,
+          borderRadius: 3
+        }
+      }>{value}</Text>
 
       <View style={styles.buttonContainer}>
-        <Button
-          style={[styles.button, styles.child]}
-          onPress={() => onChange(value + 1)}
-        >
-          +
-        </Button>
-        <Button
-          style={[styles.button, styles.child]}
-          onPress={() => onChange(value - 1)}
-        >
-          -
-        </Button>
+        <ButtonGroup  appearance = "outline">
+          <Button            
+            style={[styles.button, styles.child]}
+            onPress={() => { onChange(value + 1); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)} }
+          >
+            +
+          </Button>
+          <Button
+            style={[styles.button, styles.child]}
+            onPress={() => {onChange(value - 1); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)} }
+          >
+            -
+          </Button>
+        </ ButtonGroup>
+        
       </View>
-    </View>
+    </Layout>
   );
 };
 const styles = StyleSheet.create({
@@ -39,16 +52,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    width: "60%",
-    height: "25%",
     fontSize: 5,
   },
   child: {
-    marginRight: 10,
   },
   buttonContainer: {
     flexDirection: "row",
-    right: 40,
+    right: 0,
     alignItems: "center",
     position: "absolute",
   },

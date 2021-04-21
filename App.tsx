@@ -16,9 +16,9 @@ export default function App() {
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
           <Stack.Screen name="Settings" component={Settings} />
-          <Stack.Screen name="QRScanner" component={QRScanner} />
+          <Stack.Screen options={{ headerShown: false }} name="QRScanner" component={QRScanner} />
           <Stack.Screen name="Match" component={Match} />
         </Stack.Navigator>
       </NavigationContainer>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useWindowDimensions, View, SafeAreaView } from "react-native";
 
 import {
   NavigationParams,
@@ -9,17 +9,12 @@ import {
 } from "react-navigation";
 
 import { db } from "../firebase";
-import { Layout, Card, Button, Text } from "@ui-kitten/components";
+import { Layout, Card, Button, Text, Divider } from "@ui-kitten/components";
+import * as Haptics from 'expo-haptics';
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-/*
-Since this app is using React Native, you can not use the normal HTML elements.
-Instead, React Native provides alternatives.
-Learn more [here](https://reactnative.dev/docs/components-and-apis)
-
-div -> View
-img -> Image
-input -> TextInput
-*/
+import { Ionicons } from "@expo/vector-icons";
+import { PostGame } from ".";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -52,50 +47,60 @@ const Home: React.FC<Props> = ({ navigation }) => {
   }, []);
   return (
     <Layout style={styles.container}>
-      <Text category="h1">Home Page</Text>
       <StatusBar style="auto" />
-      {loading ? (
-        <Text>loading...</Text>
-      ) : (
-        <Card>
-          <Text category="c1">{data}</Text>
-        </Card>
-      )}
-      <Button
-        style={styles.button}
-        onPress={() => navigation.navigate("Settings")}
-      >
-        Go To Settings?
-      </Button>
-      <Button
-        onPress={() => navigation.navigate("Match", { data: "" })}
-        style={styles.button}
-      >
-        Go To Match
-      </Button>
-      <Button
-        onPress={() => navigation.navigate("QRScanner")}
-        style={styles.button}
-      >
-        Go To Scanner
-      </Button>
+      <View>
+        <Text category="h1" style = {{}}>Scout App</Text> 
+        <Divider style = {{ width: 40}}/>
+      </View>
+      
+      <View>
+        <Button
+          onPress={() => { navigation.navigate("QRScanner"); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); } }
+          style={styles.button}
+          size = "giant"
+        >
+          Scan QRCode
+        </Button>
+        <Button
+          onPress={() => { navigation.navigate("Match", { data: "" });  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); }}
+          style={[styles.button, {shadowOpacity: 0}]}
+          appearance = "outline"
+          size = "giant"
+        >
+          Match
+        </Button>
+      </View>
+      <SafeAreaView style={styles.settings}>
+        <TouchableOpacity
+            onPress={() => {navigation.navigate("Settings"); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); }}
+          >
+            <Ionicons name = "cog" size = {30}/>
+        </TouchableOpacity>
+      </SafeAreaView>
     </Layout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexWrap: "wrap",
-    flexDirection: "row",
-    paddingHorizontal: 10,
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fafafa",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around",
+    flexDirection: "column"
   },
   button: {
-    margin: 2,
+    marginVertical: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 3,
+    shadowOpacity: 0.3,
   },
+  settings: {
+    position: "absolute",
+    top: 20,
+    right: 20
+  }
 });
 
 export default Home;
