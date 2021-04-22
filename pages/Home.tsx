@@ -16,6 +16,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { PostGame } from ".";
 
+import { SettingContext } from '../context/SettingContext'
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -23,6 +25,13 @@ interface Props {
 const Home: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<string>("");
+  const { settings, getSettingState } = React.useContext(SettingContext) as SettingContextType;
+
+  const [haptic, setHaptic] = useState( getSettingState( "Haptic Feedback" ) );
+
+  useEffect( () => {
+    setHaptic( getSettingState("Haptic Feedback") );
+  }, [getSettingState("Haptic Feedback")])
 
   useEffect(() => {
     (async () => {
@@ -55,14 +64,20 @@ const Home: React.FC<Props> = ({ navigation }) => {
       
       <View>
         <Button
-          onPress={() => { navigation.navigate("QRScanner"); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); } }
+          onPress={() => { 
+            navigation.navigate("QRScanner"); 
+            ( haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
+          } }
           style={styles.button}
           size = "giant"
         >
           Scan QRCode
         </Button>
         <Button
-          onPress={() => { navigation.navigate("Match", { data: "" });  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); }}
+          onPress={() => { 
+            navigation.navigate("Match", { data: "" });  
+            ( haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
+          }}
           style={[styles.button, {shadowOpacity: 0}]}
           appearance = "outline"
           size = "giant"
@@ -72,7 +87,10 @@ const Home: React.FC<Props> = ({ navigation }) => {
       </View>
       <SafeAreaView style={styles.settings}>
         <TouchableOpacity
-            onPress={() => {navigation.navigate("Settings"); Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); }}
+            onPress={() => {
+            navigation.navigate("Settings"); 
+            ( haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
+            } }
           >
             <Ionicons name = "cog" size = {30}/>
         </TouchableOpacity>

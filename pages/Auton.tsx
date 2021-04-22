@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Settings, StyleSheet, View } from "react-native";
 import {
   Layout,
   Card,
@@ -12,7 +12,7 @@ import {
 import { MatchProps } from "./Match";
 import Counter from "../components/Counter";
 
-const Auton: FC<MatchProps> = ({ data, matchInfo, onChange }) => {
+const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   const [autonInner, setAutonInner] = useState<number>(0);
   const [autonUpper, setAutonUpper] = useState<number>(0);
   const [autonBottom, setAutonBottom] = useState<number>(0);
@@ -36,9 +36,10 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange }) => {
         value={autonBottom}
         onChange={setAutonBottom}
         name="Auton Bottom"
+        haptic = { settings.haptic }
       />
-      <Counter value={autonUpper} onChange={setAutonUpper} name="Auton Upper" />
-      <Counter value={autonInner} onChange={setAutonInner} name="Auton Inner" />
+      <Counter value={autonUpper} onChange={setAutonUpper} name="Auton Upper" haptic = { settings.haptic }/>
+      <Counter value={autonInner} onChange={setAutonInner} name="Auton Inner" haptic = { settings.haptic } />
       <Button onPress={handleSave}>Save Auton</Button>
       <Text>{JSON.stringify(matchInfo)}</Text>
     </Layout>

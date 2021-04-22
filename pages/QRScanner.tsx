@@ -12,6 +12,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableNativeFeedback, TouchableOpacity } from "react-native-gesture-handler";
 import * as Haptics from 'expo-haptics';
+import { SettingContext } from '../context/SettingContext'
+
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -22,6 +24,10 @@ const QRScanner: FC<Props> = ({ navigation }) => {
   const [scannedData, setScannedData] = useState<string>("");
   const [scanning, setScanning] = useState<boolean>(false);
 
+  const { settings, getSettingState } = React.useContext(SettingContext) as SettingContextType;
+
+  const [haptic, setHaptic] = useState( getSettingState( "Haptic Feedback" ) );
+
   const handleBarCodeScanned = ({ type, data }) => {
     setScanning(false);
 
@@ -30,6 +36,7 @@ const QRScanner: FC<Props> = ({ navigation }) => {
 
     // setScannedData(data);
   };
+  
 
   useEffect(() => {
     (async () => {
@@ -38,6 +45,10 @@ const QRScanner: FC<Props> = ({ navigation }) => {
       setScanning(true)
     })();
   });
+
+  useEffect( () => {
+    setHaptic( getSettingState("Haptic Feedback") );
+  }, [getSettingState("Haptic Feedback")])
 
   return (
     <View style={styles.container}>
@@ -63,7 +74,7 @@ const QRScanner: FC<Props> = ({ navigation }) => {
       <SafeAreaView style={styles.backButtonContainer}>
         <TouchableOpacity 
           onPress = {() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              (haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
               navigation.goBack();
             } 
         }>

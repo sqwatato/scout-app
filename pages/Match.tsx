@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Auton, Teleop, PostGame } from "./";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
+import { SettingContext } from '../context/SettingContext'
 
 const Tab = createBottomTabNavigator();
 
@@ -29,9 +30,16 @@ const Match: FC<Props> = ({ route }) => {
   const [data, setData] = useState();
   const [matchInfo, setMatchInfo] = useState<MInfo>();
 
+  const { settings, getSettingState } = React.useContext(SettingContext) as SettingContextType;
+
+  const [haptic, setHaptic] = useState( getSettingState( "Haptic Feedback" ) );
+
+  useEffect( () => {
+    setHaptic( getSettingState("Haptic Feedback") );
+  }, [getSettingState("Haptic Feedback")])
+
   useEffect(() => {
     const matchInfo: string = route.params.data;
-    // const matchInfo: string = "3@CASF:b[2,7,1]";
 
     let stuff = matchInfo.split(/[:@\[\,\]]/).slice(0, -1);
 
@@ -50,6 +58,9 @@ const Match: FC<Props> = ({ route }) => {
     matchInfo={matchInfo}
     data={data}
     onChange={(data) => setData(data)}
+    settings = {{
+      haptic: haptic
+    }}
     />
   )
 
@@ -117,4 +128,5 @@ export type MatchProps = {
   matchInfo: MInfo;
   onChange: (data: any) => void;
   data: {};
+  settings?
 };
