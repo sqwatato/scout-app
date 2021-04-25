@@ -22,7 +22,7 @@ export default function App() {
             <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen options={{ headerShown: false }} name="QRScanner" component={QRScanner} />
-            <Stack.Screen name="Match" component={Match} />
+            <Stack.Screen options={{ headerShown: false }} name="Match" component={Match} />
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>

@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import { SettingContext } from '../context/SettingContext'
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 
 type RootStackParamList = {
   data: { data: string };
@@ -40,7 +40,7 @@ const Match: FC<Props> = ({ route }) => {
 
   useEffect(() => {
     const matchInfo: string = route.params.data;
-
+    console.log( matchInfo );
     let stuff = matchInfo.split(/[:@\[\,\]]/).slice(0, -1);
 
     setMatchInfo({
@@ -70,6 +70,9 @@ const Match: FC<Props> = ({ route }) => {
     matchInfo={matchInfo}
     data={data}
     onChange={(data) => setData(data)}
+    settings = {{
+      haptic: haptic
+    }}
     />
   )
 
@@ -79,6 +82,9 @@ const Match: FC<Props> = ({ route }) => {
     matchInfo={matchInfo}
     data={data}
     onChange={(data) => setData(data)}
+    settings = {{
+      haptic: haptic
+    }}
     />
   )
 
@@ -109,6 +115,7 @@ const Match: FC<Props> = ({ route }) => {
       tabBarOptions={{
         activeTintColor: "purple",
         inactiveTintColor: "gray",
+        style:{height:90}
       }}
     >
       <Tab.Screen

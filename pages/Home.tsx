@@ -75,7 +75,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
         </Button>
         <Button
           onPress={() => { 
-            navigation.navigate("Match", { data: "" });  
+            navigation.navigate("Match", { data: "1@MVHS:b[115,115,115]" } );  
             ( haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
           }}
           style={[styles.button, {shadowOpacity: 0}]}

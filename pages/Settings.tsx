@@ -31,6 +31,7 @@ const SettingComponent: React.FC<SettingProps> = ( {setting, updateSettings} ) =
       </ReactText>
       <Toggle 
         checked = {setting.state} 
+        status='success'
         onChange = {( isChecked ) => updateSettings( setting.id, isChecked ) }
         style = {{
         }}
