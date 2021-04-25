@@ -1,17 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Auton, Teleop, PostGame } from "./";
+import Auton from "./Auton";
+import Teleop from "./Teleop";
+import PostGame from "./PostGame";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
-import { SettingContext } from '../context/SettingContext'
+import { SettingContext } from "../context/SettingContext";
 
 const Tab = createBottomTabNavigator();
-
-type RootStackParamList = {
-  data: { data: string };
-};
-
-type DataProp = RouteProp<RootStackParamList, "data">;
 
 type MInfo = {
   regional: string;
@@ -24,63 +20,75 @@ type Props = {
   route: DataProp;
 };
 
-
-
 const Match: FC<Props> = ({ route }) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<MatchData>();
   const [matchInfo, setMatchInfo] = useState<MInfo>();
 
-  const { settings, getSettingState } = React.useContext(SettingContext) as SettingContextType;
+  const { settings, getSettingState } = React.useContext(
+    SettingContext
+  ) as SettingContextType;
 
-  const [haptic, setHaptic] = useState( getSettingState( "Haptic Feedback" ) );
+  const [haptic, setHaptic] = useState(getSettingState("Haptic Feedback"));
 
-  useEffect( () => {
-    setHaptic( getSettingState("Haptic Feedback") );
-  }, [getSettingState("Haptic Feedback")])
+  useEffect(() => {
+    setHaptic(getSettingState("Haptic Feedback"));
+  }, [getSettingState("Haptic Feedback")]);
 
   useEffect(() => {
     const matchInfo: string = route.params.data;
 
-    let stuff = matchInfo.split(/[:@\[\,\]]/).slice(0, -1);
+    const matchStrs: string[] = matchInfo.split(/[:@\[\,\]]/).slice(0, -1);
+
+    const regional: string = matchStrs[1];
+    const matchNum: number = parseInt(matchStrs[0]);
+    const alliance: string = matchStrs[2];
+    const teams: [number, number, number] = [
+      parseInt(matchStrs[3]),
+      parseInt(matchStrs[4]),
+      parseInt(matchStrs[5]),
+    ];
 
     setMatchInfo({
-      regional: stuff[1],
-      matchNum: parseInt(stuff[0]),
-      alliance: stuff[2],
-      teams: [parseInt(stuff[3]), parseInt(stuff[4]), parseInt(stuff[5])],
+      regional,
+      matchNum,
+      alliance,
+      teams,
+    });
+
+    setData({
+      ...data,
+      regional,
+      matchNum,
+      alliance,
     });
   }, []);
 
-  
-  const AutonComponent = props =>
-  (
+  const AutonComponent = (props) => (
     <Auton
-    matchInfo={matchInfo}
-    data={data}
-    onChange={(data) => setData(data)}
-    settings = {{
-      haptic: haptic
-    }}
+      matchInfo={matchInfo}
+      data={data}
+      onChange={(data) => setData(data)}
+      settings={{
+        haptic: haptic,
+      }}
     />
-  )
+  );
 
-  const TeleopComponent = props =>
-  (
+  const TeleopComponent = () => (
     <Teleop
-    matchInfo={matchInfo}
-    data={data}
-    onChange={(data) => setData(data)}
+      matchInfo={matchInfo}
+      data={data}
+      onChange={(data) => setData(data)}
     />
-  )
+  );
 
-  const PostGameComponent = props =>
-  (
+  const PostGameComponent = () => (
     <PostGame
-    matchInfo={matchInfo}
-    data={data}
-    onChange={(data) => setData(data)}
+      matchInfo={matchInfo}
+      data={data}
+      onChange={(data) => setData(data)}
     />
-  )
+  );
 
   return (
     <Tab.Navigator
@@ -111,22 +119,42 @@ const Match: FC<Props> = ({ route }) => {
         inactiveTintColor: "gray",
       }}
     >
-      <Tab.Screen
-        name="Auton"
-        component={AutonComponent}
-      />
-      <Tab.Screen name="Teleop" component = {TeleopComponent}/>
-      <Tab.Screen
-        name="PostGame"
-        component={PostGameComponent}
-      />
+      <Tab.Screen name="Auton" component={AutonComponent} />
+      <Tab.Screen name="Teleop" component={TeleopComponent} />
+      <Tab.Screen name="PostGame" component={PostGameComponent} />
     </Tab.Navigator>
   );
 };
+type RootStackParamList = {
+  data: { data: string };
+};
+
+type DataProp = RouteProp<RootStackParamList, "data">;
+
 export default Match;
+
+export type MatchData = {
+  alliance: string;
+  attemptHang: boolean;
+  autonInner: number;
+  autonUpper: number;
+  autonBottom: number;
+  comments: string;
+  defense: boolean;
+  disabled: boolean;
+  hangFail: boolean;
+  matchNum: number;
+  minfo: string;
+  regional: string;
+  teamNum: number;
+  teleopInner: number;
+  teleopUpper: number;
+  teleopBottom: number;
+};
+
 export type MatchProps = {
   matchInfo: MInfo;
   onChange: (data: any) => void;
-  data: {};
-  settings?
+  data: MatchData;
+  settings?;
 };
