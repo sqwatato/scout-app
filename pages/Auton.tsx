@@ -20,19 +20,20 @@ import { ScrollView } from "react-native-gesture-handler";
 import {Dimensions} from 'react-native';
 
 const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
-
   const [headerBackgroundColor] = useState( new Animated.Value( 0 ) );
   const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({ 
     inputRange: [0,255], 
     outputRange: [ '#fff0', '#aaf2']
   })
-
-  const [autonInner, setAutonInner] = useState<number>(0);
-  const [autonUpper, setAutonUpper] = useState<number>(0);
-  const [autonBottom, setAutonBottom] = useState<number>(0);
-
-  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
-  const [displayValue, setDisplayValue] = useState("Team 1");
+  const [autonInner, setAutonInner] = useState<number>(
+    data ? (data.autonInner ? data.autonInner : 0) : 0
+  );
+  const [autonUpper, setAutonUpper] = useState<number>(
+    data ? (data.autonUpper ? data.autonUpper : 0) : 0
+  );
+  const [autonBottom, setAutonBottom] = useState<number>(
+    data ? (data.autonBottom ? data.autonBottom : 0) : 0
+  );
 
   const handleSave = () => {
     onChange({
