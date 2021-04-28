@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     height: 55,
-    marginVertical: 15
+    marginTop: 20
   },
 });
 

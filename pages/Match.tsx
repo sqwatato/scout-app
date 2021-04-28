@@ -63,7 +63,7 @@ const Match: FC<Props> = ({ route }) => {
     });
   }, []);
 
-  const AutonComponent = (props) => (
+  const AutonComponent = () => (
     <Auton
       matchInfo={matchInfo}
       data={data}
@@ -78,7 +78,7 @@ const Match: FC<Props> = ({ route }) => {
     <Teleop
     matchInfo={matchInfo}
     data={data}
-    onChange={(data) => setData(data)}
+    onChange={(data) => { setData(data) }}
     settings = {{
       haptic: haptic
     }}
@@ -87,12 +87,12 @@ const Match: FC<Props> = ({ route }) => {
 
   const PostGameComponent = () => (
     <PostGame
-    matchInfo={matchInfo}
-    data={data}
-    onChange={(data) => setData(data)}
-    settings = {{
-      haptic: haptic
-    }}
+      matchInfo={matchInfo}
+      data={data}
+      onChange={(data) => setData(data)}
+      settings = {{
+        haptic: haptic
+      }}
     />
   );
 

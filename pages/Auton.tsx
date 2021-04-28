@@ -1,17 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { Settings, StyleSheet, View, SafeAreaView, Animated } from "react-native";
 import { Easing } from 'react-native-reanimated';
-import {
-  Layout,
-  Card,
-  Button,
-  Text,
-  Select,
-  SelectItem,
-  IndexPath,
-  Divider,
- 
-} from "@ui-kitten/components";
+import { Layout, Button, Text, IndexPath } from "@ui-kitten/components";
 import { BlurView } from 'expo-blur';
 import { MatchProps } from "./Match";
 import Header from "../components/Header"
@@ -49,8 +39,7 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   useEffect( () => {
     setMatchInfoState( matchInfo );
   }, [matchInfo])
-  
-  console.log( matchInfo )
+
 
   return (
     <Layout style={styles.container} level="1">
@@ -82,8 +71,18 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
               name="Auton Bottom"
               haptic = { settings.haptic }
             />
-            <Counter value={autonUpper} onChange={setAutonUpper} name="Auton Upper" haptic = { settings.haptic }/>
-            <Counter value={autonInner} onChange={setAutonInner} name="Auton Inner" haptic = { settings.haptic } />
+            <Counter
+              value={autonUpper}
+              onChange={setAutonUpper}
+              name="Auton Upper"
+              haptic={settings.haptic}
+            />
+            <Counter
+              value={autonInner}
+              onChange={setAutonInner}
+              name="Auton Inner"
+              haptic={settings.haptic}
+            />
             {/* <Text>{JSON.stringify(matchInfo)}</Text> */}
           </View>
 
