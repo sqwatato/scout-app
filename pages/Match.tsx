@@ -6,8 +6,9 @@ import PostGame from "./PostGame";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import { SettingContext } from "../context/SettingContext";
+import Counter from "../components/Counter";
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator();
 
 type MInfo = {
   regional: string;
@@ -76,12 +77,12 @@ const Match: FC<Props> = ({ route }) => {
 
   const TeleopComponent = () => (
     <Teleop
-    matchInfo={matchInfo}
-    data={data}
-    onChange={(data) => { setData(data) }}
-    settings = {{
-      haptic: haptic
-    }}
+      matchInfo={matchInfo}
+      data={data}
+      onChange={(data) => setData(data)}
+      settings={{
+        haptic: haptic,
+      }}
     />
   );
 
@@ -90,8 +91,8 @@ const Match: FC<Props> = ({ route }) => {
       matchInfo={matchInfo}
       data={data}
       onChange={(data) => setData(data)}
-      settings = {{
-        haptic: haptic
+      settings={{
+        haptic: haptic,
       }}
     />
   );
@@ -123,7 +124,7 @@ const Match: FC<Props> = ({ route }) => {
       tabBarOptions={{
         activeTintColor: "purple",
         inactiveTintColor: "gray",
-        style:{height:90}
+        style: { height: 90 },
       }}
     >
       <Tab.Screen name="Auton" component={AutonComponent} />
@@ -146,6 +147,9 @@ export type MatchData = {
   autonInner: number;
   autonUpper: number;
   autonBottom: number;
+  autonInnerMissed: number;
+  autonUpperMissed: number;
+  autonBottomMissed: number;
   comments: string;
   defense: boolean;
   disabled: boolean;
@@ -161,7 +165,7 @@ export type MatchData = {
 
 export type MatchProps = {
   matchInfo: MInfo;
-  onChange: (data: any) => void;
+  onChange: (data: MatchData) => void;
   data: MatchData;
   settings?;
 };

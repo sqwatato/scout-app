@@ -30,7 +30,24 @@ const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   return (
     <Layout style={styles.container} level="1">
       <View>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
+      <ScrollView 
+          showsVerticalScrollIndicator={false}
+          onScroll = {( e ) => {
+            if( e.nativeEvent.contentOffset.y > 0 )
+              Animated.timing( headerBackgroundColor, {
+                toValue: 255,
+                duration: 150,
+                useNativeDriver: false
+              }).start()
+            else
+              Animated.timing( headerBackgroundColor, {
+                toValue: 0,
+                duration: 150,
+                useNativeDriver: false
+              }).start()
+          }}
+          style = {{zIndex: 0}}
+        >
           <View style={styles.section}>
             <Text category="h4" style={{ paddingTop: 120 }}>
               Header
