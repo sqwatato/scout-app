@@ -4,17 +4,16 @@ import { Easing } from 'react-native-reanimated';
 import { Layout, Button, Text, IndexPath } from "@ui-kitten/components";
 import { BlurView } from 'expo-blur';
 import { MatchProps } from "./Match";
-import Header from "../components/Header"
+import Header from "../components/Header";
 import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
-import {Dimensions} from 'react-native';
 
 const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
-  const [headerBackgroundColor] = useState( new Animated.Value( 0 ) );
-  const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({ 
-    inputRange: [0,255], 
-    outputRange: [ '#fff0', '#aaf2']
-  })
+  const [headerBackgroundColor] = useState(new Animated.Value(0));
+  const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({
+    inputRange: [0, 255],
+    outputRange: ["#fff0", "#aaf2"],
+  });
   const [autonInner, setAutonInner] = useState<number>(
     data ? (data.autonInner ? data.autonInner : 0) : 0
   );
@@ -25,26 +24,28 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
     data ? (data.autonBottom ? data.autonBottom : 0) : 0
   );
 
-  const handleSave = () => {
-    onChange({
-      ...data,
-      autonInner,
-      autonUpper,
-      autonBottom,
-    });
+  useEffect(() => {
+    setAutonInner(data ? (data.autonInner ? data.autonInner : 0) : 0);
+    setAutonUpper(data ? (data.autonUpper ? data.autonUpper : 0) : 0);
+    setAutonBottom(data ? (data.autonBottom ? data.autonBottom : 0) : 0);
+  }, [data]);
+
+  const handleChange = (value: number, key: string) => {
+    let dataCopy = { ...data };
+    dataCopy[key] = value;
+    onChange(dataCopy);
   };
 
-  const [ matchInfoState, setMatchInfoState ] = useState( matchInfo )
+  const [matchInfoState, setMatchInfoState] = useState(matchInfo);
 
-  useEffect( () => {
-    setMatchInfoState( matchInfo );
-  }, [matchInfo])
-
+  useEffect(() => {
+    setMatchInfoState(matchInfo);
+  }, [matchInfo]);
 
   return (
     <Layout style={styles.container} level="1">
       <View>
-        <ScrollView 
+      <ScrollView 
           showsVerticalScrollIndicator={false}
           onScroll = {( e ) => {
             if( e.nativeEvent.contentOffset.y > 0 )
@@ -62,47 +63,62 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
           }}
           style = {{zIndex: 0}}
         >
-          <View style = {styles.section}>
-            <Text category = "h4" style = {{paddingTop: 120}}>Succesful Shots</Text>
+          <View style={styles.section}>
+            <Text category="h4" style={{ paddingTop: 120 }}>
+              Succesful Shots
+            </Text>
 
             <Counter
               value={autonBottom}
-              onChange={setAutonBottom}
+              onChange={(val) => {handleChange(val, "autonBottom")}}
               name="Auton Bottom"
-              haptic = { settings.haptic }
+              haptic={settings.haptic}
             />
             <Counter
               value={autonUpper}
-              onChange={setAutonUpper}
+              onChange={(val) => handleChange(val, "autonUpper")}
               name="Auton Upper"
               haptic={settings.haptic}
             />
             <Counter
               value={autonInner}
-              onChange={setAutonInner}
+              onChange={(val) => handleChange(val, "autonInner")}
+              name="Auton Inner"
+              haptic={settings.haptic}
+            />
+          </View>
+
+          <View style={styles.section}>
+            <Text category="h4">Missed Shots</Text>
+
+            <Counter
+              value={0}
+              onChange={() => {}}
+              name="Auton Bottom"
+              haptic={settings.haptic}
+            />
+            <Counter
+              value={0}
+              onChange={() => {}}
+              name="Auton Upper"
+              haptic={settings.haptic}
+            />
+            <Counter
+              value={0}
+              onChange={() => {}}
               name="Auton Inner"
               haptic={settings.haptic}
             />
             {/* <Text>{JSON.stringify(matchInfo)}</Text> */}
           </View>
-
-          <View style = {styles.section}>
-            <Text category = "h4">Missed Shots</Text>
-
-            <Counter
-              value={ 0 }
-              onChange={ () => {} }
-              name="Auton Bottom"
-              haptic = { settings.haptic }
-            />
-            <Counter value={0} onChange={() => {}} name="Auton Upper" haptic = { settings.haptic }/>
-            <Counter value={0} onChange={()=>{}} name="Auton Inner" haptic = { settings.haptic } />
-            {/* <Text>{JSON.stringify(matchInfo)}</Text> */}
-          </View>
-          <Button onPress={handleSave} style = {{marginBottom: 50, marginTop: 30}}>Finish Auton</Button>
+          <Button onPress = {() => {}}>Finish Auton</Button>
         </ScrollView>
       </View>
-      <Header title = "Auton" matchInfo = {matchInfoState} backgroundColor = {interpolateHeaderBackgroundColor}/>
+      <Header
+        title="Auton"
+        matchInfo={matchInfoState}
+        backgroundColor={interpolateHeaderBackgroundColor}
+      />
     </Layout>
   );
 };
@@ -115,10 +131,9 @@ const styles = StyleSheet.create({
   dropdown: {
     width: "70%",
   },
-  section:
-  {
-    marginTop: 35
-  }, 
+  section: {
+    marginVertical: 20,
+  },
 });
 
 export default Auton;

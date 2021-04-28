@@ -1,37 +1,31 @@
 import React, { FC, useEffect, useState } from "react";
 import { Settings, StyleSheet, View, SafeAreaView, Animated } from "react-native";
 import { Easing } from 'react-native-reanimated';
-import {
-  Layout,
-  Card,
-  Button,
-  Text,
-  Select,
-  SelectItem,
-  IndexPath,
-  Divider,
- 
-} from "@ui-kitten/components";
+import { Layout, Button, Text, IndexPath } from "@ui-kitten/components";
 import { BlurView } from 'expo-blur';
 import { MatchProps } from "./Match";
-import Header from "../components/Header"
+import Header from "../components/Header";
 import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
-import {Dimensions} from 'react-native';
 
-const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
+const Teleop: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
+  const [headerBackgroundColor] = useState(new Animated.Value(0));
+  const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({
+    inputRange: [0, 255],
+    outputRange: ["#fff0", "#aaf2"],
+  });
 
-  const [headerBackgroundColor] = useState( new Animated.Value( 0 ) );
-  const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({ 
-    inputRange: [0,255], 
-    outputRange: [ '#fff0', '#aaf2']
-  })
-  const [ matchInfoState, setMatchInfoState ] = useState( matchInfo )
+  const handleChange = (value: number, key: string) => {
+    let dataCopy = { ...data };
+    dataCopy[key] = value;
+    onChange(dataCopy);
+  };
 
-  useEffect( () => {
-    setMatchInfoState( matchInfo );
-  }, [matchInfo])
-  
+  const [matchInfoState, setMatchInfoState] = useState(matchInfo);
+
+  useEffect(() => {
+    setMatchInfoState(matchInfo);
+  }, [matchInfo]);
 
   return (
     <Layout style={styles.container} level="1">
@@ -54,20 +48,28 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
           }}
           style = {{zIndex: 0}}
         >
-          <View style = {styles.section}>
-            <Text category = "h4" style = {{paddingTop: 120}}>Succesful Shots</Text>
+          <View style={styles.section}>
+            <Text category="h4" style={{ paddingTop: 120 }}>
+              Header
+            </Text>
 
             <Counter
               value={0}
-              onChange={ () => {} }
+              onChange={(val) => {handleChange(val, "autonBottom")}}
               name="Sample Counter"
-              haptic = { settings.haptic }
+              haptic={settings.haptic}
             />
+           
+            {/* <Text>{JSON.stringify(matchInfo)}</Text> */}
           </View>
-          <Button  style = {{marginBottom: 50, marginTop: 30}}>Finish Teleop</Button>
+          <Button onPress = {() => {}}>Finish Teleop</Button>
         </ScrollView>
       </View>
-      <Header title = "Teleop" matchInfo = {matchInfoState} backgroundColor = {interpolateHeaderBackgroundColor}/>
+      <Header
+        title="Teleop"
+        matchInfo={matchInfoState}
+        backgroundColor={interpolateHeaderBackgroundColor}
+      />
     </Layout>
   );
 };
@@ -80,10 +82,9 @@ const styles = StyleSheet.create({
   dropdown: {
     width: "70%",
   },
-  section:
-  {
-    marginTop: 35
-  }, 
+  section: {
+    marginVertical: 20,
+  },
 });
 
-export default Auton;
+export default Teleop;
