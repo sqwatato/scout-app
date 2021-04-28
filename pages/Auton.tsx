@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View, Animated } from "react-native";
 import { Layout, Button, Text } from "@ui-kitten/components";
-import { MatchProps } from "./Match";
+import { MatchData, MatchProps } from "./Match";
 import Header from "../components/Header";
 import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
+import MatchStatefulCounter from "../components/MatchStatefulCounter";
 
 const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -12,27 +13,6 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
     inputRange: [0, 255],
     outputRange: ["#fff0", "#aaf2"],
   });
-  const [autonInner, setAutonInner] = useState<number>(
-    data ? (data.autonInner ? data.autonInner : 0) : 0
-  );
-  const [autonUpper, setAutonUpper] = useState<number>(
-    data ? (data.autonUpper ? data.autonUpper : 0) : 0
-  );
-  const [autonBottom, setAutonBottom] = useState<number>(
-    data ? (data.autonBottom ? data.autonBottom : 0) : 0
-  );
-
-  useEffect(() => {
-    setAutonInner(data ? (data.autonInner ? data.autonInner : 0) : 0);
-    setAutonUpper(data ? (data.autonUpper ? data.autonUpper : 0) : 0);
-    setAutonBottom(data ? (data.autonBottom ? data.autonBottom : 0) : 0);
-  }, [data]);
-
-  const handleChange = (value: number, key: string) => {
-    let dataCopy = { ...data };
-    dataCopy[key] = value;
-    onChange(dataCopy);
-  };
 
   const [matchInfoState, setMatchInfoState] = useState(matchInfo);
 
@@ -49,21 +29,24 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
               Succesful Shots
             </Text>
 
-            <Counter
-              value={autonBottom}
-              onChange={(val) => handleChange(val, "autonBottom")}
+            <MatchStatefulCounter
+              onDataChange={onChange}
+              data={data}
+              dataTitle={"autonBottom"}
               name="Auton Bottom"
               haptic={settings.haptic}
             />
-            <Counter
-              value={autonUpper}
-              onChange={(val) => handleChange(val, "autonUpper")}
+            <MatchStatefulCounter
+              onDataChange={onChange}
+              data={data}
+              dataTitle={"autonUpper"}
               name="Auton Upper"
               haptic={settings.haptic}
             />
-            <Counter
-              value={autonInner}
-              onChange={(val) => handleChange(val, "autonInner")}
+            <MatchStatefulCounter
+              onDataChange={onChange}
+              data={data}
+              dataTitle={"autonInner"}
               name="Auton Inner"
               haptic={settings.haptic}
             />
@@ -72,25 +55,27 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
           <View style={styles.section}>
             <Text category="h4">Missed Shots</Text>
 
-            <Counter
-              value={0}
-              onChange={() => {}}
+            <MatchStatefulCounter
+              onDataChange={onChange}
+              data={data}
+              dataTitle={"autonBottomMissed"}
               name="Auton Bottom"
               haptic={settings.haptic}
             />
-            <Counter
-              value={0}
-              onChange={() => {}}
+            <MatchStatefulCounter
+              onDataChange={onChange}
+              data={data}
+              dataTitle={"autonUpperMissed"}
               name="Auton Upper"
               haptic={settings.haptic}
             />
-            <Counter
-              value={0}
-              onChange={() => {}}
+            <MatchStatefulCounter
+              onDataChange={onChange}
+              data={data}
+              dataTitle={"autonInnerMissed"}
               name="Auton Inner"
               haptic={settings.haptic}
             />
-            {/* <Text>{JSON.stringify(matchInfo)}</Text> */}
           </View>
         </ScrollView>
       </View>
