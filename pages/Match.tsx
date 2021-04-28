@@ -161,6 +161,8 @@ export type MatchData = {
   teleopInner: number;
   teleopUpper: number;
   teleopBottom: number;
+  cycles: number;
+  rotationDisabled: boolean;
 };
 
 export type MatchProps = {

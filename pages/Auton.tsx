@@ -1,17 +1,24 @@
-import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View, Animated } from "react-native";
+import React, { FC, useEffect, useState, useRef } from "react";
+import { StyleSheet, View, Animated, Platform } from "react-native";
 import { Layout, Button, Text } from "@ui-kitten/components";
 import { MatchData, MatchProps } from "./Match";
 import Header from "../components/Header";
 import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
 import MatchStatefulCounter from "../components/MatchStatefulCounter";
+import ShotsInput from "../components/ShotsInput";
 
 const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
   const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({
     inputRange: [0, 255],
-    outputRange: ["#fff0", "#aaf2"],
+    outputRange: ["#fff0", Platform.OS === "ios" ? "#aaf2" : "#aaf9"],
+  });
+
+  const [scrollOffset, setOffset] = useState(0);
+
+  const scrollRef = useRef({
+    scrollOffset: 0,
   });
 
   const [matchInfoState, setMatchInfoState] = useState(matchInfo);
@@ -23,78 +30,33 @@ const Auton: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   return (
     <Layout style={styles.container} level="1">
       <View>
-      <ScrollView 
+        <ScrollView
+          scrollEventThrottle={16}
+          contentOffset={{ x: 0, y: scrollRef.current.scrollOffset }}
           showsVerticalScrollIndicator={false}
-          onScroll = {( e ) => {
-            if( e.nativeEvent.contentOffset.y > 0 )
-              Animated.timing( headerBackgroundColor, {
+          onScroll={(e) => {
+            scrollRef.current.scrollOffset = e.nativeEvent.contentOffset.y;
+            if (e.nativeEvent.contentOffset.y > 0)
+              Animated.timing(headerBackgroundColor, {
                 toValue: 255,
                 duration: 150,
-                useNativeDriver: false
-              }).start()
+                useNativeDriver: false,
+              }).start();
             else
-              Animated.timing( headerBackgroundColor, {
+              Animated.timing(headerBackgroundColor, {
                 toValue: 0,
                 duration: 150,
-                useNativeDriver: false
-              }).start()
+                useNativeDriver: false,
+              }).start();
           }}
-          style = {{zIndex: 0}}
+          style={{ zIndex: 0 }}
         >
-          <View style={styles.section}>
-            <Text category="h4" style={{ paddingTop: 120 }}>
-              Succesful Shots
-            </Text>
-
-            <MatchStatefulCounter
-              onDataChange={onChange}
-              data={data}
-              dataTitle={"autonBottom"}
-              name="Auton Bottom"
-              haptic={settings.haptic}
-            />
-            <MatchStatefulCounter
-              onDataChange={onChange}
-              data={data}
-              dataTitle={"autonUpper"}
-              name="Auton Upper"
-              haptic={settings.haptic}
-            />
-            <MatchStatefulCounter
-              onDataChange={onChange}
-              data={data}
-              dataTitle={"autonInner"}
-              name="Auton Inner"
-              haptic={settings.haptic}
-            />
-          </View>
-
-          <View style={styles.section}>
-            <Text category="h4">Missed Shots</Text>
-
-            <MatchStatefulCounter
-              onDataChange={onChange}
-              data={data}
-              dataTitle={"autonBottomMissed"}
-              name="Auton Bottom"
-              haptic={settings.haptic}
-            />
-            <MatchStatefulCounter
-              onDataChange={onChange}
-              data={data}
-              dataTitle={"autonUpperMissed"}
-              name="Auton Upper"
-              haptic={settings.haptic}
-            />
-            <MatchStatefulCounter
-              onDataChange={onChange}
-              data={data}
-              dataTitle={"autonInnerMissed"}
-              name="Auton Inner"
-              haptic={settings.haptic}
-            />
-          </View>
-          <Button onPress = {() => {}}>Finish Auton</Button>
+          <ShotsInput
+            auton
+            data={data}
+            onChange={onChange}
+            settings={settings}
+          />
         </ScrollView>
       </View>
       <Header

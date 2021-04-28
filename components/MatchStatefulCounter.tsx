@@ -23,7 +23,7 @@ const MatchStatefulCounter: FC<CounterProps> = ({
 
   useEffect(() => {
     setValue(data ? (data[dataTitle] ? data[dataTitle] : 0) : 0);
-  }, [data]);
+  }, [data[dataTitle]]);
 
   const handleChange = (value: number) => {
     let dataCopy = { ...data };

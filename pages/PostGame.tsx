@@ -1,18 +1,25 @@
 import React, { FC, useEffect, useState } from "react";
-import { Settings, StyleSheet, View, SafeAreaView, Animated } from "react-native";
-import { Easing } from 'react-native-reanimated';
-import { Layout, Button, Text, IndexPath } from "@ui-kitten/components";
-import { BlurView } from 'expo-blur';
+import { StyleSheet, View, Animated, Platform } from "react-native";
+import {
+  Layout,
+  Button,
+  Text,
+  ButtonGroup,
+  Radio,
+  RadioGroup,
+} from "@ui-kitten/components";
+import { BlurView } from "expo-blur";
 import { MatchProps } from "./Match";
 import Header from "../components/Header";
 import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
+import MatchStatefulToggle from "../components/MatchStatefulToggle";
 
 const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
   const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({
     inputRange: [0, 255],
-    outputRange: ["#fff0", "#aaf2"],
+    outputRange: ["#fff0", Platform.OS === "ios" ? "#aaf2" : "#aaf9"],
   });
 
   const handleChange = (value: number, key: string) => {
@@ -22,7 +29,7 @@ const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   };
 
   const [matchInfoState, setMatchInfoState] = useState(matchInfo);
-
+  const [hang, setHang] = useState<number>(0);
   useEffect(() => {
     setMatchInfoState(matchInfo);
   }, [matchInfo]);
@@ -30,39 +37,68 @@ const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   return (
     <Layout style={styles.container} level="1">
       <View>
-      <ScrollView 
+        <ScrollView
           showsVerticalScrollIndicator={false}
-          onScroll = {( e ) => {
-            if( e.nativeEvent.contentOffset.y > 0 )
-              Animated.timing( headerBackgroundColor, {
+          onScroll={(e) => {
+            if (e.nativeEvent.contentOffset.y > 0)
+              Animated.timing(headerBackgroundColor, {
                 toValue: 255,
                 duration: 150,
-                useNativeDriver: false
-              }).start()
+                useNativeDriver: false,
+              }).start();
             else
-              Animated.timing( headerBackgroundColor, {
+              Animated.timing(headerBackgroundColor, {
                 toValue: 0,
                 duration: 150,
-                useNativeDriver: false
-              }).start()
+                useNativeDriver: false,
+              }).start();
           }}
-          style = {{zIndex: 0}}
+          style={{ zIndex: 0 }}
         >
           <View style={styles.section}>
-            <Text category="h4" style={{ paddingTop: 120 }}>
-              Header
-            </Text>
+            <ButtonGroup
+              style={{ marginTop: 120, ...styles.startStopClimb }}
+              appearance="outline"
+            >
+              <Button onPress={() => {}} style={styles.halfButton}>
+                Start Climb
+              </Button>
+              <Button onPress={() => {}} style={styles.halfButton}>
+                Change
+              </Button>
+            </ButtonGroup>
 
-            <Counter
-              value={0}
-              onChange={(val) => {handleChange(val, "autonBottom")}}
-              name="Sample Counter"
-              haptic={settings.haptic}
+            <RadioGroupWrapper
+              choices={["Success", "Fail", "Did not Attempt"]}
+              title="Hang"
+              onDataChange={(index: number) => {
+                setHang(index);
+              }}
             />
-           
-            {/* <Text>{JSON.stringify(matchInfo)}</Text> */}
+
+            <View style={{ flex: 5 }} />
+
+            <View style={styles.section}>
+              <View style={styles.buttonGroup}>
+                <Button
+                  style={{
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                  }}
+                >
+                  Button1
+                </Button>
+                <Button>Button2</Button>
+                <Button
+                  style={[
+                    { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
+                  ]}
+                >
+                  Button1
+                </Button>
+              </View>
+            </View>
           </View>
-          <Button onPress = {() => {}}>Finish Post Game</Button>
         </ScrollView>
       </View>
       <Header
@@ -71,6 +107,41 @@ const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
         backgroundColor={interpolateHeaderBackgroundColor}
       />
     </Layout>
+  );
+};
+
+type WrapperOptions = {
+  choices: string[];
+  title: string;
+  onDataChange: (index: number) => void;
+};
+const RadioGroupWrapper = ({
+  choices,
+  title,
+  onDataChange,
+}: WrapperOptions) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(2);
+
+  return (
+    <View>
+      <Text category="h6">{title}</Text>
+
+      <RadioGroup
+        selectedIndex={selectedIndex}
+        onChange={(index) => {
+          setSelectedIndex(index);
+          onDataChange(index);
+        }}
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        {choices.map((choice) => (
+          <Radio>{choice}</Radio>
+        ))}
+      </RadioGroup>
+    </View>
   );
 };
 
@@ -84,6 +155,20 @@ const styles = StyleSheet.create({
   },
   section: {
     marginVertical: 20,
+  },
+  startStopClimb: {
+    flex: 1,
+    alignItems: "center",
+  },
+  halfButton: {
+    width: "50%",
+  },
+  buttonGroup: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  button: {
+    flex: 1,
   },
 });
 
