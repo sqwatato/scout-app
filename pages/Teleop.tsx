@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import ShotsInput from "../components/ShotsInput";
 import MatchStatefulCounter from "../components/MatchStatefulCounter";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
+import Section from "../components/Section";
 
 const Teleop: FC<MatchProps> = ({ matchInfo, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -25,24 +26,24 @@ const Teleop: FC<MatchProps> = ({ matchInfo, settings }) => {
     <Layout style={styles.container} level="1">
       <View>
         <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
-          <View style={styles.section}>
+          <Section>
             <ShotsInput auton={false} settings={settings} />
-            <View style={styles.section}>
+            <Section>
               <Text category="h4">Cycles</Text>
               <MatchStatefulCounter
                 name="Cycles"
                 dataTitle="cycles"
                 haptic={settings.haptic}
               />
-            </View>
-            <View style={styles.section}>
+            </Section>
+            <Section>
               <Text category="h4">Rotation Disabled</Text>
               <MatchStatefulToggle
                 dataTitle="rotationDisabled"
                 name="Rotation Disabled"
               />
-            </View>
-          </View>
+            </Section>
+          </Section>
         </ScrollView>
       </View>
       <Header

@@ -1,21 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View, Animated, Platform } from "react-native";
-import {
-  Layout,
-  Button,
-  Text,
-  ButtonGroup,
-  Radio,
-  RadioGroup,
-} from "@ui-kitten/components";
-import { BlurView } from "expo-blur";
+import { Layout, Button, Text, Radio, RadioGroup } from "@ui-kitten/components";
 import { MatchProps } from "./Match";
 import Header from "../components/Header";
-import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
+import { useData } from "../context/DataContext";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
+import Section from "../components/Section";
 
-const PostGame: FC<MatchProps> = ({ matchInfo, settings }) => {
+const PostGame: FC<MatchProps> = ({ matchInfo }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
   const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({
     inputRange: [0, 255],
@@ -23,7 +16,21 @@ const PostGame: FC<MatchProps> = ({ matchInfo, settings }) => {
   });
 
   const [matchInfoState, setMatchInfoState] = useState(matchInfo);
-  const [hang, setHang] = useState<number>(0);
+  const { data, setData } = useData();
+  const defaultHang = data
+    ? !data.attemptHang
+      ? 2
+      : data.hangFail
+      ? 1
+      : 0
+    : 2;
+  const defaultLevel = data
+    ? !data.attemptLevel
+      ? 2
+      : data.levelFail
+      ? 1
+      : 0
+    : 2;
   useEffect(() => {
     setMatchInfoState(matchInfo);
   }, [matchInfo]);
@@ -32,8 +39,8 @@ const PostGame: FC<MatchProps> = ({ matchInfo, settings }) => {
     <Layout style={styles.container} level="1">
       <View>
         <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
-          <View style={styles.section}>
-            <ButtonGroup
+          <Section>
+            {/* <ButtonGroup
               style={{ marginTop: 120, ...styles.startStopClimb }}
               appearance="outline"
             >
@@ -43,39 +50,40 @@ const PostGame: FC<MatchProps> = ({ matchInfo, settings }) => {
               <Button onPress={() => {}} style={styles.halfButton}>
                 Change
               </Button>
-            </ButtonGroup>
+            </ButtonGroup> */}
 
             <RadioGroupWrapper
               choices={["Success", "Fail", "Did not Attempt"]}
               title="Hang"
+              titleStyle={{ marginTop: 120 }}
+              defaultChoice={defaultHang}
               onDataChange={(index: number) => {
-                setHang(index);
+                if (index === 0)
+                  setData({ ...data, attemptHang: true, hangFail: false });
+                else if (index === 1)
+                  setData({ ...data, attemptHang: true, hangFail: true });
+                else setData({ ...data, attemptHang: false, hangFail: true });
               }}
             />
-
-            <View style={{ flex: 5 }} />
-
-            <View style={styles.section}>
-              <View style={styles.buttonGroup}>
-                <Button
-                  style={{
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                  }}
-                >
-                  Button1
-                </Button>
-                <Button>Button2</Button>
-                <Button
-                  style={[
-                    { borderTopLeftRadius: 0, borderBottomLeftRadius: 0 },
-                  ]}
-                >
-                  Button1
-                </Button>
-              </View>
-            </View>
-          </View>
+          </Section>
+          <Section>
+            <RadioGroupWrapper
+              choices={["Success", "Fail", "Did not Attempt"]}
+              title="Level"
+              defaultChoice={defaultLevel}
+              onDataChange={(index: number) => {
+                if (index === 0)
+                  setData({ ...data, attemptLevel: true, levelFail: false });
+                else if (index === 1)
+                  setData({ ...data, attemptLevel: true, levelFail: true });
+                else setData({ ...data, attemptLevel: false, levelFail: true });
+              }}
+            />
+          </Section>
+          <Section>
+            <Text category="h4">Solo Climb</Text>
+            <MatchStatefulToggle dataTitle="soloClimb" name="Solo Climb" />
+          </Section>
         </ScrollView>
       </View>
       <Header
@@ -90,18 +98,24 @@ const PostGame: FC<MatchProps> = ({ matchInfo, settings }) => {
 type WrapperOptions = {
   choices: string[];
   title: string;
+  titleStyle?: any;
+  defaultChoice: number;
   onDataChange: (index: number) => void;
 };
 const RadioGroupWrapper = ({
   choices,
   title,
   onDataChange,
+  titleStyle,
+  defaultChoice,
 }: WrapperOptions) => {
-  const [selectedIndex, setSelectedIndex] = React.useState(2);
+  const [selectedIndex, setSelectedIndex] = React.useState(defaultChoice);
 
   return (
     <View>
-      <Text category="h6">{title}</Text>
+      <Text category="h4" style={titleStyle}>
+        {title}
+      </Text>
 
       <RadioGroup
         selectedIndex={selectedIndex}
@@ -115,7 +129,7 @@ const RadioGroupWrapper = ({
         }}
       >
         {choices.map((choice) => (
-          <Radio>{choice}</Radio>
+          <Radio key={choice}>{choice}</Radio>
         ))}
       </RadioGroup>
     </View>
@@ -129,9 +143,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     width: "70%",
-  },
-  section: {
-    marginVertical: 20,
   },
   startStopClimb: {
     flex: 1,

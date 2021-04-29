@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import { ScrollView } from "react-native-gesture-handler";
 import ShotsInput from "../components/ShotsInput";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
+import Section from "../components/Section";
 
 const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -29,13 +30,13 @@ const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
           style={{ zIndex: 0 }}
         >
           <ShotsInput auton settings={settings} />
-          <View style={styles.section}>
+          <Section>
             <Text category="h4">Crossing</Text>
             <MatchStatefulToggle
               dataTitle="crossedInitLine"
               name="Crossed Initiation Line"
             />
-          </View>
+          </Section>
         </ScrollView>
       </View>
       <Header

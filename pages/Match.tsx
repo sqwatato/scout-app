@@ -143,6 +143,7 @@ export default Match;
 export type MatchData = {
   alliance: string;
   attemptHang: boolean;
+  attemptLevel: boolean;
   autonInner: number;
   autonUpper: number;
   autonBottom: number;
@@ -153,6 +154,7 @@ export type MatchData = {
   defense: boolean;
   disabled: boolean;
   hangFail: boolean;
+  levelFail: boolean;
   matchNum: number;
   minfo: string;
   regional: string;
@@ -163,6 +165,7 @@ export type MatchData = {
   cycles: number;
   rotationDisabled: boolean;
   crossedInitLine: boolean;
+  soloClimb: boolean;
 };
 
 export type MatchProps = {

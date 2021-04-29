@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "@ui-kitten/components";
 import MatchStatefulCounter from "../components/MatchStatefulCounter";
+import Section from "./Section";
 
 type Props = {
   settings?;
@@ -11,7 +12,7 @@ type Props = {
 const ShotsInput: FC<Props> = ({ settings, auton }) => {
   return (
     <View>
-      <View style={styles.section}>
+      <Section>
         <Text category="h4" style={{ paddingTop: 120 }}>
           Succesful Shots
         </Text>
@@ -31,9 +32,9 @@ const ShotsInput: FC<Props> = ({ settings, auton }) => {
           name={`${auton ? "Auton" : "Teleop"} Inner`}
           haptic={settings.haptic}
         />
-      </View>
+      </Section>
 
-      <View style={styles.section}>
+      <Section>
         <Text category="h4">Missed Shots</Text>
 
         <MatchStatefulCounter
@@ -51,7 +52,7 @@ const ShotsInput: FC<Props> = ({ settings, auton }) => {
           name={`${auton ? "Auton" : "Teleop"} Inner`}
           haptic={settings.haptic}
         />
-      </View>
+      </Section>
     </View>
   );
 };
