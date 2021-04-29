@@ -1,23 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
-import {
-  Settings,
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Animated,
-  Platform,
-} from "react-native";
-import { Easing } from "react-native-reanimated";
-import {
-  Layout,
-  Card,
-  Button,
-  Text,
-  Select,
-  SelectItem,
-  IndexPath,
-  Divider,
-} from "@ui-kitten/components";
+import React, { FC } from "react";
+import { StyleSheet, Animated } from "react-native";
+import { Text } from "@ui-kitten/components";
 import { BlurView } from "expo-blur";
 import { Dimensions } from "react-native";
 
@@ -27,7 +10,7 @@ interface Props {
   backgroundColor?: any;
 }
 
-function Header<Props>({ title, matchInfo, backgroundColor }) {
+const Header: FC<Props> = ({ title, matchInfo, backgroundColor }) => {
   return (
     <BlurView intensity={100} tint="light" style={styles.header}>
       <Animated.View
@@ -49,7 +32,7 @@ function Header<Props>({ title, matchInfo, backgroundColor }) {
       </Animated.View>
     </BlurView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   header: {

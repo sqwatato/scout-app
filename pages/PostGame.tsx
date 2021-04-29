@@ -15,18 +15,12 @@ import Counter from "../components/Counter";
 import { ScrollView } from "react-native-gesture-handler";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
 
-const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
+const PostGame: FC<MatchProps> = ({ matchInfo, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
   const interpolateHeaderBackgroundColor = headerBackgroundColor.interpolate({
     inputRange: [0, 255],
     outputRange: ["#fff0", Platform.OS === "ios" ? "#aaf2" : "#aaf9"],
   });
-
-  const handleChange = (value: number, key: string) => {
-    let dataCopy = { ...data };
-    dataCopy[key] = value;
-    onChange(dataCopy);
-  };
 
   const [matchInfoState, setMatchInfoState] = useState(matchInfo);
   const [hang, setHang] = useState<number>(0);
@@ -37,24 +31,7 @@ const PostGame: FC<MatchProps> = ({ data, matchInfo, onChange, settings }) => {
   return (
     <Layout style={styles.container} level="1">
       <View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          onScroll={(e) => {
-            if (e.nativeEvent.contentOffset.y > 0)
-              Animated.timing(headerBackgroundColor, {
-                toValue: 255,
-                duration: 150,
-                useNativeDriver: false,
-              }).start();
-            else
-              Animated.timing(headerBackgroundColor, {
-                toValue: 0,
-                duration: 150,
-                useNativeDriver: false,
-              }).start();
-          }}
-          style={{ zIndex: 0 }}
-        >
+        <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
           <View style={styles.section}>
             <ButtonGroup
               style={{ marginTop: 120, ...styles.startStopClimb }}

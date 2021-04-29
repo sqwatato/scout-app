@@ -6,7 +6,7 @@ import PostGame from "./PostGame";
 import { Ionicons } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import { SettingContext } from "../context/SettingContext";
-import Counter from "../components/Counter";
+import { DataProvider, useData } from "../context/DataContext";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,10 +22,11 @@ type Props = {
 };
 
 const Match: FC<Props> = ({ route }) => {
-  const [data, setData] = useState<MatchData>();
   const [matchInfo, setMatchInfo] = useState<MInfo>();
 
-  const { settings, getSettingState } = React.useContext(
+  const { data, setData } = useData();
+
+  const { getSettingState } = React.useContext(
     SettingContext
   ) as SettingContextType;
 
@@ -67,8 +68,6 @@ const Match: FC<Props> = ({ route }) => {
   const AutonComponent = () => (
     <Auton
       matchInfo={matchInfo}
-      data={data}
-      onChange={(data) => setData(data)}
       settings={{
         haptic: haptic,
       }}
@@ -78,8 +77,6 @@ const Match: FC<Props> = ({ route }) => {
   const TeleopComponent = () => (
     <Teleop
       matchInfo={matchInfo}
-      data={data}
-      onChange={(data) => setData(data)}
       settings={{
         haptic: haptic,
       }}
@@ -89,8 +86,6 @@ const Match: FC<Props> = ({ route }) => {
   const PostGameComponent = () => (
     <PostGame
       matchInfo={matchInfo}
-      data={data}
-      onChange={(data) => setData(data)}
       settings={{
         haptic: haptic,
       }}
@@ -98,39 +93,43 @@ const Match: FC<Props> = ({ route }) => {
   );
 
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName:
-            | "car"
-            | "car-outline"
-            | "game-controller"
-            | "game-controller-outline"
-            | "alarm"
-            | "alarm-outline";
+    <DataProvider>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName:
+              | "car"
+              | "car-outline"
+              | "game-controller"
+              | "game-controller-outline"
+              | "alarm"
+              | "alarm-outline";
 
-          if (route.name === "Auton") {
-            iconName = focused ? "car" : "car-outline";
-          } else if (route.name === "Teleop") {
-            iconName = focused ? "game-controller" : "game-controller-outline";
-          } else if (route.name === "PostGame") {
-            iconName = focused ? "alarm" : "alarm-outline";
-          }
+            if (route.name === "Auton") {
+              iconName = focused ? "car" : "car-outline";
+            } else if (route.name === "Teleop") {
+              iconName = focused
+                ? "game-controller"
+                : "game-controller-outline";
+            } else if (route.name === "PostGame") {
+              iconName = focused ? "alarm" : "alarm-outline";
+            }
 
-          // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: "purple",
-        inactiveTintColor: "gray",
-        style: { height: 90 },
-      }}
-    >
-      <Tab.Screen name="Auton" component={AutonComponent} />
-      <Tab.Screen name="Teleop" component={TeleopComponent} />
-      <Tab.Screen name="PostGame" component={PostGameComponent} />
-    </Tab.Navigator>
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+        tabBarOptions={{
+          activeTintColor: "purple",
+          inactiveTintColor: "gray",
+          style: { height: 90 },
+        }}
+      >
+        <Tab.Screen name="Auton" component={AutonComponent} />
+        <Tab.Screen name="Teleop" component={TeleopComponent} />
+        <Tab.Screen name="PostGame" component={PostGameComponent} />
+      </Tab.Navigator>
+    </DataProvider>
   );
 };
 type RootStackParamList = {
@@ -163,11 +162,10 @@ export type MatchData = {
   teleopBottom: number;
   cycles: number;
   rotationDisabled: boolean;
+  crossedInitLine: boolean;
 };
 
 export type MatchProps = {
   matchInfo: MInfo;
-  onChange: (data: MatchData) => void;
-  data: MatchData;
   settings?;
 };

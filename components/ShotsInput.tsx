@@ -1,20 +1,14 @@
-import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View, Animated } from "react-native";
-import { Layout, Button, Text } from "@ui-kitten/components";
-import { MatchData, MatchProps } from "../pages/Match";
-import Header from "../components/Header";
-import Counter from "../components/Counter";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { FC } from "react";
+import { StyleSheet, View } from "react-native";
+import { Text } from "@ui-kitten/components";
 import MatchStatefulCounter from "../components/MatchStatefulCounter";
 
 type Props = {
-  data: MatchData;
-  onChange: (data: MatchData) => void;
   settings?;
   auton: boolean;
 };
 
-const ShotsInput: FC<Props> = ({ data, onChange, settings, auton }) => {
+const ShotsInput: FC<Props> = ({ settings, auton }) => {
   return (
     <View>
       <View style={styles.section}>
@@ -23,22 +17,16 @@ const ShotsInput: FC<Props> = ({ data, onChange, settings, auton }) => {
         </Text>
 
         <MatchStatefulCounter
-          onDataChange={onChange}
-          data={data}
           dataTitle={`${auton ? "auton" : "teleop"}Bottom`}
           name={`${auton ? "Auton" : "Teleop"} Bottom`}
           haptic={settings.haptic}
         />
         <MatchStatefulCounter
-          onDataChange={onChange}
-          data={data}
           dataTitle={`${auton ? "auton" : "teleop"}Upper`}
           name={`${auton ? "Auton" : "Teleop"} Upper`}
           haptic={settings.haptic}
         />
         <MatchStatefulCounter
-          onDataChange={onChange}
-          data={data}
           dataTitle={`${auton ? "auton" : "teleop"}Inner`}
           name={`${auton ? "Auton" : "Teleop"} Inner`}
           haptic={settings.haptic}
@@ -49,22 +37,16 @@ const ShotsInput: FC<Props> = ({ data, onChange, settings, auton }) => {
         <Text category="h4">Missed Shots</Text>
 
         <MatchStatefulCounter
-          onDataChange={onChange}
-          data={data}
           dataTitle={`${auton ? "auton" : "teleop"}BottomMissed`}
           name={`${auton ? "Auton" : "Teleop"} Bottom`}
           haptic={settings.haptic}
         />
         <MatchStatefulCounter
-          onDataChange={onChange}
-          data={data}
           dataTitle={`${auton ? "auton" : "teleop"}UpperMissed`}
           name={`${auton ? "Auton" : "Teleop"} Upper`}
           haptic={settings.haptic}
         />
         <MatchStatefulCounter
-          onDataChange={onChange}
-          data={data}
           dataTitle={`${auton ? "auton" : "teleop"}InnerMissed`}
           name={`${auton ? "Auton" : "Teleop"} Inner`}
           haptic={settings.haptic}

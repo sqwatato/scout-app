@@ -1,34 +1,29 @@
-import React, { FC, useState, useEffect } from "react";
-import { MatchData } from "../pages/Match";
+import React, { FC, useState } from "react";
+import { useData } from "../context/DataContext";
 import Counter from "./Counter";
 
 type CounterProps = {
-  data: MatchData;
   dataTitle: string;
-  onDataChange: (data: MatchData) => void;
   haptic: boolean;
   name: string;
 };
 
 const MatchStatefulCounter: FC<CounterProps> = ({
-  data,
   dataTitle,
-  onDataChange,
   haptic,
   name,
 }) => {
+  const { data, setData } = useData();
   const [value, setValue] = useState<number>(
     data ? (data[dataTitle] ? data[dataTitle] : 0) : 0
   );
 
-  useEffect(() => {
-    setValue(data ? (data[dataTitle] ? data[dataTitle] : 0) : 0);
-  }, [data[dataTitle]]);
-
   const handleChange = (value: number) => {
+    setValue(value);
+
     let dataCopy = { ...data };
     dataCopy[dataTitle] = value;
-    onDataChange(dataCopy);
+    setData(dataCopy);
   };
   return (
     <Counter
