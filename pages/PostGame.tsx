@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { useData } from "../context/DataContext";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
 import Section from "../components/Section";
+import MatchStatefulStopwatch from "../components/MatchStatefulStopwatch";
 
 const PostGame: FC<MatchProps> = ({ matchInfo }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -39,7 +40,10 @@ const PostGame: FC<MatchProps> = ({ matchInfo }) => {
     <Layout style={styles.container} level="1">
       <View>
         <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
-          <Section headerTitle="Hang" headerPadding={120}>
+          <Section headerPadding={120} headerTitle="Climb Time">
+            <MatchStatefulStopwatch dataTitle="climbTime" name="Climb Time" />
+          </Section>
+          <Section headerTitle="Hang">
             <RadioGroupWrapper
               choices={["Success", "Fail", "Did not Attempt"]}
               defaultChoice={defaultHang}

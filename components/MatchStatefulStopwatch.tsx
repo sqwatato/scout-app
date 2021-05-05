@@ -1,23 +1,21 @@
 import React, { FC, useState } from "react";
 import { useData } from "../context/DataContext";
 import Counter from "./Counter";
-import { Stopwatch, Timer } from "react-native-stopwatch-timer";
+import { View } from "react-native";
+import Stopwatch from "./Stopwatch";
 
 type CounterProps = {
   dataTitle: string;
-  haptic: boolean;
   name: string;
 };
 
-const MatchStatefulCounter: FC<CounterProps> = ({
-  dataTitle,
-  haptic,
-  name,
-}) => {
+const MatchStatefulCounter: FC<CounterProps> = ({ dataTitle }) => {
   const { data, setData } = useData();
   const [value, setValue] = useState<number>(
     data ? (data[dataTitle] ? data[dataTitle] : 0) : 0
   );
+  const [start, setStart] = useState<boolean>(false);
+  const [reset, setReset] = useState<boolean>(false);
 
   const handleChange = (value: number) => {
     setValue(value);
@@ -26,7 +24,11 @@ const MatchStatefulCounter: FC<CounterProps> = ({
     dataCopy[dataTitle] = value;
     setData(dataCopy);
   };
-  return <Stopwatch></Stopwatch>;
+  return (
+    <View>
+      <Stopwatch onMSecChange={(time) => setValue(time)} />
+    </View>
+  );
 };
 
 export default MatchStatefulCounter;

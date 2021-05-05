@@ -171,6 +171,7 @@ export type MatchData = {
   preloads: number;
   positionDisabled: boolean;
   trench: boolean;
+  climbTime: number;
 };
 
 export type MatchProps = {
