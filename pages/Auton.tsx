@@ -24,11 +24,7 @@ const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
   return (
     <Layout style={styles.container} level="1">
       <View>
-        <ScrollView
-          scrollEventThrottle={16}
-          showsVerticalScrollIndicator={false}
-          style={{ zIndex: 0 }}
-        >
+        <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
           <ShotsInput auton settings={settings} />
           <Section>
             <Text category="h4">Crossing</Text>
