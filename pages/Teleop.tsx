@@ -27,21 +27,37 @@ const Teleop: FC<MatchProps> = ({ matchInfo, settings }) => {
       <View>
         <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
           <Section>
-            <ShotsInput auton={false} settings={settings} />
-            <Section>
-              <Text category="h4">Cycles</Text>
+            <ShotsInput auton={false} settings={settings} padding={120} />
+            <Section headerTitle="Cycles">
               <MatchStatefulCounter
                 name="Cycles"
                 dataTitle="cycles"
                 haptic={settings.haptic}
               />
             </Section>
-            <Section>
-              <Text category="h4">Rotation Disabled</Text>
+            <Section headerTitle="Rotation Disabled">
               <MatchStatefulToggle
                 dataTitle="rotationDisabled"
                 name="Rotation Disabled"
               />
+            </Section>
+            <Section headerTitle="Position Disabled">
+              <MatchStatefulToggle
+                dataTitle="positionDisabled"
+                name="Position Disabled"
+              />
+            </Section>
+            <Section headerTitle="Trench">
+              <MatchStatefulToggle dataTitle="trench" name="Trench" />
+            </Section>
+            <Section headerTitle="Defense">
+              <MatchStatefulToggle dataTitle="defense" name="Defense" />
+            </Section>
+            <Section headerTitle="Stuck">
+              <MatchStatefulToggle dataTitle="stuck" name="Stuck" />
+            </Section>
+            <Section headerTitle="Disabled">
+              <MatchStatefulToggle dataTitle="disabled" name="Disabled" />
             </Section>
           </Section>
         </ScrollView>

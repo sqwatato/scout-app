@@ -152,6 +152,7 @@ export type MatchData = {
   autonBottomMissed: number;
   comments: string;
   defense: boolean;
+  stuck: boolean;
   disabled: boolean;
   hangFail: boolean;
   levelFail: boolean;
@@ -166,6 +167,10 @@ export type MatchData = {
   rotationDisabled: boolean;
   crossedInitLine: boolean;
   soloClimb: boolean;
+  start: 1 | 2 | 3;
+  preloads: number;
+  positionDisabled: boolean;
+  trench: boolean;
 };
 
 export type MatchProps = {
