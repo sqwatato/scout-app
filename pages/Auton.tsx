@@ -7,6 +7,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import ShotsInput from "../components/ShotsInput";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
 import Section from "../components/Section";
+import MatchStatefulRadio from "../components/MatchStatefulRadio";
+import MatchStatefulCounter from "../components/MatchStatefulCounter";
 
 const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -24,15 +26,32 @@ const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
   return (
     <Layout style={styles.container} level="1">
       <View>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
-          <ShotsInput auton settings={settings} />
-          <Section>
-            <Text category="h4">Crossing</Text>
+        <ScrollView
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+          style={{ zIndex: 0 }}
+        >
+          <Section headerTitle="Crossing" headerPadding={120}>
             <MatchStatefulToggle
               dataTitle="crossedInitLine"
               name="Crossed Initiation Line"
             />
           </Section>
+          <Section headerTitle="Starting Location">
+            <MatchStatefulRadio
+              dataTitle="start"
+              values={[1, 2, 3]}
+              options={["Location 1", "Location 2", "Location 3"]}
+            />
+          </Section>
+          <Section headerTitle="Preloads">
+            <MatchStatefulCounter
+              name="Preloads"
+              dataTitle="preloads"
+              haptic={settings.haptic}
+            />
+          </Section>
+          <ShotsInput auton settings={settings} />
         </ScrollView>
       </View>
       <Header

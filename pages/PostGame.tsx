@@ -39,23 +39,9 @@ const PostGame: FC<MatchProps> = ({ matchInfo }) => {
     <Layout style={styles.container} level="1">
       <View>
         <ScrollView showsVerticalScrollIndicator={false} style={{ zIndex: 0 }}>
-          <Section>
-            {/* <ButtonGroup
-              style={{ marginTop: 120, ...styles.startStopClimb }}
-              appearance="outline"
-            >
-              <Button onPress={() => {}} style={styles.halfButton}>
-                Start Climb
-              </Button>
-              <Button onPress={() => {}} style={styles.halfButton}>
-                Change
-              </Button>
-            </ButtonGroup> */}
-
+          <Section headerTitle="Hang" headerPadding={120}>
             <RadioGroupWrapper
               choices={["Success", "Fail", "Did not Attempt"]}
-              title="Hang"
-              titleStyle={{ marginTop: 120 }}
               defaultChoice={defaultHang}
               onDataChange={(index: number) => {
                 if (index === 0)
@@ -66,10 +52,9 @@ const PostGame: FC<MatchProps> = ({ matchInfo }) => {
               }}
             />
           </Section>
-          <Section>
+          <Section headerTitle="Level">
             <RadioGroupWrapper
               choices={["Success", "Fail", "Did not Attempt"]}
-              title="Level"
               defaultChoice={defaultLevel}
               onDataChange={(index: number) => {
                 if (index === 0)
@@ -80,8 +65,7 @@ const PostGame: FC<MatchProps> = ({ matchInfo }) => {
               }}
             />
           </Section>
-          <Section>
-            <Text category="h4">Solo Climb</Text>
+          <Section headerTitle="Solo Climb">
             <MatchStatefulToggle dataTitle="soloClimb" name="Solo Climb" />
           </Section>
         </ScrollView>
@@ -97,26 +81,18 @@ const PostGame: FC<MatchProps> = ({ matchInfo }) => {
 
 type WrapperOptions = {
   choices: string[];
-  title: string;
-  titleStyle?: any;
   defaultChoice: number;
   onDataChange: (index: number) => void;
 };
 const RadioGroupWrapper = ({
   choices,
-  title,
   onDataChange,
-  titleStyle,
   defaultChoice,
 }: WrapperOptions) => {
   const [selectedIndex, setSelectedIndex] = React.useState(defaultChoice);
 
   return (
     <View>
-      <Text category="h4" style={titleStyle}>
-        {title}
-      </Text>
-
       <RadioGroup
         selectedIndex={selectedIndex}
         onChange={(index) => {

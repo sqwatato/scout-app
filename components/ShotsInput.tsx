@@ -7,16 +7,13 @@ import Section from "./Section";
 type Props = {
   settings?;
   auton: boolean;
+  padding?: number;
 };
 
-const ShotsInput: FC<Props> = ({ settings, auton }) => {
+const ShotsInput: FC<Props> = ({ settings, auton, padding }) => {
   return (
     <View>
-      <Section>
-        <Text category="h4" style={{ paddingTop: 120 }}>
-          Succesful Shots
-        </Text>
-
+      <Section headerPadding={padding} headerTitle="Successful Shots">
         <MatchStatefulCounter
           dataTitle={`${auton ? "auton" : "teleop"}Bottom`}
           name={`${auton ? "Auton" : "Teleop"} Bottom`}
@@ -34,9 +31,7 @@ const ShotsInput: FC<Props> = ({ settings, auton }) => {
         />
       </Section>
 
-      <Section>
-        <Text category="h4">Missed Shots</Text>
-
+      <Section headerTitle="Missed Shots">
         <MatchStatefulCounter
           dataTitle={`${auton ? "auton" : "teleop"}BottomMissed`}
           name={`${auton ? "Auton" : "Teleop"} Bottom`}
