@@ -120,7 +120,7 @@ const Match: FC<Props> = ({ route }) => {
           },
         })}
         tabBarOptions={{
-          activeTintColor: "purple",
+          activeTintColor: "#598BFF",
           inactiveTintColor: "gray",
           style: { height: 90 },
         }}

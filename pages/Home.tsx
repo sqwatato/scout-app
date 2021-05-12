@@ -15,6 +15,8 @@ import {
 
 import { db } from "../firebase";
 import { Layout, Card, Button, Text, Divider } from "@ui-kitten/components";
+import { withStyles } from '@ui-kitten/components';
+
 import * as Haptics from "expo-haptics";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -95,7 +97,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fafafa",
+    backgroundColor: "#",
     alignItems: "center",
     justifyContent: "space-around",
     flexDirection: "column",

@@ -8,6 +8,7 @@ import { useData } from "../context/DataContext";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
 import Section from "../components/Section";
 import MatchStatefulStopwatch from "../components/MatchStatefulStopwatch";
+import MatchStatefulCheckbox from "../components/MatchStatefulCheckbox";
 
 const PostGame: FC<MatchProps> = ({ matchInfo }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -70,7 +71,7 @@ const PostGame: FC<MatchProps> = ({ matchInfo }) => {
             />
           </Section>
           <Section headerTitle="Solo Climb">
-            <MatchStatefulToggle dataTitle="soloClimb" name="Solo Climb" />
+            <MatchStatefulCheckbox dataTitle="soloClimb" name="Solo Climb" />
           </Section>
         </ScrollView>
       </View>
@@ -109,7 +110,9 @@ const RadioGroupWrapper = ({
         }}
       >
         {choices.map((choice) => (
-          <Radio key={choice}>{choice}</Radio>
+          <Radio key={choice}>
+            {props => <Text {...props} style = {{ fontSize: 16, fontWeight: "500", marginLeft: 10 }}>{choice}</Text>}
+          </Radio>
         ))}
       </RadioGroup>
     </View>

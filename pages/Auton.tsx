@@ -9,6 +9,7 @@ import MatchStatefulToggle from "../components/MatchStatefulToggle";
 import Section from "../components/Section";
 import MatchStatefulRadio from "../components/MatchStatefulRadio";
 import MatchStatefulCounter from "../components/MatchStatefulCounter";
+import MatchStatefulCheckbox from "../components/MatchStatefulCheckbox";
 
 const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
   const [headerBackgroundColor] = useState(new Animated.Value(0));
@@ -32,7 +33,7 @@ const Auton: FC<MatchProps> = ({ matchInfo, settings }) => {
           style={{ zIndex: 0 }}
         >
           <Section headerTitle="Crossing" headerPadding={120}>
-            <MatchStatefulToggle
+            <MatchStatefulCheckbox
               dataTitle="crossedInitLine"
               name="Crossed Initiation Line"
             />

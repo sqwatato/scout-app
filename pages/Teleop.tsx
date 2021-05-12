@@ -7,6 +7,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import ShotsInput from "../components/ShotsInput";
 import MatchStatefulCounter from "../components/MatchStatefulCounter";
 import MatchStatefulToggle from "../components/MatchStatefulToggle";
+import MatchStatefulCheckbox from "../components/MatchStatefulCheckbox";
 import Section from "../components/Section";
 
 const Teleop: FC<MatchProps> = ({ matchInfo, settings }) => {
@@ -35,28 +36,28 @@ const Teleop: FC<MatchProps> = ({ matchInfo, settings }) => {
             />
           </Section>
           <Section headerTitle="Rotation Disabled">
-            <MatchStatefulToggle
+            <MatchStatefulCheckbox
               dataTitle="rotationDisabled"
               name="Rotation Disabled"
             />
           </Section>
           <Section headerTitle="Position Disabled">
-            <MatchStatefulToggle
+            <MatchStatefulCheckbox
               dataTitle="positionDisabled"
               name="Position Disabled"
             />
           </Section>
           <Section headerTitle="Trench">
-            <MatchStatefulToggle dataTitle="trench" name="Trench" />
+            <MatchStatefulCheckbox dataTitle="trench" name="Trench" />
           </Section>
           <Section headerTitle="Defense">
-            <MatchStatefulToggle dataTitle="defense" name="Defense" />
+            <MatchStatefulCheckbox dataTitle="defense" name="Defense" />
           </Section>
           <Section headerTitle="Stuck">
-            <MatchStatefulToggle dataTitle="stuck" name="Stuck" />
+            <MatchStatefulCheckbox dataTitle="stuck" name="Stuck" />
           </Section>
           <Section headerTitle="Disabled">
-            <MatchStatefulToggle dataTitle="disabled" name="Disabled" />
+            <MatchStatefulCheckbox dataTitle="disabled" name="Disabled" />
           </Section>
         </ScrollView>
       </View>
