@@ -45,13 +45,13 @@ const Stopwatch: FC<StopwatchProps> = ({ onMSecChange }) => {
 
   return (
     <View>
-      <Text>{`${mins < 10 ? 0 : ""}${mins}:${secs < 10 ? 0 : ""}${secs}.${
+      <Text category = "h5" style = {{ marginVertical: 10, fontWeight: "400", fontSize: 40 }}>{`${mins < 10 ? 0 : ""}${mins}:${secs < 10 ? 0 : ""}${secs}.${
         msecs / 100
       }`}</Text>
-      <Button onPress={paused ? start : pause}>
-        {paused ? "Start" : "Pause"}
+      <Button onPress={paused ? start : pause}  status = {paused ? "success" : "danger" } style = {{ marginBottom: 10 }}> 
+        { paused ? "Start" : "Stop" }
       </Button>
-      <Button onPress={reset} disabled={!paused}>
+      <Button onPress={reset} disabled={ ( !paused || msecs == 0 ) } appearance = "outline" status = "warning">
         Reset
       </Button>
     </View>
