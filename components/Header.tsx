@@ -1,16 +1,24 @@
 import React, { FC } from "react";
-import { StyleSheet, Animated } from "react-native";
+import { StyleSheet, Animated, Button, View } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { BlurView } from "expo-blur";
 import { Dimensions } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   title: string;
   matchInfo: any;
   backgroundColor?: any;
+  toggleQRCode?: () => any;
 }
 
-const Header: FC<Props> = ({ title, matchInfo, backgroundColor }) => {
+const Header: FC<Props> = ({
+  title,
+  matchInfo,
+  backgroundColor,
+  toggleQRCode,
+}) => {
   return (
     <BlurView intensity={100} tint="light" style={styles.header}>
       <Animated.View
@@ -20,15 +28,41 @@ const Header: FC<Props> = ({ title, matchInfo, backgroundColor }) => {
             justifyContent: "flex-end",
             paddingHorizontal: 25,
             paddingBottom: 15,
+            position: "relative",
           },
           StyleSheet.absoluteFillObject,
         ]}
       >
-        <Text category="h1">{title}</Text>
-        <Text category="s1">
-          Team: {matchInfo && matchInfo.teams[0]}, &nbsp;
-          {matchInfo && matchInfo.alliance}@{matchInfo && matchInfo.regional}{" "}
-        </Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <View>
+            <Text category="h1">{title}</Text>
+            <Text category="s1">
+              Team: {matchInfo && matchInfo.teams[0]}, &nbsp;
+              {matchInfo && matchInfo.alliance}@
+              {matchInfo && matchInfo.regional}{" "}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={toggleQRCode}
+            style={{
+              marginTop: 10,
+              marginRight: 10,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text category="c1" style={{}}>
+              Create
+            </Text>
+            <Ionicons name="qr-code-outline" size={30} color={"black"} />
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </BlurView>
   );

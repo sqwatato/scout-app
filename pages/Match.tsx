@@ -1,12 +1,23 @@
-import React, { FC, useEffect, useState } from "react";
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Auton from "./Auton";
 import Teleop from "./Teleop";
 import PostGame from "./PostGame";
 import { Ionicons } from "@expo/vector-icons";
-import { RouteProp } from "@react-navigation/native";
+import { NavigationState, RouteProp } from "@react-navigation/native";
 import { SettingContext } from "../context/SettingContext";
 import { DataProvider, useData } from "../context/DataContext";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { StyleSheet, View } from "react-native";
+import { Text } from "@ui-kitten/components";
+import { NavigationScreenProp, NavigationParams } from "react-navigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,9 +30,10 @@ type MInfo = {
 
 type Props = {
   route: DataProp;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 };
 
-const Match: FC<Props> = ({ route }) => {
+const Match: FC<Props> = ({ route, navigation }) => {
   const [matchInfo, setMatchInfo] = useState<MInfo>();
 
   const { data, setData } = useData();
@@ -71,6 +83,7 @@ const Match: FC<Props> = ({ route }) => {
       settings={{
         haptic: haptic,
       }}
+      navigation={navigation}
     />
   );
 
@@ -80,6 +93,7 @@ const Match: FC<Props> = ({ route }) => {
       settings={{
         haptic: haptic,
       }}
+      navigation={navigation}
     />
   );
 
@@ -89,6 +103,7 @@ const Match: FC<Props> = ({ route }) => {
       settings={{
         haptic: haptic,
       }}
+      navigation={navigation}
     />
   );
 
@@ -132,6 +147,14 @@ const Match: FC<Props> = ({ route }) => {
     </DataProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
+});
+
 type RootStackParamList = {
   data: { data: string };
 };
@@ -176,5 +199,6 @@ export type MatchData = {
 
 export type MatchProps = {
   matchInfo: MInfo;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   settings?;
 };
