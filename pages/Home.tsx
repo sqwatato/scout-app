@@ -5,6 +5,7 @@ import {
   useWindowDimensions,
   View,
   SafeAreaView,
+  ImageBackground,
 } from "react-native";
 
 import {
@@ -49,47 +50,54 @@ const Home: React.FC<Props> = ({ navigation }) => {
   }, []);
   return (
     <Layout style={styles.container}>
-      <StatusBar style="auto" />
-      <View>
-        <Text category="h1" style={{}}>
-          Scout App
-        </Text>
-        <Divider style={{ width: 40 }} />
-      </View>
+      <ImageBackground
+        source = { require( "../assets/homepagebg.jpg" ) }
+        style = { styles.bgimage }
+      >      
+        <View style = { styles.childContainer }>
+          <StatusBar style="auto" />
+          <View>
+            <Text category="h1" style={{}}>
+              Scout App
+            </Text>
+            <Divider style={{ width: 40 }} />
+          </View>
 
-      <View>
-        <Button
-          onPress={() => {
-            navigation.navigate("QRScanner");
-            haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          }}
-          style={styles.button}
-          size="giant"
-        >
-          Scan QRCode
-        </Button>
-        <Button
-          onPress={() => {
-            navigation.navigate("Match", { data: "1@MVHS:b[115,115,115]" });
-            haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          }}
-          style={[styles.button, { shadowOpacity: 0 }]}
-          appearance="outline"
-          size="giant"
-        >
-          Sample Match
-        </Button>
-      </View>
-      <SafeAreaView style={styles.settings}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Settings");
-            haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          }}
-        >
-          <Ionicons name="cog" size={30} />
-        </TouchableOpacity>
-      </SafeAreaView>
+          <View>
+            <Button
+              onPress={() => {
+                navigation.navigate("QRScanner");
+                haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }}
+              style={styles.button}
+              size="giant"
+            >
+              Scan QRCode
+            </Button>
+            <Button
+              onPress={() => {
+                navigation.navigate("Match", { data: "1@MVHS:b[115,115,115]" });
+                haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }}
+              style={[styles.button, { shadowOpacity: 0 }]}
+              appearance="outline"
+              size="giant"
+            >
+              Sample Match
+            </Button>
+          </View>
+          <SafeAreaView style={styles.settings}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Settings");
+                haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }}
+            >
+              <Ionicons name="cog" size={30} />
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
+      </ImageBackground>
     </Layout>
   );
 };
@@ -97,10 +105,22 @@ const Home: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    flexDirection: "column"
+  },
+  bgimage:
+  {    
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
+  childContainer:{
+    flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
     flexDirection: "column",
+    position: "relative",
+    resizeMode: 'cover',
+    backgroundColor: "#fffe"
   },
   button: {
     marginVertical: 10,
