@@ -16,7 +16,7 @@ const Counter: FC<Props> = ({ name, onChange, value, haptic }) => {
       <View style={styles.buttonContainer}>
         <Button
           style={[styles.neg, styles.button]}
-          onPress={() => {
+          onPressIn={() => {
             onChange(value - 1);
             haptic &&
               Haptics.notificationAsync(
@@ -62,7 +62,7 @@ const Counter: FC<Props> = ({ name, onChange, value, haptic }) => {
         </View>
         <Button
           style={[styles.button, styles.pos]}
-          onPress={() => {
+          onPressIn={() => {
             onChange(value + 1);
             haptic &&
               Haptics.notificationAsync(

@@ -51,7 +51,7 @@ const Stopwatch: FC<StopwatchProps> = ({ onMSecChange }) => {
       <Button onPress={paused ? start : pause}  status = {paused ? "success" : "danger" } style = {{ marginBottom: 10 }}> 
         { paused ? "Start" : "Stop" }
       </Button>
-      <Button onPress={reset} disabled={ ( !paused || msecs == 0 ) } appearance = "outline">
+      <Button onPress={reset} disabled={ ( !paused || totalMSecs === 0 ) } appearance = "outline">
         Reset
       </Button>
     </View>

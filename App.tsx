@@ -14,6 +14,7 @@ enableScreens();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  console.log = () => null;
   return (
     <SettingsProvider>
       <ApplicationProvider {...eva} theme={eva.light}>

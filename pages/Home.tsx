@@ -77,7 +77,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
           appearance="outline"
           size="giant"
         >
-          Match
+          Sample Match
         </Button>
       </View>
       <SafeAreaView style={styles.settings}>

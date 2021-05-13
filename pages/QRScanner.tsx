@@ -10,9 +10,10 @@ import {
 } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableNativeFeedback, TouchableOpacity } from "react-native-gesture-handler";
+import { ForceTouchGestureHandler, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import * as Haptics from 'expo-haptics';
 import { SettingContext } from '../context/SettingContext'
+import { TapGestureHandler } from 'react-native-gesture-handler';
 
 
 interface Props {
@@ -20,6 +21,8 @@ interface Props {
 }
 
 const QRScanner: FC<Props> = ({ navigation }) => {
+  let doubleTapRef = React.createRef();
+  const [ facing, setFacing ] = useState( "back" );
   const [hasPermission, setHasPermission] = useState<boolean>(false);
   const [scannedData, setScannedData] = useState<string>("");
   const [scanning, setScanning] = useState<boolean>(false);
@@ -51,37 +54,31 @@ const QRScanner: FC<Props> = ({ navigation }) => {
   }, [getSettingState("Haptic Feedback")])
 
   return (
-    <View style={styles.container}>
-      <Text>{scannedData}</Text>
-      {hasPermission && scanning && (
-        <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-      )}
-      {/* <View style={styles.buttonContainer}>
-        {hasPermission && !scanning && (
-          <View>
-            <Button onPress={() => setScanning(true)}>Tap to Scan</Button>
-          </View>
+    <ForceTouchGestureHandler 
+      minForce = { 0.8 }
+      onHandlerStateChange={ () => { setFacing ( facing === "back" ? "front" : "back" ); Haptics.impactAsync( Haptics.ImpactFeedbackStyle.Light )  } } 
+    >
+      <View style={styles.container}>
+        <Text>{scannedData}</Text>
+        {hasPermission && scanning && (
+            <BarCodeScanner
+              type = { facing === "back" ? "back" : "front" }
+              onBarCodeScanned={handleBarCodeScanned}
+              style={StyleSheet.absoluteFillObject}
+            />
         )}
-        {scanning && (
-          <View>
-            <Button onPress={() => setScanning(false)}>Cancel</Button>
-          </View>
-        )}
-      </View> */}
-      <SafeAreaView style={styles.backButtonContainer}>
-        <TouchableOpacity 
-          onPress = {() => {
-              (haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
-              navigation.goBack();
-            } 
-        }>
-          <Ionicons name = "chevron-back-outline" size = {35} color = {"white"}/>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </View>
+        <SafeAreaView style={styles.backButtonContainer}>
+          <TouchableOpacity 
+            onPress = {() => {
+                (haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
+                navigation.goBack();
+              } 
+          }>
+            <Ionicons name = "chevron-back-outline" size = {35} color = {"white"}/>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </View>
+    </ForceTouchGestureHandler>
   );
 };
 

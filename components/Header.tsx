@@ -5,12 +5,14 @@ import { BlurView } from "expo-blur";
 import { Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as Haptics from "expo-haptics";
 
 interface Props {
   title: string;
   matchInfo: any;
   backgroundColor?: any;
   toggleQRCode?: () => any;
+  haptic: boolean
 }
 
 const Header: FC<Props> = ({
@@ -18,6 +20,7 @@ const Header: FC<Props> = ({
   matchInfo,
   backgroundColor,
   toggleQRCode,
+  haptic
 }) => {
   return (
     <BlurView intensity={100} tint="light" style={styles.header}>
@@ -49,7 +52,11 @@ const Header: FC<Props> = ({
             </Text>
           </View>
           <TouchableOpacity
-            onPress={toggleQRCode}
+            onPress={() => {
+              toggleQRCode();
+              ( haptic &&
+              Haptics.impactAsync( Haptics.ImpactFeedbackStyle.Heavy ) )
+            }}
             style={{
               marginTop: 10,
               marginRight: 10,
