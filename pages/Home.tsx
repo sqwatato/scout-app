@@ -1,103 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  useWindowDimensions,
-  View,
-  SafeAreaView,
-  ImageBackground,
-} from "react-native";
-
+import { StyleSheet, View } from "react-native";
+import { Button, Divider, Layout, Text } from "@ui-kitten/components";
 import {
   NavigationParams,
   NavigationScreenProp,
   NavigationState,
 } from "react-navigation";
 
-import { db } from "../firebase";
-import { Layout, Card, Button, Text, Divider } from "@ui-kitten/components";
-import { withStyles } from "@ui-kitten/components";
-
-import * as Haptics from "expo-haptics";
-import { TouchableOpacity } from "react-native-gesture-handler";
-
-import { Ionicons } from "@expo/vector-icons";
-import { PostGame } from ".";
-
-import { SettingContext } from "../context/SettingContext";
-
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 const Home: React.FC<Props> = ({ navigation }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [data, setData] = useState<string>("");
-  const { settings, getSettingState } = React.useContext(
-    SettingContext
-  ) as SettingContextType;
-
-  const [haptic, setHaptic] = useState(getSettingState("Haptic Feedback"));
-
-  useEffect(() => {
-    setHaptic(getSettingState("Haptic Feedback"));
-  }, [getSettingState("Haptic Feedback")]);
-
-  useEffect(() => {
-    (async () => {
-      setLoading(false);
-    })();
-  }, []);
   return (
     <Layout style={styles.container}>
-      <ImageBackground
-        source = { require( "../assets/homepagebg.jpg" ) }
-        style = { styles.bgimage }
-      >      
-        <View style = { styles.childContainer }>
-          <StatusBar style="auto" />
-          <View>
-            <Text category="h1" style={{}}>
-              Scout App
-            </Text>
-            <Divider style={{ width: 40 }} />
-          </View>
-
-          <View>
-            <Button
-              onPress={() => {
-                navigation.navigate("QRScanner");
-                haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              }}
-              style={styles.button}
-              size="giant"
-            >
-              Scan QRCode
-            </Button>
-            <Button
-              onPress={() => {
-                navigation.navigate("Match", { data: "1@MVHS:b[115,115,115]" });
-                haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              }}
-              style={[styles.button, { shadowOpacity: 0 }]}
-              appearance="outline"
-              size="giant"
-            >
-              Sample Match
-            </Button>
-          </View>
-          <SafeAreaView style={styles.settings}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("Settings");
-                haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              }}
-            >
-              <Ionicons name="cog" size={30} />
-            </TouchableOpacity>
-          </SafeAreaView>
+      <View style={styles.childContainer}>
+        <StatusBar style="auto" />
+        <View>
+          <Text category="h1" style={{}}>
+            Scout App
+          </Text>
+          <Divider style={{ width: 40 }} />
         </View>
-      </ImageBackground>
+
+        <View>
+          <Button
+            onPress={() => {
+              navigation.navigate("QRScanner");
+            }}
+            style={styles.button}
+            size="giant"
+          >
+            Scout New Match
+          </Button>
+          {/* <Button
+            onPress={() => {
+              navigation.navigate("Match", { data: "1@MVHS:b[115,115,115]" });
+            }}
+            style={[styles.button, { shadowOpacity: 0 }]}
+            appearance="outline"
+            size="giant"
+          >
+            Continue Scouting
+          </Button> */}
+        </View>
+      </View>
     </Layout>
   );
 };
@@ -105,22 +53,21 @@ const Home: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
   },
-  bgimage:
-  {    
+  bgimage: {
     flex: 1,
     width: "100%",
     height: "100%",
   },
-  childContainer:{
+  childContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "space-around",
     flexDirection: "column",
     position: "relative",
-    resizeMode: 'cover',
-    backgroundColor: "#fffe"
+    resizeMode: "cover",
+    backgroundColor: "#fffe",
   },
   button: {
     marginVertical: 10,

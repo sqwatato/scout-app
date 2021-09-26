@@ -1,29 +1,29 @@
 import { Button, Layout, Text } from "@ui-kitten/components";
 import React, { FC } from "react";
 import { StyleSheet, View } from "react-native";
-import * as Haptics from "expo-haptics";
 
 interface Props {
   name: string | undefined;
   onChange: (newVal: number) => void | undefined;
   value: number;
-  haptic: boolean;
+  //   haptic: boolean;
 }
 
-const Counter: FC<Props> = ({ name, onChange, value, haptic }) => {
+const Counter: FC<Props> = ({ name, onChange, value }) => {
   return (
-    <Layout style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <Button
           style={[styles.neg, styles.button]}
           onPressIn={() => {
             onChange(value - 1);
-            haptic &&
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Warning
-              );
+            // haptic &&
+            //   Haptics.notificationAsync(
+            //     Haptics.NotificationFeedbackType.Warning
+            //   );
           }}
           appearance="outline"
+          disabled={value <= 0}
         >
           -
         </Button>
@@ -64,17 +64,17 @@ const Counter: FC<Props> = ({ name, onChange, value, haptic }) => {
           style={[styles.button, styles.pos]}
           onPressIn={() => {
             onChange(value + 1);
-            haptic &&
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success
-              );
+            // haptic &&
+            //   Haptics.notificationAsync(
+            //     Haptics.NotificationFeedbackType.Success
+            //   );
           }}
           appearance="outline"
         >
           +
         </Button>
       </View>
-    </Layout>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
+    // backgroundColor: "#fffe",
   },
   button: {
     // fontSize: 10

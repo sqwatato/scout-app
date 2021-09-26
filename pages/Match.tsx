@@ -1,114 +1,53 @@
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Auton from "./Auton";
-import Teleop from "./Teleop";
-import PostGame from "./PostGame";
+import { RouteProp } from "@react-navigation/native";
+import React, { FC, useEffect, useRef } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { NavigationState, RouteProp } from "@react-navigation/native";
-import { SettingContext } from "../context/SettingContext";
-import { DataProvider, useData } from "../context/DataContext";
+import { usePreGame } from "../Stores";
+import PreGame from "../components/Pregame";
+import Auton from "../components/Auton";
+import Teleop from "../components/Teleop";
+import EndGame from "../components/Endgame";
+import QRCodeBottomSheet from "../components/QRCode";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { StyleSheet, View } from "react-native";
-import { Text } from "@ui-kitten/components";
-import { NavigationScreenProp, NavigationParams } from "react-navigation";
+import { View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
-type MInfo = {
-  regional: string;
-  matchNum: number;
-  alliance: string;
-  teams: [number, number, number];
+type RootStackParamList = {
+  data: { data: string };
 };
 
-type Props = {
+type DataProp = RouteProp<RootStackParamList, "data">;
+
+interface MatchProps {
   route: DataProp;
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-};
+}
 
-const Match: FC<Props> = ({ route, navigation }) => {
-  const [matchInfo, setMatchInfo] = useState<MInfo>();
-
-  const { data, setData } = useData();
-
-  const { getSettingState } = React.useContext(
-    SettingContext
-  ) as SettingContextType;
-
-  const [haptic, setHaptic] = useState(getSettingState("Haptic Feedback"));
-
-  useEffect(() => {
-    setHaptic(getSettingState("Haptic Feedback"));
-  }, [getSettingState("Haptic Feedback")]);
+const Match: FC<MatchProps> = ({ route }) => {
+  const setMinfo = usePreGame((state) => state.set);
 
   useEffect(() => {
     const matchInfo: string = route.params.data;
 
-    const matchStrs: string[] = matchInfo.split(/[:@\[\,\]]/).slice(0, -1);
+    // regex expression to make 1@mv:r[115, 254, 118] into [1, mv, 115, 254, 118]
+    const [matchNum, regional, alliance, team1, team2, team3] = matchInfo
+      .split(/[:@\[\,\]]/)
+      .slice(0, -1);
 
-    const regional: string = matchStrs[1];
-    const matchNum: number = parseInt(matchStrs[0]);
-    const alliance: string = matchStrs[2];
-    const teams: [number, number, number] = [
-      parseInt(matchStrs[3]),
-      parseInt(matchStrs[4]),
-      parseInt(matchStrs[5]),
-    ];
+    const teams: [string, string, string] = [team1, team2, team3];
 
-    setMatchInfo({
-      regional,
+    setMinfo({
       matchNum,
+      regional,
       alliance,
+      minfo: matchInfo,
+      teamNum: team1,
       teams,
-    });
-
-    setData({
-      ...data,
-      regional,
-      matchNum,
-      alliance,
     });
   }, []);
 
-  const AutonComponent = () => (
-    <Auton
-      matchInfo={matchInfo}
-      settings={{
-        haptic: haptic,
-      }}
-      navigation={navigation}
-    />
-  );
-
-  const TeleopComponent = () => (
-    <Teleop
-      matchInfo={matchInfo}
-      settings={{
-        haptic: haptic,
-      }}
-      navigation={navigation}
-    />
-  );
-
-  const PostGameComponent = () => (
-    <PostGame
-      matchInfo={matchInfo}
-      settings={{
-        haptic: haptic,
-      }}
-      navigation={navigation}
-    />
-  );
-
   return (
-    <DataProvider>
+    <>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -118,15 +57,19 @@ const Match: FC<Props> = ({ route, navigation }) => {
               | "game-controller"
               | "game-controller-outline"
               | "alarm"
-              | "alarm-outline";
+              | "alarm-outline"
+              | "checkmark-done"
+              | "checkmark-done-outline";
 
-            if (route.name === "Auton") {
+            if (route.name === "PreGame")
+              iconName = focused ? "checkmark-done" : "checkmark-done-outline";
+            else if (route.name === "Auton") {
               iconName = focused ? "car" : "car-outline";
             } else if (route.name === "Teleop") {
               iconName = focused
                 ? "game-controller"
                 : "game-controller-outline";
-            } else if (route.name === "PostGame") {
+            } else {
               iconName = focused ? "alarm" : "alarm-outline";
             }
 
@@ -140,65 +83,13 @@ const Match: FC<Props> = ({ route, navigation }) => {
           style: { height: 90 },
         }}
       >
-        <Tab.Screen name="Auton" component={AutonComponent} />
-        <Tab.Screen name="Teleop" component={TeleopComponent} />
-        <Tab.Screen name="PostGame" component={PostGameComponent} />
+        <Tab.Screen name="PreGame" component={PreGame} />
+        <Tab.Screen name="Auton" component={Auton} />
+        <Tab.Screen name="Teleop" component={Teleop} />
+        <Tab.Screen name="EndGame" component={EndGame} />
       </Tab.Navigator>
-    </DataProvider>
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-});
-
-type RootStackParamList = {
-  data: { data: string };
-};
-
-type DataProp = RouteProp<RootStackParamList, "data">;
-
 export default Match;
-
-export type MatchData = {
-  alliance: string;
-  attemptHang: boolean;
-  attemptLevel: boolean;
-  autonInner: number;
-  autonUpper: number;
-  autonBottom: number;
-  autonInnerMissed: number;
-  autonUpperMissed: number;
-  autonBottomMissed: number;
-  comments: string;
-  defense: boolean;
-  stuck: boolean;
-  disabled: boolean;
-  hangFail: boolean;
-  levelFail: boolean;
-  matchNum: number;
-  minfo: string;
-  regional: string;
-  teamNum: number;
-  teleopInner: number;
-  teleopUpper: number;
-  teleopBottom: number;
-  cycles: number;
-  rotationDisabled: boolean;
-  crossedInitLine: boolean;
-  soloClimb: boolean;
-  start: 1 | 2 | 3;
-  preloads: number;
-  positionDisabled: boolean;
-  trench: boolean;
-  climbTime: number;
-};
-
-export type MatchProps = {
-  matchInfo: MInfo;
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-  settings?;
-};

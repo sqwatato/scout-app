@@ -1,7 +1,7 @@
-import { Button } from "@ui-kitten/components";
+import { Button, Modal, Card, Text } from "@ui-kitten/components";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import React, { FC, useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   NavigationParams,
@@ -10,75 +10,136 @@ import {
 } from "react-navigation";
 
 import { Ionicons } from "@expo/vector-icons";
-import { ForceTouchGestureHandler, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
-import * as Haptics from 'expo-haptics';
-import { SettingContext } from '../context/SettingContext'
-import { TapGestureHandler } from 'react-native-gesture-handler';
-
+import {
+  ForceTouchGestureHandler,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 const QRScanner: FC<Props> = ({ navigation }) => {
-  let doubleTapRef = React.createRef();
-  const [ facing, setFacing ] = useState( "back" );
+  const [facing, setFacing] = useState("back");
   const [hasPermission, setHasPermission] = useState<boolean>(false);
-  const [scannedData, setScannedData] = useState<string>("");
   const [scanning, setScanning] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [data, setData] = useState<string>("");
 
-  const { settings, getSettingState } = React.useContext(SettingContext) as SettingContextType;
-
-  const [haptic, setHaptic] = useState( getSettingState( "Haptic Feedback" ) );
-
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = ({ data }: { data: string }) => {
     setScanning(false);
 
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    navigation.navigate("Match", { data });
+    setData(data);
 
-    // setScannedData(data);
+    setVisible(true);
   };
-  
 
   useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
-      setScanning(true)
+      setScanning(true);
     })();
-  });
-
-  useEffect( () => {
-    setHaptic( getSettingState("Haptic Feedback") );
-  }, [getSettingState("Haptic Feedback")])
+  }, []);
 
   return (
-    <ForceTouchGestureHandler 
-      minForce = { 0.8 }
-      onHandlerStateChange={ () => { setFacing ( facing === "back" ? "front" : "back" ); Haptics.impactAsync( Haptics.ImpactFeedbackStyle.Light )  } } 
-    >
-      <View style={styles.container}>
-        <Text>{scannedData}</Text>
-        {hasPermission && scanning && (
+    <>
+      <ForceTouchGestureHandler
+        minForce={0.8}
+        onHandlerStateChange={() => {
+          setFacing(facing === "back" ? "front" : "back");
+        }}
+      >
+        <View style={styles.container}>
+          {hasPermission && scanning && (
             <BarCodeScanner
-              type = { facing === "back" ? "back" : "front" }
+              type={facing === "back" ? "back" : "front"}
               onBarCodeScanned={handleBarCodeScanned}
               style={StyleSheet.absoluteFillObject}
             />
-        )}
-        <SafeAreaView style={styles.backButtonContainer}>
-          <TouchableOpacity 
-            onPress = {() => {
-                (haptic && Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium) );
+          )}
+          <SafeAreaView style={styles.backButtonContainer}>
+            <TouchableOpacity
+              onPress={() => {
                 navigation.goBack();
-              } 
-          }>
-            <Ionicons name = "chevron-back-outline" size = {35} color = {"white"}/>
-          </TouchableOpacity>
-        </SafeAreaView>
-      </View>
-    </ForceTouchGestureHandler>
+              }}
+            >
+              <Ionicons name="chevron-back-outline" size={35} color={"white"} />
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
+      </ForceTouchGestureHandler>
+      <ConfirmModal
+        data={data}
+        visible={visible}
+        setVisible={setVisible}
+        navigation={navigation}
+        setData={setData}
+        setScanning={setScanning}
+      />
+    </>
+  );
+};
+
+interface ConfirmModalProps {
+  visible: boolean;
+  setVisible: (value: boolean) => any;
+  data: string;
+  setData: (value: string) => any;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  setScanning: (value: boolean) => any;
+}
+
+const ConfirmModal: FC<ConfirmModalProps> = ({
+  data,
+  setData,
+  visible,
+  setVisible,
+  navigation,
+  setScanning,
+}) => {
+  const yes = () => {
+    setVisible(false);
+    setScanning(false);
+    navigation.navigate("Match", { data });
+  };
+
+  const no = () => {
+    setVisible(false);
+    setScanning(false);
+    setData("");
+    setScanning(true);
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+      onBackdropPress={no}
+    >
+      <Card
+        disabled={true}
+        style={{ marginHorizontal: 25, paddingTop: 10, paddingBottom: 16 }}
+      >
+        <Text category="h4" style={{ fontSize: 20 }}>
+          Confirm Match
+        </Text>
+        <Text
+          category="p1"
+          style={{ marginVertical: 10, marginBottom: 15, textAlign: "center" }}
+        >
+          Are you scouting the match, {data}?
+        </Text>
+        <View style={styles.confirmButtons}>
+          <Button appearance="outline" style={styles.button} onPress={yes}>
+            Yes
+          </Button>
+          <Button appearance="outline" style={styles.button} onPress={no}>
+            No
+          </Button>
+        </View>
+      </Card>
+    </Modal>
   );
 };
 
@@ -92,18 +153,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 20,
-    width: "100%",
-  },
   backButtonContainer: {
     position: "absolute",
     left: 10,
     top: 10,
   },
   button: {
-    marginBottom: 2,
+    width: "49%",
+    marginRight: 2,
+    flex: 1,
+  },
+  confirmButtons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });
 
