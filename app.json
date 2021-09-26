@@ -1,32 +1,17 @@
 {
   "expo": {
-    "name": "scout-app",
-    "slug": "scout-app",
+    "name": "MVRT Scouting App",
+    "icon": "./assets/mvrt-icon.png",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "slug": "scout-app",
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.mvrt.scout",
+      "buildNumber": "1.0.0"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+      "package": "com.mvrt.scout",
+      "versionCode": 1
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "sdkVersion": "42.0.0"
   }
 }

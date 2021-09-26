@@ -100,6 +100,7 @@ const EndGame: FC<EndGameProps> = ({}) => {
               setAttemptHang(newVal);
               if (!newVal) setHangFail(true);
             }}
+            style={{ marginTop: "2%" }}
           >
             Attempt Hang
           </Toggle>
@@ -107,6 +108,7 @@ const EndGame: FC<EndGameProps> = ({}) => {
             checked={hangFail}
             onChange={setHangFail}
             disabled={!attemptHang}
+            style={{ marginTop: "2%" }}
           >
             Hang Fail
           </Toggle>
@@ -119,6 +121,7 @@ const EndGame: FC<EndGameProps> = ({}) => {
                 setBuddy(false);
               }
             }}
+            style={{ marginTop: "2%" }}
           >
             Attempt Level
           </Toggle>
@@ -126,10 +129,16 @@ const EndGame: FC<EndGameProps> = ({}) => {
             checked={levelFail}
             onChange={setLevelFail}
             disabled={!attemptLevel}
+            style={{ marginTop: "2%" }}
           >
             Level Fail
           </Toggle>
-          <Toggle checked={buddy} onChange={setBuddy} disabled={!attemptLevel}>
+          <Toggle
+            checked={buddy}
+            onChange={setBuddy}
+            disabled={!attemptLevel}
+            style={{ marginTop: "2%" }}
+          >
             Buddy Climb
           </Toggle>
         </View>

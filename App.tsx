@@ -9,6 +9,10 @@ import * as eva from "@eva-design/eva";
 import QRScanner from "./pages/QRScanner";
 import Match from "./pages/Match";
 
+console.warn = () => {};
+console.log = () => {};
+console.error = () => {};
+
 enableScreens();
 const Stack = createNativeStackNavigator();
 

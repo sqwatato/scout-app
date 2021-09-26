@@ -7,9 +7,6 @@ import PreGame from "../components/Pregame";
 import Auton from "../components/Auton";
 import Teleop from "../components/Teleop";
 import EndGame from "../components/Endgame";
-import QRCodeBottomSheet from "../components/QRCode";
-import BottomSheet from "@gorhom/bottom-sheet";
-import { View } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
