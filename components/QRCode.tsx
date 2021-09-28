@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import { View, Dimensions, StyleSheet } from "react-native";
 import { Text, Button } from "@ui-kitten/components";
@@ -23,10 +24,17 @@ type MatchData = AutonData & TeleopData & PostGameData & PreGameData;
 const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({ sheetRef }) => {
   const snapPoints = useMemo(() => [1, "75%"], []);
 
+  const [showQR, setShowQR] = useState<boolean>(false);
+
   const preGameState = usePreGame((state) => state);
   const autonState = useAuton((state) => state);
   const teleopState = useTeleop((state) => state);
   const postGameState = usePostGame((state) => state);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index === 0) setShowQR(false);
+    else setShowQR(true);
+  }, []);
 
   const getData: () => MatchData = () => {
     return {
@@ -70,6 +78,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({ sheetRef }) => {
       index={0}
       animateOnMount={false}
       snapPoints={snapPoints}
+      onChange={handleSheetChanges}
       style={{
         shadowColor: "#000",
         shadowOffset: {
@@ -86,10 +95,12 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({ sheetRef }) => {
         <Text style={{ marginBottom: 20 }}>
           Scan this QR Code with the Super Scout Scanner
         </Text>
-        <QRCode
-          value={JSON.stringify(getData())}
-          size={Dimensions.get("screen").width / 1.3}
-        />
+        {showQR && (
+          <QRCode
+            value={JSON.stringify(getData())}
+            size={Dimensions.get("screen").width / 1.3}
+          />
+        )}
         <View
           style={{
             flex: 1,
@@ -147,6 +158,3 @@ const styles = StyleSheet.create({
 });
 
 export default QRCodeBottomSheet;
-function useState<T>(arg0: number): [any, any] {
-  throw new Error("Function not implemented.");
-}
