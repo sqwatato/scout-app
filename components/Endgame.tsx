@@ -6,9 +6,16 @@ import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View } from "react-native";
 import { Stopwatch } from "react-native-stopwatch-timer";
 import { Button, Input, Text, Toggle } from "@ui-kitten/components";
+import {
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from "react-navigation";
 
-interface EndGameProps {}
-const EndGame: FC<EndGameProps> = ({}) => {
+interface EndGameProps {
+  navigation: any; //NavigationScreenProp<NavigationState, NavigationParams>;
+}
+const EndGame: FC<EndGameProps> = ({ navigation }) => {
   const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
@@ -152,7 +159,7 @@ const EndGame: FC<EndGameProps> = ({}) => {
           onChangeText={setComments}
         />
       </ScrollView>
-      <QRCodeBottomSheet sheetRef={sheetRef} />
+      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>
   );
 };

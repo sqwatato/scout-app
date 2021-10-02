@@ -6,9 +6,17 @@ import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View } from "react-native";
 import Counter from "./Counter";
 import { Text, Toggle } from "@ui-kitten/components";
+import {
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from "react-navigation";
 
-interface TeleopProps {}
-const Teleop: FC<TeleopProps> = ({}) => {
+interface TeleopProps {
+  navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+const Teleop: FC<TeleopProps> = ({ navigation }) => {
   const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
@@ -133,7 +141,7 @@ const Teleop: FC<TeleopProps> = ({}) => {
           </Toggle>
         </View>
       </ScrollView>
-      <QRCodeBottomSheet sheetRef={sheetRef} />
+      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>
   );
 };

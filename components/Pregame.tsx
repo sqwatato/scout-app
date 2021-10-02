@@ -5,6 +5,11 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View } from "react-native";
 import { IndexPath, Input, Select, SelectItem } from "@ui-kitten/components/ui";
+import {
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from "react-navigation";
 
 // data to account for
 // matchNum: number | string;
@@ -14,8 +19,10 @@ import { IndexPath, Input, Select, SelectItem } from "@ui-kitten/components/ui";
 // teams: [string | number, string | number, string | number];
 // teamNum: string | number;
 
-interface PreGameProps {}
-const PreGame: FC<PreGameProps> = ({}) => {
+interface PreGameProps {
+  navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
+}
+const PreGame: FC<PreGameProps> = ({ navigation }) => {
   const matchNum = usePreGame((state) => state.matchNum);
   const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
@@ -91,7 +98,7 @@ const PreGame: FC<PreGameProps> = ({}) => {
           <SelectItem title={`${teams[2]}`} />
         </Select>
       </ScrollView>
-      <QRCodeBottomSheet sheetRef={sheetRef} />
+      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>
   );
 };

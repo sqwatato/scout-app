@@ -6,9 +6,17 @@ import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View } from "react-native";
 import { Text, Toggle } from "@ui-kitten/components";
 import Counter from "./Counter";
+import {
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from "react-navigation";
 
-interface AutonProps {}
-const Auton: FC<AutonProps> = ({}) => {
+interface AutonProps {
+  navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+const Auton: FC<AutonProps> = ({ navigation }) => {
   const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
@@ -91,7 +99,7 @@ const Auton: FC<AutonProps> = ({}) => {
           value={preloads}
         />
       </ScrollView>
-      <QRCodeBottomSheet sheetRef={sheetRef} />
+      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>
   );
 };

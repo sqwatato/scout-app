@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { RouteProp } from "@react-navigation/native";
+import { NavigationState, RouteProp } from "@react-navigation/native";
 import React, { FC, useEffect, useRef } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { usePreGame } from "../Stores";
@@ -7,6 +7,7 @@ import PreGame from "../components/Pregame";
 import Auton from "../components/Auton";
 import Teleop from "../components/Teleop";
 import EndGame from "../components/Endgame";
+import { NavigationScreenProp, NavigationParams } from "react-navigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,30 +19,38 @@ type DataProp = RouteProp<RootStackParamList, "data">;
 
 interface MatchProps {
   route: DataProp;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-const Match: FC<MatchProps> = ({ route }) => {
+const Match: FC<MatchProps> = ({ route, navigation }) => {
   const setMinfo = usePreGame((state) => state.set);
 
   useEffect(() => {
-    const matchInfo: string = route.params.data;
+    if (route?.params?.data) {
+      const matchInfo: string = route.params.data;
 
-    // regex expression to make 1@mv:r[115, 254, 118] into [1, mv, 115, 254, 118]
-    const [matchNum, regional, alliance, team1, team2, team3] = matchInfo
-      .split(/[:@\[\,\]]/)
-      .slice(0, -1);
+      // regex expression to make 1@mv:r[115, 254, 118] into [1, mv, 115, 254, 118]
+      const [matchNum, regional, alliance, team1, team2, team3] = matchInfo
+        .split(/[:@\[\,\]]/)
+        .slice(0, -1);
 
-    const teams: [string, string, string] = [team1, team2, team3];
+      const teams: [string, string, string] = [team1, team2, team3];
 
-    setMinfo({
-      matchNum,
-      regional,
-      alliance,
-      minfo: matchInfo,
-      teamNum: team1,
-      teams,
-    });
+      setMinfo({
+        matchNum,
+        regional,
+        alliance,
+        minfo: matchInfo,
+        teamNum: team1,
+        teams,
+      });
+    }
   }, []);
+
+  const AutonComponent = () => <Auton navigation={navigation} />;
+  const EndGameComponent = () => <EndGame navigation={navigation} />;
+  const TeleopComponent = () => <Teleop navigation={navigation} />;
+  const PreGameComponent = () => <PreGame navigation={navigation} />;
 
   return (
     <>
@@ -80,10 +89,10 @@ const Match: FC<MatchProps> = ({ route }) => {
           style: { height: 90 },
         }}
       >
-        <Tab.Screen name="PreGame" component={PreGame} />
-        <Tab.Screen name="Auton" component={Auton} />
-        <Tab.Screen name="Teleop" component={Teleop} />
-        <Tab.Screen name="EndGame" component={EndGame} />
+        <Tab.Screen name="PreGame" component={PreGameComponent} />
+        <Tab.Screen name="Auton" component={AutonComponent} />
+        <Tab.Screen name="Teleop" component={TeleopComponent} />
+        <Tab.Screen name="EndGame" component={EndGameComponent} />
       </Tab.Navigator>
     </>
   );

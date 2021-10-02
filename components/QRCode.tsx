@@ -14,14 +14,24 @@ import QRCode from "react-native-qrcode-svg";
 import { usePreGame, useAuton, useTeleop, usePostGame } from "../Stores";
 import { AutonData, PostGameData, PreGameData, TeleopData } from "../types";
 import { BottomSheetMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import {
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from "react-navigation";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface QRCodeBottomSheetProps {
   sheetRef?: RefObject<BottomSheetMethods>;
+  navigation?: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
 type MatchData = AutonData & TeleopData & PostGameData & PreGameData;
 
-const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({ sheetRef }) => {
+const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
+  sheetRef,
+  navigation,
+}) => {
   const snapPoints = useMemo(() => [1, "75%"], []);
 
   const [showQR, setShowQR] = useState<boolean>(false);
@@ -35,6 +45,22 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({ sheetRef }) => {
     if (index === 0) setShowQR(false);
     else setShowQR(true);
   }, []);
+
+  useEffect(() => {
+    AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));
+  }, [preGameState]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("@scout_auton", JSON.stringify(autonState));
+  }, [autonState]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("@scout_teleop", JSON.stringify(teleopState));
+  }, [teleopState]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("@scout_postgame", JSON.stringify(postGameState));
+  }, [postGameState]);
 
   const getData: () => MatchData = () => {
     return {
@@ -126,6 +152,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({ sheetRef }) => {
               width: "100%",
             }}
             onPress={() => {
+              navigation?.navigate("Home");
               // setVisible(true);
               // Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
             }}
