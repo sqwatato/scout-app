@@ -54,7 +54,6 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
           display: "flex",
           flexDirection: "column",
           padding: "10%",
-          height: "100%",
         }}
         keyboardDismissMode="on-drag"
       >
@@ -76,37 +75,6 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
             }}
           >
             <Stopwatch onChange={setClimbTime} />
-            {/* <Stopwatch
-              msecs
-              start={stopwatchRunning}
-              reset={stopwatchReset}
-              options={{
-                container: {
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "50%",
-                },
-                text: { fontSize: 25 },
-              }}
-              getTime={(val: string) =>
-                (time = parseInt(val.replaceAll(":", "")))
-              }
-            />
-            <Button
-              onPress={() => {
-                if (stopwatchRunning) setClimbTime(time);
-                setStopwatchRunning(!stopwatchRunning);
-                setStopwatchReset(false);
-              }}
-            >
-              {stopwatchRunning ? "Stop" : "Start"}
-            </Button>
-            <Button
-              onPress={() => setStopwatchReset(true)}
-              disabled={stopwatchRunning}
-            >
-              Reset
-            </Button> */}
           </View>
         </View>
         <View
@@ -160,8 +128,6 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
             Buddy Climb
           </Toggle>
         </View>
-
-        <View style={{ marginTop: "50%" }}></View>
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>

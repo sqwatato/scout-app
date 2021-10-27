@@ -66,11 +66,32 @@ const Stopwatch: React.FC<Props> = ({ onChange }) => {
         }}
       >
         {isRunning ? (
-          <Button onPress={handleStartStop}>Stop</Button>
+          <Button
+            onPress={handleStartStop}
+            status="danger"
+            style={{ margin: "1%" }}
+            appearance="outline"
+          >
+            Stop
+          </Button>
         ) : (
-          <Button onPress={handleStartStop}>Start</Button>
+          <Button
+            onPress={handleStartStop}
+            status="success"
+            style={{ margin: "1%" }}
+            appearance="outline"
+          >
+            Start
+          </Button>
         )}
-        <Button onPress={handleReset}>Reset</Button>
+        <Button
+          onPress={handleReset}
+          status="warning"
+          style={{ margin: "1%" }}
+          appearance="outline"
+        >
+          Reset
+        </Button>
       </View>
     </View>
   );
