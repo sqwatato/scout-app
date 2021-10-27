@@ -4,13 +4,14 @@ import { usePostGame, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View } from "react-native";
-import { Stopwatch } from "react-native-stopwatch-timer";
+// import { Stopwatch } from "react-native-stopwatch-timer";
 import { Button, Input, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
   NavigationState,
   NavigationParams,
 } from "react-navigation";
+import Stopwatch from "./Stopwatch";
 
 interface EndGameProps {
   navigation: any; //NavigationScreenProp<NavigationState, NavigationParams>;
@@ -53,10 +54,19 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
           display: "flex",
           flexDirection: "column",
           padding: "10%",
+          height: "100%",
         }}
         keyboardDismissMode="on-drag"
       >
-        <View>
+        <Input
+          multiline={true}
+          textStyle={{ minHeight: 64 }}
+          placeholder="Comments"
+          label="Comments"
+          value={comments}
+          onChangeText={setComments}
+        />
+        <View style={{ marginTop: "5%" }}>
           <Text category="h4">Climb Time</Text>
           <View
             style={{
@@ -65,7 +75,8 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
               justifyContent: "space-around",
             }}
           >
-            <Stopwatch
+            <Stopwatch onChange={setClimbTime} />
+            {/* <Stopwatch
               msecs
               start={stopwatchRunning}
               reset={stopwatchReset}
@@ -95,7 +106,7 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
               disabled={stopwatchRunning}
             >
               Reset
-            </Button>
+            </Button> */}
           </View>
         </View>
         <View
@@ -149,15 +160,8 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
             Buddy Climb
           </Toggle>
         </View>
-        <Input
-          style={{ marginTop: "5%" }}
-          multiline={true}
-          textStyle={{ minHeight: 64 }}
-          placeholder="Comments"
-          label="Comments"
-          value={comments}
-          onChangeText={setComments}
-        />
+
+        <View style={{ marginTop: "50%" }}></View>
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>
