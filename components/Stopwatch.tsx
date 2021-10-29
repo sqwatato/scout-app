@@ -8,30 +8,16 @@ interface Props {
 
 const Stopwatch: React.FC<Props> = ({ onChange }) => {
   const [msecs, setTime] = useState(0);
-  const [mins, setMin] = useState(0);
-  const [secs, setSecs] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     let interval: any = undefined;
     if (isRunning) {
       interval = setInterval(() => {
-        let newMs = msecs + 5;
-        let newSecs = secs;
-        let newMin = mins;
-        if (newMs >= 1000) {
-          newSecs++;
-          newMs = 0;
-        }
-        if (newSecs >= 60) {
-          newMin++;
-          newSecs = 0;
-        }
+        let newMs = msecs + 25;
         setTime(newMs);
-        setSecs(newSecs);
-        setMin(newMin);
-        onChange(newMs + 60 * 1000 * newMin + newSecs * 1000);
-      }, 5);
+        onChange(newMs);
+      }, 25);
     }
     return () => clearInterval(interval);
   }, [isRunning, msecs]);
@@ -56,9 +42,7 @@ const Stopwatch: React.FC<Props> = ({ onChange }) => {
         category="h5"
         style={{ marginVertical: 10, fontWeight: "400", fontSize: 40 }}
       >
-        {`${mins < 10 ? 0 : ""}${mins}:${secs < 10 ? 0 : ""}${secs}.${(
-          "000" + msecs
-        ).substr(-3)}`}
+        {`${msecs} ms`}
       </Text>
       <View
         style={{
