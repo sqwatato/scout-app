@@ -20,43 +20,32 @@ const Auton: FC<AutonProps> = ({ navigation }) => {
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);*/
   const [autonFields, setAutonFields] = useState<any[]>();
+  const fetchData = () =>{
+    db.collection('years').doc('2022').collection('scouting').doc('auton').get()
+    .then((fields)=>{
+      setAutonFields(Object.keys(fields.data() || {}).map(field => ({name: field, type: (fields.data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
+    })
+  }
   useEffect(() => {
-    const fetchData = async () => {
-      const fields = await db.collection('years').doc('2022').collection('scouting').doc('auton').get();
-      // setAutonFields(fields.data());
-      setAutonFields(Object.keys(fields.data() || {}).map(field => ({name: field, type: (fields.data() || {})[field]})))
-      // Alert.alert(JSON.stringify(fields.data()));
-    }
     fetchData();
   }, [])
-
-  const renderFields = () => {
-    Alert.alert("Called");
-    for(let key in autonFields) {
-      if(autonFields.hasOwnProperty(key)) {
-        return (
-          <View>
-            {key + " -> " + autonFields[key]}
-          </View>
-        )
-      }
-    }
-  }
 
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
-      <View
-        // contentContainerStyle={{
-        //   display: "flex",
-        //   flexDirection: "column",
-        //   padding: "10%",
-        //   // backgroundColor: 'red'
-        // }}
-        // keyboardDismissMode="on-drag"
-        style={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+      <ScrollView
+         contentContainerStyle={{
+           display: "flex",
+           flexDirection: "column",
+           padding: "10%",
+           width: '100%',
+           height: '100%',
+           justifyContent: 'center',
+           alignItems: 'center'
+           // backgroundColor: 'red'
+         }}
+         keyboardDismissMode="on-drag"
       >
-        <Text>{autonFields?.length}</Text>
         {/* {autonFields?.map(field => <Text>{field['name'] + " -> " + field['type']}</Text>)}  */}
         {autonFields?.map((field) => {
           if(field['type'] == 'counter') {
@@ -73,22 +62,10 @@ const Auton: FC<AutonProps> = ({ navigation }) => {
             )
           }
         })}
-      </View>
+      </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>
   );
 };
 
 export default Auton;
-/*
-
-          if(field['type']==="counter"){
-            <Counter
-            name={field['name']}
-            onChange={() => Alert.alert("Change")}
-            value={0}/>
-          }
-          if(field['type'] == 'boolean') {
-            <Toggle checked = {false} onChange={() => Alert.alert("Stuff")} style = {{marginTop: "3%"}}/>
-          }
-        })*/

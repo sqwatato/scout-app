@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationState, RouteProp } from "@react-navigation/native";
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { usePreGame } from "../Stores";
 import PreGame from "../components/Pregame";
@@ -8,6 +8,8 @@ import Auton from "../components/Auton";
 import Teleop from "../components/Teleop";
 import EndGame from "../components/Endgame";
 import { NavigationScreenProp, NavigationParams } from "react-navigation";
+import { Alert } from "react-native";
+import { db } from "../firebase";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,8 +26,9 @@ interface MatchProps {
 
 const Match: FC<MatchProps> = ({ route, navigation }) => {
   const setMinfo = usePreGame((state) => state.set);
-
+  const [autonFields, setAutonFields] = useState<any[]>();
   useEffect(() => {
+    Alert.alert("called");
     if (route?.params?.data) {
       const matchInfo: string = route.params.data;
 
@@ -47,7 +50,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
     }
   }, []);
 
-  const AutonComponent = () => <Auton navigation={navigation} />;
+  const AutonComponent = () => <Auton navigation={navigation}/>;
   const EndGameComponent = () => <EndGame navigation={navigation} />;
   const TeleopComponent = () => <Teleop navigation={navigation} />;
   const PreGameComponent = () => <PreGame navigation={navigation} />;
