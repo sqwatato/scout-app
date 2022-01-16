@@ -3,7 +3,7 @@ import Header from "./Header";
 import { usePostGame, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { ScrollView, View } from "react-native";
+import { Alert, ScrollView, View } from "react-native";
 // import { Stopwatch } from "react-native-stopwatch-timer";
 import { Button, Input, Text, Toggle } from "@ui-kitten/components";
 import {
@@ -12,15 +12,17 @@ import {
   NavigationParams,
 } from "react-navigation";
 import Stopwatch from "./Stopwatch";
+import Counter from "./Counter";
 
 interface EndGameProps {
   navigation: any; //NavigationScreenProp<NavigationState, NavigationParams>;
+  fields: any[];
 }
-const EndGame: FC<EndGameProps> = ({ navigation }) => {
-  const teams = usePreGame((state) => state.teams);
+const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
+  const sheetRef = useRef<BottomSheet>(null);
+  /*const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
-  const sheetRef = useRef<BottomSheet>(null);
 
   const [stopwatchRunning, setStopwatchRunning] = useState<boolean>(false);
   const [stopwatchReset, setStopwatchReset] = useState<boolean>(false);
@@ -40,15 +42,10 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
   const setLevelFail = usePostGame((state) => state.setLevelFail);
   const setBuddy = usePostGame((state) => state.setBuddy);
   const setComments = usePostGame((state) => state.setComments);
-
+  */
   let time = 0;
   return (
     <>
-      <Header
-        matchInfo={{ teams, alliance, regional }}
-        title={"EndGame"}
-        toggleQRCode={() => sheetRef.current?.snapTo(1)}
-      />
       <ScrollView
         contentContainerStyle={{
           display: "flex",
@@ -57,7 +54,36 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
         }}
         keyboardDismissMode="on-drag"
       >
-        <Input
+      {fields?.map((field) => {
+          if(field['type'] == 'counter') {
+            return(
+              <Counter
+              name={field['name']}
+              onChange={() => Alert.alert("Change")}
+              value={0}/>
+            )
+          }
+          else if(field['type']=='boolean'){
+            return(
+              <Toggle checked = {false} onChange={() => Alert.alert("Stuff")} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+            )
+          }
+      })}
+        
+      </ScrollView>
+      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
+    </>
+  );
+};
+
+export default EndGame;
+/*<Header
+        matchInfo={{ teams, alliance, regional }}
+        title={"EndGame"}
+        toggleQRCode={() => sheetRef.current?.snapTo(1)}
+      />*/
+/*
+<Input
           multiline={true}
           textStyle={{ minHeight: 64 }}
           placeholder="Comments"
@@ -128,10 +154,4 @@ const EndGame: FC<EndGameProps> = ({ navigation }) => {
             Buddy Climb
           </Toggle>
         </View>
-      </ScrollView>
-      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
-    </>
-  );
-};
-
-export default EndGame;
+        */

@@ -3,7 +3,7 @@ import Header from "./Header";
 import { usePreGame, useTeleop } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, Alert } from "react-native";
 import Counter from "./Counter";
 import { Text, Toggle } from "@ui-kitten/components";
 import {
@@ -14,9 +14,10 @@ import {
 
 interface TeleopProps {
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
+  fields: any[];
 }
 
-const Teleop: FC<TeleopProps> = ({ navigation }) => {
+const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
@@ -65,81 +66,21 @@ const Teleop: FC<TeleopProps> = ({ navigation }) => {
         }}
         keyboardDismissMode="on-drag"
       >
-        <View>
-          <Text category="h4">Teleop Made Shots</Text>
-          <Counter
-            name="Bottom Port"
-            onChange={(val) => setTeleopBottom(val)}
-            value={teleopBottom}
-          />
-          <Counter
-            name="Upper Port"
-            onChange={(val) => setTeleopUpper(val)}
-            value={teleopUpper}
-          />
-          <Counter
-            name="Inner Port"
-            onChange={(val) => setTeleopInner(val)}
-            value={teleopInner}
-          />
-        </View>
-        <View style={{ marginTop: "3%" }}>
-          <Text category="h4">Teleop Missed Shots</Text>
-          <Counter
-            name="Bottom Port"
-            onChange={(val) => setTeleopBottomMissed(val)}
-            value={teleopBottomMissed}
-          />
-          <Counter
-            name="Upper Port"
-            onChange={(val) => setTeleopUpperMissed(val)}
-            value={teleopUpperMissed}
-          />
-        </View>
-        <View style={{ marginTop: "5%" }}>
-          <Counter
-            name="Cycles"
-            onChange={(val) => setCycles(val)}
-            value={cycles}
-          />
-        </View>
-        <View style={{ display: "flex", alignItems: "flex-start" }}>
-          <Toggle
-            checked={trench}
-            onChange={setTrench}
-            style={{ marginTop: "3%" }}
-          >
-            Trench Run
-          </Toggle>
-          <Toggle
-            checked={defense}
-            onChange={setDefense}
-            style={{ marginTop: "3%" }}
-          >
-            Played Defense
-          </Toggle>
-          <Toggle
-            checked={rotation}
-            onChange={setRotation}
-            style={{ marginTop: "3%" }}
-          >
-            Did Rotation
-          </Toggle>
-          <Toggle
-            checked={stuck}
-            onChange={setStuck}
-            style={{ marginTop: "3%" }}
-          >
-            Got Stuck
-          </Toggle>
-          <Toggle
-            checked={disabled}
-            onChange={setDisabled}
-            style={{ marginTop: "3%" }}
-          >
-            Got Disabled
-          </Toggle>
-        </View>
+        {fields?.map((field) => {
+          if(field['type'] == 'counter') {
+            return(
+              <Counter
+              name={field['name']}
+              onChange={() => Alert.alert("Change")}
+              value={0}/>
+            )
+          }
+          else if(field['type']=='boolean'){
+            return(
+              <Toggle checked = {false} onChange={() => Alert.alert("Stuff")} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+            )
+          }
+        })}
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>

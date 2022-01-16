@@ -13,22 +13,23 @@ import {
 } from "react-navigation";
 interface AutonProps {
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
+  fields: any[];
 }
 
-const Auton: FC<AutonProps> = ({ navigation }) => {
+const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   /*const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);*/
-  const [autonFields, setAutonFields] = useState<any[]>();
+  //const [autonFields, setAutonFields] = useState<any[]>();
   const fetchData = () =>{
     db.collection('years').doc('2022').collection('scouting').doc('auton').get()
     .then((fields)=>{
-      setAutonFields(Object.keys(fields.data() || {}).map(field => ({name: field, type: (fields.data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
+      //setAutonFields(Object.keys(fields.data() || {}).map(field => ({name: field, type: (fields.data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
     })
   }
-  useEffect(() => {
-    fetchData();
-  }, [])
+  /*useEffect(() => {
+    //fetchData();
+  }, [])*/
 
   const sheetRef = useRef<BottomSheet>(null);
   return (
@@ -47,7 +48,7 @@ const Auton: FC<AutonProps> = ({ navigation }) => {
          keyboardDismissMode="on-drag"
       >
         {/* {autonFields?.map(field => <Text>{field['name'] + " -> " + field['type']}</Text>)}  */}
-        {autonFields?.map((field) => {
+        {fields?.map((field) => {
           if(field['type'] == 'counter') {
             return(
               <Counter
