@@ -20,6 +20,9 @@ interface EndGameProps {
 }
 const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const sheetRef = useRef<BottomSheet>(null);
+  const teams = usePreGame((state) => state.teams);
+  const alliance = usePreGame((state) => state.alliance);
+  const regional = usePreGame((state) => state.regional);
   const postGameFields = usePostGame((state) => state.postGameFields);
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
   useEffect(() =>{
@@ -34,9 +37,6 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
     })
     return tempPostGame;
   }
-  const teams = usePreGame((state) => state.teams);
-  const alliance = usePreGame((state) => state.alliance);
-  const regional = usePreGame((state) => state.regional);
   return (
     <>
     <Header

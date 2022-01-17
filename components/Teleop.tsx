@@ -37,34 +37,6 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
     return tempTeleop;
   }
 
-  /*const cycles = useTeleop((state) => state.cycles);
-  const setCycles = useTeleop((state) => state.setCycles);
-
-  const trench = useTeleop((state) => state.trench);
-  const defense = useTeleop((state) => state.defense);
-  const rotation = useTeleop((state) => state.rotation);
-  const stuck = useTeleop((state) => state.stuck);
-  const disabled = useTeleop((state) => state.disabled);
-  const setTrench = useTeleop((state) => state.setTrench);
-  const setDefense = useTeleop((state) => state.setDefense);
-  const setRotation = useTeleop((state) => state.setRotation);
-  const setStuck = useTeleop((state) => state.setStuck);
-  const setDisabled = useTeleop((state) => state.setDisabled);
-
-  const teleopBottom = useTeleop((state) => state.teleopBottom);
-  const setTeleopBottom = useTeleop((state) => state.setTeleopBottom);
-  const teleopUpper = useTeleop((state) => state.teleopUpper);
-  const setTeleopUpper = useTeleop((state) => state.setTeleopUpper);
-  const teleopInner = useTeleop((state) => state.teleopInner);
-  const setTeleopInner = useTeleop((state) => state.setTeleopInner);
-
-  const teleopBottomMissed = useTeleop((state) => state.teleopBottomMissed);
-  const setTeleopBottomMissed = useTeleop(
-    (state) => state.setTeleopBottomMissed
-  );
-  const teleopUpperMissed = useTeleop((state) => state.teleopUpperMissed);
-  const setTeleopUpperMissed = useTeleop((state) => state.setTeleopUpperMissed);*/
-
   return (
     <>
       <Header

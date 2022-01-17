@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import { useAuton } from '../Stores';
+import { useAuton, usePreGame } from '../Stores';
 import Header from "./Header";
 import {db} from '../firebase';
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -18,13 +18,11 @@ interface AutonProps {
 }
 
 const Auton: FC<AutonProps> = ({ navigation, fields }) => {
-  /*const teams = usePreGame((state) => state.teams);
+  const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
-  const regional = usePreGame((state) => state.regional);*/
-  //const [autonFields, setAutonFields] = useState<any[]>();
+  const regional = usePreGame((state) => state.regional);
   const autonFields = useAuton((state) => state.autonFields);
   const setAutonFields = useAuton((state) => state.setAutonFields);
-  // const setAutonData = useAuton((state, index) => state.setAutonField(state, index));
   const initializeAutonFields = () =>{
     const tempAuton: any[] = [];
     fields?.map((value)=>{
@@ -41,6 +39,11 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
+      <Header
+        matchInfo={{ teams, alliance, regional }}
+        title={"Auton"}
+        toggleQRCode={() => sheetRef.current?.snapTo(1)}
+      />
       <ScrollView
          contentContainerStyle={{
            display: "flex",
