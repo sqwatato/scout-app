@@ -1,6 +1,6 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Header from "./Header";
-import { usePostGame, usePreGame } from "../Stores";
+import { usePostGame, usePreGame} from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { Alert, ScrollView, View } from "react-native";
@@ -20,32 +20,30 @@ interface EndGameProps {
 }
 const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const sheetRef = useRef<BottomSheet>(null);
-  /*const teams = usePreGame((state) => state.teams);
+  const postGameFields = usePostGame((state) => state.postGameFields);
+  const setPostGameFields = usePostGame((state) => state.setPostGameFields);
+  useEffect(() =>{
+    if(postGameFields.length<fields.length) setPostGameFields(initializePostGameFields());
+  }, [])
+  const initializePostGameFields = () =>{
+    const tempPostGame: any[] = [];
+    fields?.map((value)=>{
+        if(value['type']=="string") tempPostGame.push("");
+        if(value['type']=="counter") tempPostGame.push(0);
+        if(value['type']=="boolean") tempPostGame.push(false);
+    })
+    return tempPostGame;
+  }
+  const teams = usePreGame((state) => state.teams);
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
-
-  const [stopwatchRunning, setStopwatchRunning] = useState<boolean>(false);
-  const [stopwatchReset, setStopwatchReset] = useState<boolean>(false);
-
-  const setClimbTime = usePostGame((state) => state.setClimbTime);
-
-  const attemptHang = usePostGame((state) => state.attemptHang);
-  const attemptLevel = usePostGame((state) => state.attemptLevel);
-  const hangFail = usePostGame((state) => state.hangFail);
-  const levelFail = usePostGame((state) => state.levelFail);
-  const buddy = usePostGame((state) => state.buddy);
-  const comments = usePostGame((state) => state.comments);
-
-  const setAttemptHang = usePostGame((state) => state.setAttemptHang);
-  const setAttemptLevel = usePostGame((state) => state.setAttemptLevel);
-  const setHangFail = usePostGame((state) => state.setHangFail);
-  const setLevelFail = usePostGame((state) => state.setLevelFail);
-  const setBuddy = usePostGame((state) => state.setBuddy);
-  const setComments = usePostGame((state) => state.setComments);
-  */
-  let time = 0;
   return (
     <>
+    <Header
+        matchInfo={{ teams, alliance, regional }}
+        title={"EndGame"}
+        toggleQRCode={() => sheetRef.current?.snapTo(1)}
+      />
       <ScrollView
         contentContainerStyle={{
           display: "flex",
@@ -54,18 +52,26 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
         }}
         keyboardDismissMode="on-drag"
       >
-      {fields?.map((field) => {
+      {fields?.map((field, index) => {
           if(field['type'] == 'counter') {
             return(
               <Counter
               name={field['name']}
-              onChange={() => Alert.alert("Change")}
-              value={0}/>
+              onChange={(val) => {
+                const temp: any[] = [...postGameFields];
+                temp[index] = val;
+                setPostGameFields(temp);
+              }}
+              value={postGameFields[index]}/>
             )
           }
           else if(field['type']=='boolean'){
             return(
-              <Toggle checked = {false} onChange={() => Alert.alert("Stuff")} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+              <Toggle checked = {postGameFields[index]} onChange={(val) => {
+                const temp: any[] = [...postGameFields];
+                temp[index] = val;
+                setPostGameFields(temp);
+              }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
             )
           }
       })}

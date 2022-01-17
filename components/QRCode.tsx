@@ -65,37 +65,14 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   const getData: () => MatchData = () => {
     return {
       autonFields: autonState.autonFields,
-      alliance: preGameState.alliance,
-      attemptHang: postGameState.attemptHang,
-      attemptLevel: postGameState.attemptLevel,
-      //autonBottom: autonState.autonBottom,
-      //autonBottomMissed: autonState.autonBottomMissed,
-      //autonInner: autonState.autonInner,
-      //autonUpper: autonState.autonUpper,
-      //autonUpperMissed: autonState.autonUpperMissed,
+      postGameFields: postGameState.postGameFields,
       teleopFields: teleopState.teleopFields,
-      /*teleopBottomMissed: teleopState.teleopBottomMissed,
-      teleopInner: teleopState.teleopInner,
-      teleopUpper: teleopState.teleopUpper,
-      teleopUpperMissed: teleopState.teleopUpperMissed,*/
-      buddy: postGameState.buddy,
-      climbTime: postGameState.climbTime,
-      comments: postGameState.comments,
-      /*cycles: teleopState.cycles,
-      defense: teleopState.defense,
-      disabled: teleopState.disabled,*/
-      hangFail: postGameState.hangFail,
-      //initLineCrosses: autonState.initLineCrosses,
-      levelFail: postGameState.levelFail,
+      alliance: preGameState.alliance,
       matchNum: preGameState.matchNum,
       minfo: preGameState.minfo,
-      //preloads: autonState.preloads,
       regional: preGameState.regional,
-      /*rotation: teleopState.rotation,
-      stuck: teleopState.stuck,*/
       teamNum: preGameState.teamNum,
       teams: preGameState.teams,
-      //trench: teleopState.trench,
     };
   };
 

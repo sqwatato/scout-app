@@ -2,13 +2,6 @@ import create from "zustand";
 import { AutonData, PostGameData, PreGameData, TeleopData } from "./types";
 
 type AutonState =| AutonData & {
-      /*setPreloads: (preloads: number) => any;
-      setInitLineCrosses: (initLineCrosses: boolean) => any;
-      setAutonUpper: (autonUpper: number) => any;
-      setAutonInner: (autonInner: number) => any;
-      setAutonBottom: (autonBottom: number) => any;
-      setAutonUpperMissed: (autonUpperMissed: number) => any;
-      setAutonBottomMissed: (autonBottomMissed: number) => any;*/
       setAutonFields: (autonFields: any[]) => any;
       set: (data: AutonData) => any;
     };
@@ -34,32 +27,13 @@ export const useTeleop = create<TeleopState>((set) => ({
 
 type PostGameState =
   | PostGameData & {
-      setClimbTime: (climbTime: number) => any;
-      setHangFail: (hangFail: boolean) => any;
-      setLevelFail: (levelFail: boolean) => any;
-      setAttemptHang: (attemptHang: boolean) => any;
-      setAttemptLevel: (attemptLevel: boolean) => any;
-      setBuddy: (buddy: boolean) => any;
-      setComments: (comments: string) => any;
+      setPostGameFields: (postGameFields: any[]) => any;
       set: (data: PostGameData) => any;
     };
 
 export const usePostGame = create<PostGameState>((set) => ({
-  climbTime: 0,
-  hangFail: false,
-  levelFail: false,
-  attemptHang: false,
-  attemptLevel: false,
-  buddy: false,
-  comments: "",
-
-  setClimbTime: (climbTime: number) => set({ climbTime }),
-  setHangFail: (hangFail: boolean) => set({ hangFail }),
-  setLevelFail: (levelFail: boolean) => set({ levelFail }),
-  setAttemptHang: (attemptHang: boolean) => set({ attemptHang }),
-  setAttemptLevel: (attemptLevel: boolean) => set({ attemptLevel }),
-  setBuddy: (buddy: boolean) => set({ buddy }),
-  setComments: (comments: string) => set({ comments }),
+  postGameFields: [],
+  setPostGameFields: (postGameFields: any[]) => set({postGameFields}),
   set,
 }));
 

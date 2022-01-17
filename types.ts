@@ -9,13 +9,6 @@ export interface MatchInfo {
 }
 
 export interface AutonData {
-  /*preloads: number;
-  initLineCrosses: boolean;
-  autonUpper: number;
-  autonInner: number;
-  autonUpperMissed: number;
-  autonBottom: number;
-  autonBottomMissed: number;*/
   autonFields: any[];
 }
 
@@ -33,13 +26,7 @@ export interface PreGameData {
 }
 
 export interface PostGameData {
-  climbTime: number;
-  hangFail: boolean;
-  levelFail: boolean;
-  attemptHang: boolean;
-  attemptLevel: boolean;
-  buddy: boolean;
-  comments: string;
+  postGameFields: any[];
 }
 
 export type MatchData = PostGameData | TeleopData | AutonData | PreGameData;

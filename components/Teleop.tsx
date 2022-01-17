@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import Header from "./Header";
 import { usePreGame, useTeleop } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -22,6 +22,20 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);
   const sheetRef = useRef<BottomSheet>(null);
+  const teleopFields = useTeleop((state) => state.teleopFields);
+  const setTeleopFields = useTeleop((state) => state.setTeleopFields);
+  useEffect(() =>{
+    if(teleopFields.length<fields.length) setTeleopFields(initializeTeleopFields());
+  }, [])
+  const initializeTeleopFields = () =>{
+    const tempTeleop: any[] = [];
+    fields?.map((value)=>{
+        if(value['type']=="string") tempTeleop.push("");
+        if(value['type']=="counter") tempTeleop.push(0);
+        if(value['type']=="boolean") tempTeleop.push(false);
+    })
+    return tempTeleop;
+  }
 
   /*const cycles = useTeleop((state) => state.cycles);
   const setCycles = useTeleop((state) => state.setCycles);
@@ -66,18 +80,26 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         }}
         keyboardDismissMode="on-drag"
       >
-        {fields?.map((field) => {
+        {fields?.map((field, index) => {
           if(field['type'] == 'counter') {
             return(
               <Counter
               name={field['name']}
-              onChange={() => Alert.alert("Change")}
-              value={0}/>
+              onChange={(val) => {
+                const temp: any[] = [...teleopFields];
+                temp[index] = val;
+                setTeleopFields(temp);
+              }}
+              value={teleopFields[index]}/>
             )
           }
           else if(field['type']=='boolean'){
             return(
-              <Toggle checked = {false} onChange={() => Alert.alert("Stuff")} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+              <Toggle checked = {teleopFields[index]} onChange={(val) =>{
+                const temp: any[] = [...teleopFields];
+                temp[index] = val;
+                setTeleopFields(temp);
+              }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
             )
           }
         })}

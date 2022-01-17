@@ -27,13 +27,17 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   // const setAutonData = useAuton((state, index) => state.setAutonField(state, index));
   const initializeAutonFields = () =>{
     const tempAuton: any[] = [];
-    autonFields?.map((value)=>{
+    fields?.map((value)=>{
         if(value['type']=="string") tempAuton.push("");
         if(value['type']=="counter") tempAuton.push(0);
         if(value['type']=="boolean") tempAuton.push(false);
     })
-    setAutonFields(tempAuton);
+    return tempAuton;
   }
+  useEffect(() =>{
+      if(autonFields.length<fields.length) setAutonFields(initializeAutonFields());
+    //}
+  }, [])
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
