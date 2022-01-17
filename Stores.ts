@@ -1,80 +1,34 @@
 import create from "zustand";
 import { AutonData, PostGameData, PreGameData, TeleopData } from "./types";
 
-type AutonState =
-  | AutonData & {
-      setPreloads: (preloads: number) => any;
+type AutonState =| AutonData & {
+      /*setPreloads: (preloads: number) => any;
       setInitLineCrosses: (initLineCrosses: boolean) => any;
       setAutonUpper: (autonUpper: number) => any;
       setAutonInner: (autonInner: number) => any;
       setAutonBottom: (autonBottom: number) => any;
       setAutonUpperMissed: (autonUpperMissed: number) => any;
-      setAutonBottomMissed: (autonBottomMissed: number) => any;
+      setAutonBottomMissed: (autonBottomMissed: number) => any;*/
+      setAutonFields: (autonFields: any[]) => any;
       set: (data: AutonData) => any;
     };
 
-export const useAuton = create<AutonState>((set) => ({
-  preloads: 0,
-  initLineCrosses: false,
-  autonUpper: 0,
-  autonInner: 0,
-  autonUpperMissed: 0,
-  autonBottom: 0,
-  autonBottomMissed: 0,
-
-  setPreloads: (preloads: number) => set({ preloads }),
-  setInitLineCrosses: (initLineCrosses: boolean) => set({ initLineCrosses }),
-  setAutonUpper: (autonUpper: number) => set({ autonUpper }),
-  setAutonInner: (autonInner: number) => set({ autonInner }),
-  setAutonBottom: (autonBottom: number) => set({ autonBottom }),
-  setAutonUpperMissed: (autonUpperMissed: number) => set({ autonUpperMissed }),
-  setAutonBottomMissed: (autonBottomMissed: number) =>
-    set({ autonBottomMissed }),
+export const useAuton = create<AutonState>((set) => ({  
+  autonFields: [],
+  setAutonFields: (autonFields: any[]) => set({autonFields}),
   set,
 }));
 
 type TeleopState =
   | TeleopData & {
-      setTeleopUpper: (TeleopUpper: number) => any;
-      setTeleopInner: (TeleopInner: number) => any;
-      setTeleopBottom: (TeleopBottom: number) => any;
-      setTeleopUpperMissed: (TeleopUpperMissed: number) => any;
-      setTeleopBottomMissed: (TeleopBottomMissed: number) => any;
-      setCycles: (cycles: number) => any;
-      setTrench: (trench: boolean) => any;
-      setDefense: (defense: boolean) => any;
-      setRotation: (rotation: boolean) => any;
-      setStuck: (stuck: boolean) => any;
-      setDisabled: (disabled: boolean) => any;
+      setTeleopFields: (teleopFields: any[]) => any;
       set: (data: TeleopData) => any;
     };
 
 export const useTeleop = create<TeleopState>((set) => ({
-  teleopUpper: 0,
-  teleopInner: 0,
-  teleopUpperMissed: 0,
-  teleopBottom: 0,
-  teleopBottomMissed: 0,
-  cycles: 0,
-  trench: false,
-  defense: false,
-  rotation: false,
-  stuck: false,
-  disabled: false,
-
-  setTeleopUpper: (teleopUpper: number) => set({ teleopUpper }),
-  setTeleopInner: (teleopInner: number) => set({ teleopInner }),
-  setTeleopBottom: (teleopBottom: number) => set({ teleopBottom }),
-  setTeleopUpperMissed: (teleopUpperMissed: number) =>
-    set({ teleopUpperMissed }),
-  setTeleopBottomMissed: (teleopBottomMissed: number) =>
-    set({ teleopBottomMissed }),
-  setCycles: (cycles: number) => set({ cycles }),
-  setTrench: (trench: boolean) => set({ trench }),
-  setDefense: (defense: boolean) => set({ defense }),
-  setRotation: (rotation: boolean) => set({ rotation }),
-  setStuck: (stuck: boolean) => set({ stuck }),
-  setDisabled: (disabled: boolean) => set({ disabled }),
+  
+  teleopFields: [],
+  setTeleopFields: (teleopFields: any[]) => set({teleopFields}),
   set,
 }));
 

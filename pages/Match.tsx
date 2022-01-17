@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationState, RouteProp } from "@react-navigation/native";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { usePreGame } from "../Stores";
+import { usePreGame, useAuton } from "../Stores";
 import PreGame from "../components/Pregame";
 import Auton from "../components/Auton";
 import Teleop from "../components/Teleop";
@@ -30,7 +30,6 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
   const [endgameFields, setEndGameFields] = useState<any[]>();
   const [teleopFields, setTeleopFields] = useState<any[]>();
   useEffect(() => {
-    Alert.alert("Called");
     fetchData();
     if (route?.params?.data) {
       const matchInfo: string = route.params.data;
@@ -58,6 +57,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
       setAutonFields(Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
       setEndGameFields(Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
       setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
+
     }, (err)=> {return []});
   }
 

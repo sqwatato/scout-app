@@ -64,37 +64,38 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
 
   const getData: () => MatchData = () => {
     return {
+      autonFields: autonState.autonFields,
       alliance: preGameState.alliance,
       attemptHang: postGameState.attemptHang,
       attemptLevel: postGameState.attemptLevel,
-      autonBottom: autonState.autonBottom,
-      autonBottomMissed: autonState.autonBottomMissed,
-      autonInner: autonState.autonInner,
-      autonUpper: autonState.autonUpper,
-      autonUpperMissed: autonState.autonUpperMissed,
-      teleopBottom: teleopState.teleopBottom,
-      teleopBottomMissed: teleopState.teleopBottomMissed,
+      //autonBottom: autonState.autonBottom,
+      //autonBottomMissed: autonState.autonBottomMissed,
+      //autonInner: autonState.autonInner,
+      //autonUpper: autonState.autonUpper,
+      //autonUpperMissed: autonState.autonUpperMissed,
+      teleopFields: teleopState.teleopFields,
+      /*teleopBottomMissed: teleopState.teleopBottomMissed,
       teleopInner: teleopState.teleopInner,
       teleopUpper: teleopState.teleopUpper,
-      teleopUpperMissed: teleopState.teleopUpperMissed,
+      teleopUpperMissed: teleopState.teleopUpperMissed,*/
       buddy: postGameState.buddy,
       climbTime: postGameState.climbTime,
       comments: postGameState.comments,
-      cycles: teleopState.cycles,
+      /*cycles: teleopState.cycles,
       defense: teleopState.defense,
-      disabled: teleopState.disabled,
+      disabled: teleopState.disabled,*/
       hangFail: postGameState.hangFail,
-      initLineCrosses: autonState.initLineCrosses,
+      //initLineCrosses: autonState.initLineCrosses,
       levelFail: postGameState.levelFail,
       matchNum: preGameState.matchNum,
       minfo: preGameState.minfo,
-      preloads: autonState.preloads,
+      //preloads: autonState.preloads,
       regional: preGameState.regional,
-      rotation: teleopState.rotation,
-      stuck: teleopState.stuck,
+      /*rotation: teleopState.rotation,
+      stuck: teleopState.stuck,*/
       teamNum: preGameState.teamNum,
       teams: preGameState.teams,
-      trench: teleopState.trench,
+      //trench: teleopState.trench,
     };
   };
 

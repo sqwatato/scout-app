@@ -23,7 +23,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const regional = usePreGame((state) => state.regional);
   const sheetRef = useRef<BottomSheet>(null);
 
-  const cycles = useTeleop((state) => state.cycles);
+  /*const cycles = useTeleop((state) => state.cycles);
   const setCycles = useTeleop((state) => state.setCycles);
 
   const trench = useTeleop((state) => state.trench);
@@ -49,7 +49,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
     (state) => state.setTeleopBottomMissed
   );
   const teleopUpperMissed = useTeleop((state) => state.teleopUpperMissed);
-  const setTeleopUpperMissed = useTeleop((state) => state.setTeleopUpperMissed);
+  const setTeleopUpperMissed = useTeleop((state) => state.setTeleopUpperMissed);*/
 
   return (
     <>

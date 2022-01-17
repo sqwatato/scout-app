@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
+import { useAuton } from '../Stores';
 import Header from "./Header";
 import {db} from '../firebase';
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -21,16 +22,18 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   const alliance = usePreGame((state) => state.alliance);
   const regional = usePreGame((state) => state.regional);*/
   //const [autonFields, setAutonFields] = useState<any[]>();
-  const fetchData = () =>{
-    db.collection('years').doc('2022').collection('scouting').doc('auton').get()
-    .then((fields)=>{
-      //setAutonFields(Object.keys(fields.data() || {}).map(field => ({name: field, type: (fields.data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
+  const autonFields = useAuton((state) => state.autonFields);
+  const setAutonFields = useAuton((state) => state.setAutonFields);
+  // const setAutonData = useAuton((state, index) => state.setAutonField(state, index));
+  const initializeAutonFields = () =>{
+    const tempAuton: any[] = [];
+    autonFields?.map((value)=>{
+        if(value['type']=="string") tempAuton.push("");
+        if(value['type']=="counter") tempAuton.push(0);
+        if(value['type']=="boolean") tempAuton.push(false);
     })
+    setAutonFields(tempAuton);
   }
-  /*useEffect(() => {
-    //fetchData();
-  }, [])*/
-
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
@@ -48,18 +51,26 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
          keyboardDismissMode="on-drag"
       >
         {/* {autonFields?.map(field => <Text>{field['name'] + " -> " + field['type']}</Text>)}  */}
-        {fields?.map((field) => {
+        {fields?.map((field, index) => {
           if(field['type'] == 'counter') {
             return(
               <Counter
-              name={field['name']}
-              onChange={() => Alert.alert("Change")}
-              value={0}/>
+              name={field['name']}  
+              onChange={(val) => {
+                const temp: any[] = [...autonFields];
+                temp[index] = val;
+                setAutonFields(temp);
+              }}
+              value={autonFields[index]}/>
             )
           }
           else if(field['type']=='boolean'){
             return(
-              <Toggle checked = {false} onChange={() => Alert.alert("Stuff")} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+              <Toggle checked = {autonFields[index]} onChange={(val) => {
+                const temp: any[] = [...autonFields];
+                temp[index] = val;
+                setAutonFields(temp);
+              }}></Toggle>
             )
           }
         })}

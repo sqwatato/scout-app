@@ -9,27 +9,18 @@ export interface MatchInfo {
 }
 
 export interface AutonData {
-  preloads: number;
+  /*preloads: number;
   initLineCrosses: boolean;
   autonUpper: number;
   autonInner: number;
   autonUpperMissed: number;
   autonBottom: number;
-  autonBottomMissed: number;
+  autonBottomMissed: number;*/
+  autonFields: any[];
 }
 
 export interface TeleopData {
-  teleopUpper: number;
-  teleopInner: number;
-  teleopUpperMissed: number;
-  teleopBottom: number;
-  teleopBottomMissed: number;
-  cycles: number;
-  trench: boolean;
-  defense: boolean;
-  rotation: boolean;
-  stuck: boolean;
-  disabled: boolean;
+  teleopFields: any[];
 }
 
 export interface PreGameData {
