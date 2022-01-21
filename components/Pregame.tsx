@@ -86,14 +86,14 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
           selectedIndex={selectedTeam}
           onSelect={(index) => {
             if (!Array.isArray(index)) {
-              setTeamNum(teams[index.row]);
+              setTeamNum(254);
               setSelectedTeam(index);
             }
           }}
           value={teamNum || teams[0]}
           label="Team Number"
         >
-          <SelectItem title={`${teams[0]}`} />
+          <SelectItem title={254} />
           <SelectItem title={`${teams[1]}`} />
           <SelectItem title={`${teams[2]}`} />
         </Select>

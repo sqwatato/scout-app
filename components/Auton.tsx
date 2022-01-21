@@ -34,6 +34,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   }
   useEffect(() =>{
       if(autonFields.length<fields.length) setAutonFields(initializeAutonFields());
+      // Alert.alert(JSON.stringify(autonFields)); 
     //}
   }, [])
   const sheetRef = useRef<BottomSheet>(null);
@@ -61,14 +62,11 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
         {fields?.map((field, index) => {
           if(field['type'] == 'counter') {
             return(
-              <Counter
-              name={field['name']}  
-              onChange={(val) => {
+              <Counter name={field['name']}  onChange={(val) => {
                 const temp: any[] = [...autonFields];
                 temp[index] = val;
                 setAutonFields(temp);
-              }}
-              value={autonFields[index]}/>
+              }} value={autonFields[index]} />
             )
           }
           else if(field['type']=='boolean'){
@@ -77,7 +75,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
                 const temp: any[] = [...autonFields];
                 temp[index] = val;
                 setAutonFields(temp);
-              }}></Toggle>
+              }}>{field['name']}</Toggle>
             )
           }
         })}

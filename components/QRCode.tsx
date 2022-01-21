@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { View, Dimensions, StyleSheet } from "react-native";
+import { View, Dimensions, StyleSheet, Alert } from "react-native";
 import { Text, Button } from "@ui-kitten/components";
 import QRCode from "react-native-qrcode-svg";
 import { usePreGame, useAuton, useTeleop, usePostGame } from "../Stores";
@@ -20,6 +20,7 @@ import {
   NavigationParams,
 } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { db } from '../firebase'
 
 interface QRCodeBottomSheetProps {
   sheetRef?: RefObject<BottomSheetMethods>;
@@ -40,6 +41,34 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   const autonState = useAuton((state) => state);
   const teleopState = useTeleop((state) => state);
   const postGameState = usePostGame((state) => state);
+
+  const pushData = () => {
+    const data = getData();
+    let autonFields: any[] = [], teleopFields : any[] = [], endGameFields : any[] = [];
+    const temp = db.collection('years').doc('2022').collection('scouting').get();
+    temp.then((fields) => {
+      autonFields = Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
+      teleopFields = Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
+      endGameFields = Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
+      let pushingData = {};
+      autonFields.forEach((field, index) => {
+        pushingData[field['name']] = data.autonFields[index];
+      });
+      teleopFields.forEach((field, index) => {
+        pushingData[field['name']] = data.teleopFields[index];
+      });
+      endGameFields.forEach((field, index) => {
+        pushingData[field['name']] = data.postGameFields[index];
+      });
+      db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
+      .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
+        () => Alert.alert(JSON.stringify("Successfully written!"))).catch(err => {
+          Alert.alert("Encountered Error: " + JSON.stringify(err.message));
+        });
+    }).catch((err) => {
+      Alert.alert("Encountered Error: " + JSON.stringify(err.message));
+    });
+  };
 
   const handleSheetChanges = useCallback((index: number) => {
     if (index === 0) setShowQR(false);
@@ -130,12 +159,11 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
               width: "100%",
             }}
             onPress={() => {
-              navigation?.navigate("Home");
-              // setVisible(true);
-              // Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+              // navigation?.navigate("Home");
+              pushData();
             }}
           >
-            Finish Scout
+          Finish Scout
           </Button>
         </View>
       </View>
@@ -163,3 +191,45 @@ const styles = StyleSheet.create({
 });
 
 export default QRCodeBottomSheet;
+
+// Alert.alert("Pushing data");
+    /*const data = getData();
+    const temp = db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
+    .collection("teams").doc(JSON.stringify(data.teamNum)).get();
+    // Alert.alert(JSON.stringify(temp));
+    temp.then((teamData) => {
+      const actualData = teamData.data();
+      Alert.alert(JSON.stringify(actualData));
+      const keys = Object.keys(actualData || {});
+      if(keys.length === 0) {
+        db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
+        .collection("teams").doc(JSON.stringify(data.teamNum)).set(data).then(() => {
+          Alert.alert("Written new data successfully!");
+        }).catch((err) => {
+          Alert.alert("Unable to write new database")
+        });
+      }
+      // Alert.alert(JSON.stringify(keys));
+      const auton: any[] = [...data.autonFields], teleop : any[] = [...data.teleopFields], endGame : any[] = [...data.postGameFields];
+      auton.forEach((field, index) => {
+        // const currVal = actualData?[keys[index]] : {};
+        actualData?[keys[index]] = field : -1;
+      }); 
+      teleop.forEach((field, index) => {
+        // const currVal = actualData?[keys[index]] : {};
+        actualData?[keys[index]] = field : -1;
+      }); 
+      endGame.forEach((field, index) => {
+        // const currVal = actualData?[keys[index]] : {};
+        actualData?[keys[index]] = field : -1;
+      }); 
+      db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
+    .collection("teams").doc(JSON.stringify(data.teamNum)).set(actualData ? actualData : {}).then(() => {
+      Alert.alert("Successfully written")
+    }).catch((error) => {
+      Alert.alert("Write unsuccessful. Error ocurred: ", JSON.stringify(error));
+    });
+    }).catch((e) => {
+      Alert.alert("Entered incorrect team/regional information");
+      Alert.alert(JSON.stringify(data) + "\n" + JSON.stringify(e));
+    }); */

@@ -56,18 +56,16 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           if(field['type'] == 'counter') {
             return(
               <Counter
-              name={field['name']}
-              onChange={(val) => {
+              name={field['name']} onChange={(val) => {
                 const temp: any[] = [...teleopFields];
                 temp[index] = val;
                 setTeleopFields(temp);
-              }}
-              value={teleopFields[index]}/>
+              }} value={teleopFields[index]}/>
             )
           }
           else if(field['type']=='boolean'){
             return(
-              <Toggle checked = {teleopFields[index]} onChange={(val) =>{
+              <Toggle checked = {teleopFields[index]} onChange={(val) => {
                 const temp: any[] = [...teleopFields];
                 temp[index] = val;
                 setTeleopFields(temp);
