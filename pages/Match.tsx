@@ -51,7 +51,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
       });
     }
   }, []);
-  const fetchData = () =>{
+  const fetchData = () => {
     db.collection('years').doc('2022').collection('scouting').get()
     .then((fields)=>{
       setAutonFields(Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
@@ -59,6 +59,12 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
       setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
     }, (err)=> {return []});
   }
+  const clearData = () =>{
+    setAutonFields([]);
+    setEndGameFields([]);
+    setTeleopFields([]);
+  }
+  
 
   const AutonComponent = () => <Auton navigation={navigation} fields={autonFields? autonFields : [{}]}/>;
   const EndGameComponent = () => <EndGame navigation={navigation} fields={endgameFields? endgameFields : [{}]} />;

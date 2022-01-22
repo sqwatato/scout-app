@@ -69,21 +69,20 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       Alert.alert("Encountered Error: " + JSON.stringify(err.message));
     });
   };
-
   const handleSheetChanges = useCallback((index: number) => {
     if (index === 0) setShowQR(false);
     else setShowQR(true);
   }, []);
 
-  useEffect(() => {
-    AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));
-  }, [preGameState]);
+   useEffect(() => {
+     AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));
+   }, [preGameState]);
 
-  useEffect(() => {
-    AsyncStorage.setItem("@scout_auton", JSON.stringify(autonState));
-  }, [autonState]);
+   useEffect(() => {
+     AsyncStorage.setItem("@scout_auton", JSON.stringify(autonState));
+   }, [autonState]);
 
-  useEffect(() => {
+   useEffect(() => {
     AsyncStorage.setItem("@scout_teleop", JSON.stringify(teleopState));
   }, [teleopState]);
 

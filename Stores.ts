@@ -19,7 +19,6 @@ type TeleopState =
     };
 
 export const useTeleop = create<TeleopState>((set) => ({
-  
   teleopFields: [],
   setTeleopFields: (teleopFields: any[]) => set({teleopFields}),
   set,

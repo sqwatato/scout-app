@@ -25,15 +25,17 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const teleopFields = useTeleop((state) => state.teleopFields);
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
   useEffect(() =>{
-    if(teleopFields.length<fields.length) setTeleopFields(initializeTeleopFields());
+    if(teleopFields.length==0){
+      setTeleopFields(initializeTeleopFields());      
+    }
   }, [])
   const initializeTeleopFields = () =>{
     const tempTeleop: any[] = [];
-    fields?.map((value)=>{
+    fields?.map((value) => {
         if(value['type']=="string") tempTeleop.push("");
         if(value['type']=="counter") tempTeleop.push(0);
         if(value['type']=="boolean") tempTeleop.push(false);
-    })
+    });
     return tempTeleop;
   }
 

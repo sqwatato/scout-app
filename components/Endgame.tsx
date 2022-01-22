@@ -5,7 +5,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { Alert, ScrollView, View } from "react-native";
 // import { Stopwatch } from "react-native-stopwatch-timer";
-import { Button, Input, Text, Toggle } from "@ui-kitten/components";
+import { Button, IndexPath, Input, Select, SelectItem, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
   NavigationState,
@@ -27,14 +27,20 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
   useEffect(() =>{
     if(postGameFields.length<fields.length) setPostGameFields(initializePostGameFields());
+    //Alert.alert(JSON.stringify(postGameFields));
   }, [])
   const initializePostGameFields = () =>{
+    setPostGameFields([]);
     const tempPostGame: any[] = [];
+    Alert.alert(JSON.stringify(fields));
     fields?.map((value)=>{
-        if(value['type']=="string") tempPostGame.push("");
         if(value['type']=="counter") tempPostGame.push(0);
-        if(value['type']=="boolean") tempPostGame.push(false);
-    })
+        else if(value['type']=="boolean") tempPostGame.push(false);
+        else if(value['type'] == 'text' || value['type'] == 'timer') tempPostGame.push("");
+        else {
+          tempPostGame.push(value['type']);
+        }
+    },)
     return tempPostGame;
   }
   return (
@@ -74,6 +80,41 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
             )
           }
+          else if(field['type'] == 'timer' || field['type']=='text') {
+            return(
+              <Input
+                multiline={true}
+                textStyle={{ minHeight: 64 }}
+                placeholder={fields[index].name}
+                label={field['type']}
+                value={postGameFields[index]}
+                onChangeText={(val) => { 
+                  const temp: any[] = [...postGameFields];
+                  temp[index] = val;
+                  setPostGameFields(temp);
+                }}
+              />
+            )
+          }
+          /*else {
+            return (
+              <Select
+                selectedIndex={alliance === "b" ? new IndexPath(0) : new IndexPath(1)}
+                onSelect={(index) =>
+                  //Handle logic later
+                }
+                label="Alliance"
+                style={{ marginBottom: "3%" }}
+                value={alliance === "b" ? "Blue" : "Red"}
+              >
+                {
+                  () => { 
+                    return(
+                      <SelectItem title = "Red" />
+                  )}}
+              </Select>
+            )
+          }*/
       })}
         
       </ScrollView>
@@ -83,81 +124,3 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
 };
 
 export default EndGame;
-/*<Header
-        matchInfo={{ teams, alliance, regional }}
-        title={"EndGame"}
-        toggleQRCode={() => sheetRef.current?.snapTo(1)}
-      />*/
-/*
-<Input
-          multiline={true}
-          textStyle={{ minHeight: 64 }}
-          placeholder="Comments"
-          label="Comments"
-          value={comments}
-          onChangeText={setComments}
-        />
-        <View style={{ marginTop: "5%" }}>
-          <Text category="h4">Climb Time</Text>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-around",
-            }}
-          >
-            <Stopwatch onChange={setClimbTime} />
-          </View>
-        </View>
-        <View
-          style={{ display: "flex", alignItems: "flex-start", marginTop: "5%" }}
-        >
-          <Toggle
-            checked={attemptHang}
-            onChange={(newVal) => {
-              setAttemptHang(newVal);
-              if (!newVal) setHangFail(true);
-            }}
-            style={{ marginTop: "2%" }}
-          >
-            Attempt Hang
-          </Toggle>
-          <Toggle
-            checked={hangFail}
-            onChange={setHangFail}
-            disabled={!attemptHang}
-            style={{ marginTop: "2%" }}
-          >
-            Hang Fail
-          </Toggle>
-          <Toggle
-            checked={attemptLevel}
-            onChange={(newVal) => {
-              setAttemptLevel(newVal);
-              if (!newVal) {
-                setLevelFail(true);
-                setBuddy(false);
-              }
-            }}
-            style={{ marginTop: "2%" }}
-          >
-            Attempt Level
-          </Toggle>
-          <Toggle
-            checked={levelFail}
-            onChange={setLevelFail}
-            disabled={!attemptLevel}
-            style={{ marginTop: "2%" }}
-          >
-            Level Fail
-          </Toggle>
-          <Toggle
-            checked={buddy}
-            onChange={setBuddy}
-            disabled={!attemptLevel}
-            style={{ marginTop: "2%" }}
-          >
-            Buddy Climb
-          </Toggle>
-        </View>
-        */
