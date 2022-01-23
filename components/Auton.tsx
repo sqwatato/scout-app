@@ -5,13 +5,14 @@ import {db} from '../firebase';
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View, Alert } from "react-native";
-import { Text, Toggle } from "@ui-kitten/components";
+import { Input, Text, Toggle } from "@ui-kitten/components";
 import Counter from "./Counter";
 import {
   NavigationScreenProp,
   NavigationState,
   NavigationParams,
 } from "react-navigation";
+import Stopwatch from "./Stopwatch";
 interface AutonProps {
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
   fields: any[];
@@ -60,9 +61,8 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
          }}
          keyboardDismissMode="on-drag"
       >
-        {/* {autonFields?.map(field => <Text>{field['name'] + " -> " + field['type']}</Text>)}  */}
         {fields?.map((field, index) => {
-          if(field['type'] == 'counter') {
+          if(field['type'] == 'counter' || field['type']=='rating') {
             return(
               <Counter name={field['name']}  onChange={(val) => {
                 const temp: any[] = [...autonFields];
@@ -78,6 +78,27 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
                 temp[index] = val;
                 setAutonFields(temp);
               }}>{field['name']}</Toggle>
+            )
+          }
+          else if(field['type']=='timer'){
+            return (
+              <Stopwatch name={field['name']} onChange={setAutonFields} fieldIndex={index} postFields={autonFields} ></Stopwatch>
+            )
+          }
+          else{
+            return(
+              <Input
+                multiline={true}
+                textStyle={{ minHeight: 64 }}
+                placeholder={field.name+"..."}
+                label={field['name']}
+                value={autonFields[index]}
+                onChangeText={(val) => { 
+                  const temp: any[] = [...autonFields];
+                  temp[index] = val;
+                  setAutonFields(temp);
+                }}
+              />
             )
           }
         })}

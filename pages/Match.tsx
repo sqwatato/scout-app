@@ -54,9 +54,9 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
   const fetchData = () => {
     db.collection('years').doc('2022').collection('scouting').get()
     .then((fields)=>{
-      setAutonFields(Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
-      setEndGameFields(Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
-      setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
+      setAutonFields(Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['type']==b['type'] ? a['name'].localeCompare(b['name']) : a['type'].localeCompare(b['type'])));
+      setEndGameFields(Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=> a['type']==b['type'] ? a['name'].localeCompare(b['name']) : a['type'].localeCompare(b['type'])));
+      setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['type'] == b['type'] ? a['name'].localeCompare(b['name']) : a['type'].localeCompare(b['type'])));
     }, (err)=> {return []});
   }
   const clearData = () =>{

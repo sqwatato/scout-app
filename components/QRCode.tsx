@@ -41,6 +41,9 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   const autonState = useAuton((state) => state);
   const teleopState = useTeleop((state) => state);
   const postGameState = usePostGame((state) => state);
+  const setAutonFields = useAuton((state) => state.setAutonFields);
+  const setTeleopFields = useTeleop((state) => state.setTeleopFields);
+  const setPostGameFields = usePostGame((state) => state.setPostGameFields);
 
   const pushData = () => {
     const data = getData();
@@ -62,7 +65,10 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       });
       db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
       .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
-        () => Alert.alert(JSON.stringify("Successfully written!"))).catch(err => {
+        () => {
+          Alert.alert(JSON.stringify("Successfully written!"))
+          clearData();
+        }).catch(err => {
           Alert.alert("Encountered Error: " + JSON.stringify(err.message));
         });
     }).catch((err) => {
@@ -73,7 +79,11 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
     if (index === 0) setShowQR(false);
     else setShowQR(true);
   }, []);
-
+  const clearData = () =>{
+    setAutonFields([]);
+    setTeleopFields([]);
+    setPostGameFields([]);
+  }
    useEffect(() => {
      AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));
    }, [preGameState]);
@@ -191,45 +201,3 @@ const styles = StyleSheet.create({
 });
 
 export default QRCodeBottomSheet;
-
-// Alert.alert("Pushing data");
-    /*const data = getData();
-    const temp = db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
-    .collection("teams").doc(JSON.stringify(data.teamNum)).get();
-    // Alert.alert(JSON.stringify(temp));
-    temp.then((teamData) => {
-      const actualData = teamData.data();
-      Alert.alert(JSON.stringify(actualData));
-      const keys = Object.keys(actualData || {});
-      if(keys.length === 0) {
-        db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
-        .collection("teams").doc(JSON.stringify(data.teamNum)).set(data).then(() => {
-          Alert.alert("Written new data successfully!");
-        }).catch((err) => {
-          Alert.alert("Unable to write new database")
-        });
-      }
-      // Alert.alert(JSON.stringify(keys));
-      const auton: any[] = [...data.autonFields], teleop : any[] = [...data.teleopFields], endGame : any[] = [...data.postGameFields];
-      auton.forEach((field, index) => {
-        // const currVal = actualData?[keys[index]] : {};
-        actualData?[keys[index]] = field : -1;
-      }); 
-      teleop.forEach((field, index) => {
-        // const currVal = actualData?[keys[index]] : {};
-        actualData?[keys[index]] = field : -1;
-      }); 
-      endGame.forEach((field, index) => {
-        // const currVal = actualData?[keys[index]] : {};
-        actualData?[keys[index]] = field : -1;
-      }); 
-      db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
-    .collection("teams").doc(JSON.stringify(data.teamNum)).set(actualData ? actualData : {}).then(() => {
-      Alert.alert("Successfully written")
-    }).catch((error) => {
-      Alert.alert("Write unsuccessful. Error ocurred: ", JSON.stringify(error));
-    });
-    }).catch((e) => {
-      Alert.alert("Entered incorrect team/regional information");
-      Alert.alert(JSON.stringify(data) + "\n" + JSON.stringify(e));
-    }); */

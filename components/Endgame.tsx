@@ -4,7 +4,6 @@ import { usePostGame, usePreGame} from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { Alert, ScrollView, View } from "react-native";
-// import { Stopwatch } from "react-native-stopwatch-timer";
 import { Button, IndexPath, Input, Select, SelectItem, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
@@ -58,7 +57,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
         keyboardDismissMode="on-drag"
       >
       {fields?.map((field, index) => {
-          if(field['type'] == 'counter') {
+          if(field['type'] == 'counter' || field['type']=='rating') {
             return(
               <Counter
               name={field['name']}
@@ -97,7 +96,23 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
           }
           else if(field['type']=='timer'){
             return (
-              <Stopwatch onChange={setPostGameFields} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
+              <Stopwatch name={field['name']} onChange={setPostGameFields} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
+            )
+          }
+          else{
+            return(
+              <Input
+                multiline={true}
+                textStyle={{ minHeight: 64 }}
+                placeholder={field.name+"..."}
+                label={field['name']}
+                value={postGameFields[index]}
+                onChangeText={(val) => { 
+                  const temp: any[] = [...postGameFields];
+                  temp[index] = val;
+                  setPostGameFields(temp);
+                }}
+              />
             )
           }
           
@@ -110,22 +125,3 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
 };
 
 export default EndGame;
-/*else {
-            return (
-              <Select
-                selectedIndex={alliance === "b" ? new IndexPath(0) : new IndexPath(1)}
-                onSelect={(index) =>
-                  //Handle logic later
-                }
-                label="Alliance"
-                style={{ marginBottom: "3%" }}
-                value={alliance === "b" ? "Blue" : "Red"}
-              >
-                {
-                  () => { 
-                    return(
-                      <SelectItem title = "Red" />
-                  )}}
-              </Select>
-            )
-          }*/

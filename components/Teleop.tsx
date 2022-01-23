@@ -5,12 +5,13 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View, Alert } from "react-native";
 import Counter from "./Counter";
-import { Text, Toggle } from "@ui-kitten/components";
+import { Input, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
   NavigationState,
   NavigationParams,
 } from "react-navigation";
+import Stopwatch from "./Stopwatch";
 
 interface TeleopProps {
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
@@ -57,7 +58,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         keyboardDismissMode="on-drag"
       >
         {fields?.map((field, index) => {
-          if(field['type'] == 'counter') {
+          if(field['type'] == 'counter' || field['type']=='rating') {
             return(
               <Counter
               name={field['name']} onChange={(val) => {
@@ -76,7 +77,27 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
               }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
             )
           }
-          else return(<></>)
+          else if(field['type']=='timer'){
+            return (
+              <Stopwatch name={field['name']} onChange={setTeleopFields} fieldIndex={index} postFields={teleopFields} ></Stopwatch>
+            )
+          }
+          else{
+            return(
+              <Input
+                multiline={true}
+                textStyle={{ minHeight: 64 }}
+                placeholder={field.name+"..."}
+                label={field['name']}
+                value={teleopFields[index]}
+                onChangeText={(val) => { 
+                  const temp: any[] = [...teleopFields];
+                  temp[index] = val;
+                  setTeleopFields(temp);
+                }}
+              />
+            )
+          }
         })}
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
