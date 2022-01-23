@@ -9,7 +9,7 @@ interface Props {
   //   haptic: boolean;
 }
 
-const Counter: FC<Props> = ({ name, onChange, value }) => {
+const Counter: FC<Props> = ({ name, onChange, value}) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>

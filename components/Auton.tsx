@@ -64,7 +64,8 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
         {fields?.map((field, index) => {
           if(field['type'] == 'counter' || field['type']=='rating') {
             return(
-              <Counter name={field['name']}  onChange={(val) => {
+              <Counter 
+                name={field['name']}  onChange={(val) => {
                 const temp: any[] = [...autonFields];
                 temp[index] = val;
                 setAutonFields(temp);

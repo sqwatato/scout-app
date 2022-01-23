@@ -31,12 +31,15 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const initializePostGameFields = () =>{
     setPostGameFields([]);
     const tempPostGame: any[] = [];
-    fields?.map((value)=>{
+    fields?.map((value, index)=>{
         if(value['type']=="counter") tempPostGame.push(0);
         else if(value['type']=="boolean") tempPostGame.push(false);
         else if(value['type'] == 'text' || value['type'] == 'timer') tempPostGame.push("");
+        else if(Array.isArray(value['type'])){
+          tempPostGame.push(value['type'][0]);
+        }
         else {
-          tempPostGame.push(value['type']);
+          tempPostGame.push("");
         }
     },)
     return tempPostGame;
@@ -98,6 +101,23 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
             return (
               <Stopwatch name={field['name']} onChange={setPostGameFields} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
             )
+          }
+          else if(Array.isArray(field['type'])){
+            return <Select
+              selectedIndex={new IndexPath(field['type'].indexOf(postGameFields[index]))}
+              onSelect={(currIndex) =>{
+                const temp: any[] = [...postGameFields];
+                temp[index] = field['type'][parseInt(currIndex.toString())-1];
+                setPostGameFields(temp);
+              }}
+              label={field['name']}
+              style={{ marginBottom: "3%" }}
+              value={postGameFields[index]}
+            >
+              {field['type'].map((val, currIndex) =>{
+                return <SelectItem title={val}/>
+              })}
+            </Select>
           }
           else{
             return(
