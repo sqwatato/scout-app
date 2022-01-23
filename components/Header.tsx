@@ -17,6 +17,7 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode }) => {
   return (
     <>
+    
       <View
         style={{
           display: "flex",

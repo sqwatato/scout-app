@@ -32,7 +32,6 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const initializePostGameFields = () =>{
     setPostGameFields([]);
     const tempPostGame: any[] = [];
-    Alert.alert(JSON.stringify(fields));
     fields?.map((value)=>{
         if(value['type']=="counter") tempPostGame.push(0);
         else if(value['type']=="boolean") tempPostGame.push(false);
@@ -80,13 +79,13 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
             )
           }
-          else if(field['type'] == 'timer' || field['type']=='text') {
+          else if(field['type']=='text') {
             return(
               <Input
                 multiline={true}
                 textStyle={{ minHeight: 64 }}
-                placeholder={fields[index].name}
-                label={field['type']}
+                placeholder={field.name+"..."}
+                label={field['name']}
                 value={postGameFields[index]}
                 onChangeText={(val) => { 
                   const temp: any[] = [...postGameFields];
@@ -96,7 +95,22 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               />
             )
           }
-          /*else {
+          else if(field['type']=='timer'){
+            return (
+              <Stopwatch onChange={setPostGameFields} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
+            )
+          }
+          
+      })}
+        
+      </ScrollView>
+      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
+    </>
+  );
+};
+
+export default EndGame;
+/*else {
             return (
               <Select
                 selectedIndex={alliance === "b" ? new IndexPath(0) : new IndexPath(1)}
@@ -115,12 +129,3 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               </Select>
             )
           }*/
-      })}
-        
-      </ScrollView>
-      <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
-    </>
-  );
-};
-
-export default EndGame;

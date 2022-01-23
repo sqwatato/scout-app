@@ -27,8 +27,10 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
     const tempAuton: any[] = [];
     fields?.map((value)=>{
         if(value['type']=="string") tempAuton.push("");
-        if(value['type']=="counter") tempAuton.push(0);
-        if(value['type']=="boolean") tempAuton.push(false);
+        else if(value['type']=="counter") tempAuton.push(0);
+        else if(value['type']=="boolean") tempAuton.push(false);
+        //else tempAuton.push(0);
+
     })
     return tempAuton;
   }

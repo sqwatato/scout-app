@@ -33,8 +33,10 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
     const tempTeleop: any[] = [];
     fields?.map((value) => {
         if(value['type']=="string") tempTeleop.push("");
-        if(value['type']=="counter") tempTeleop.push(0);
-        if(value['type']=="boolean") tempTeleop.push(false);
+        else if(value['type']=="counter") tempTeleop.push(0);
+        else if(value['type']=="boolean") tempTeleop.push(false);
+        else tempTeleop.push(0);
+
     });
     return tempTeleop;
   }
@@ -74,6 +76,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
               }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
             )
           }
+          else return(<></>)
         })}
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />

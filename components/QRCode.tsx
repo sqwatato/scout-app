@@ -36,7 +36,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   const snapPoints = useMemo(() => [1, "75%"], []);
 
   const [showQR, setShowQR] = useState<boolean>(false);
-
+  const [login, setLogin] = useState<boolean>(false);
   const preGameState = usePreGame((state) => state);
   const autonState = useAuton((state) => state);
   const teleopState = useTeleop((state) => state);
@@ -159,6 +159,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
             }}
             onPress={() => {
               // navigation?.navigate("Home");
+              // setLogin(logInUser());
               pushData();
             }}
           >

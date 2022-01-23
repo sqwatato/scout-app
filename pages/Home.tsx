@@ -9,6 +9,7 @@ import {
 } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuton, usePostGame, usePreGame, useTeleop } from "../Stores";
+import { Navigate } from "react-router-dom";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -33,11 +34,14 @@ const Home: React.FC<Props> = ({ navigation }) => {
             AsyncStorage.getItem("@scout_postgame"),
           ]
         );
-        console.log(endgameStr);
         const pregameData = JSON.parse(pregameStr || "");
         const autonData = JSON.parse(autonStr || "");
         const teleopData = JSON.parse(teleopStr || "");
-        const endgameData = JSON.parse(endgameStr || "");
+        const endgameData = JSON.parse(endgameStr || "");/*
+        const pregameData = JSON.parse("");
+        const autonData = JSON.parse("");
+        const teleopData = JSON.parse("");
+        const endgameData = JSON.parse("");*/
 
         setPreGame(pregameData);
         setAuton(autonData);
@@ -98,7 +102,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
     const teleopData = JSON.stringify(teleopEmpty);
     const endgameData = JSON.stringify(endEmpty);
 
-    console.log("im stupid" + pregameData);
+    // console.log("im stupid" + pregameData);
 
     AsyncStorage.setItem("@scout_pregame", JSON.stringify(pregameData));
     AsyncStorage.setItem("@scout_auton", JSON.stringify(autonData));
@@ -116,7 +120,6 @@ const Home: React.FC<Props> = ({ navigation }) => {
           </Text>
           <Divider style={{ width: 40 }} />
         </View>
-
         <View>
           <Button
             onPress={() => {
@@ -127,6 +130,15 @@ const Home: React.FC<Props> = ({ navigation }) => {
             size="giant"
           >
             Scout New Match
+          </Button>
+          <Button 
+            onPress={() =>{
+              navigation.navigate("Login");
+            }}
+            style={styles.button}
+            size="giant"
+          >
+            Login
           </Button>
           <Button
             onPress={() => {

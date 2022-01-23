@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import { ApplicationProvider } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import QRScanner from "./pages/QRScanner";
+import Login from "./pages/Login";
 import Match from "./pages/Match";
 
 console.warn = () => {};
@@ -30,6 +31,11 @@ export default function App() {
             options={{ headerShown: false }}
             name="QRScanner"
             component={QRScanner}
+          />
+          <Stack.Screen 
+            options={{headerShown: false}}
+            name="Login"
+            component={Login}
           />
           <Stack.Screen
             options={{ headerShown: false }}

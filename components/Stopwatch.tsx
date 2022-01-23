@@ -3,24 +3,28 @@ import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 
 interface Props {
-  onChange: (time: number) => void;
+  onChange: (temporary: any[]) => void;
+  postFields: any[];
+  fieldIndex: number;
 }
 
-const Stopwatch: React.FC<Props> = ({ onChange }) => {
-  const [msecs, setTime] = useState(0);
+const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex }) => {
+  const [secs, setTime] = useState(postFields[fieldIndex]);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     let interval: any = undefined;
     if (isRunning) {
       interval = setInterval(() => {
-        let newMs = msecs + 25;
+        let newMs = secs + 1;
         setTime(newMs);
-        onChange(newMs);
-      }, 25);
+        const temp: any[] = postFields;
+        temp[fieldIndex] = secs;
+        onChange(temp);
+      }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isRunning, msecs]);
+  }, [isRunning, secs]);
 
   const handleReset = () => {
     setTime(0);
@@ -38,11 +42,12 @@ const Stopwatch: React.FC<Props> = ({ onChange }) => {
         width: "100%",
       }}
     >
+      <Text category = "h5" style={{ marginVertical: 10, fontWeight: "400", fontSize: 20, paddingRight: 5}}>Climb Time:</Text>
       <Text
-        category="h5"
-        style={{ marginVertical: 10, fontWeight: "400", fontSize: 40 }}
+        category="h6"
+        style={{ marginVertical: 10, fontWeight: "200", fontSize: 20 }}
       >
-        {`${msecs} ms`}
+        {`${secs} s`}
       </Text>
       <View
         style={{
