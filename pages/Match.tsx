@@ -56,7 +56,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
     .then((fields)=>{
       setAutonFields(Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=>  a['name'].localeCompare(b['name'])));
       setEndGameFields(Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=>  a['name'].localeCompare(b['name'])));
-      setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name'])));
+      setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=>  a['name'].localeCompare(b['name'])));
     }, (err)=> {return []});
   }
   const clearData = () =>{

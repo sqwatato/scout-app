@@ -10,6 +10,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuton, usePostGame, usePreGame, useTeleop } from "../Stores";
 import { Navigate } from "react-router-dom";
+import { auth } from '../firebase'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -21,6 +22,10 @@ const Home: React.FC<Props> = ({ navigation }) => {
   const setAuton = useAuton((state) => state.set);
   const setTeleop = useTeleop((state) => state.set);
   const setPostGame = usePostGame((state) => state.set);
+
+  const isLoggedIn = () => {
+    return auth.currentUser != null;
+  }
 
   useEffect(() => {
     (async () => {
@@ -131,7 +136,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
           >
             Scout New Match
           </Button>
-          <Button 
+          {!isLoggedIn() && <Button 
             onPress={() =>{
               navigation.navigate("Login");
             }}
@@ -139,7 +144,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
             size="giant"
           >
             Login
-          </Button>
+          </Button>}
           <Button
             onPress={() => {
               console.log(pregame);

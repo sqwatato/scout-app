@@ -49,6 +49,15 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
     }
     return(
         <>
+            {/* <Text style = {{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: '900',
+                fontSize: 60
+            }}>
+                Login
+            </Text> */}
             <KeyboardAvoidingView 
                 style = { styles.container }
                 behavior='padding'
@@ -59,6 +68,7 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
                         value = {email.toLowerCase()}
                         onChangeText={text => setEmail(text.toLowerCase())}
                         style = {styles.input}
+                        autoCorrect
                     />
                     <TextInput 
                         placeholder = "Password"

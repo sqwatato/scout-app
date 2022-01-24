@@ -1,8 +1,11 @@
-import React, { FC } from "react";
-import { View, TouchableOpacity } from "react-native";
+import React, { FC, useEffect } from "react";
+import { View, TouchableOpacity, Alert } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import QRCodeBottomSheet from "./QRCode";
+import { auth } from '../firebase';
+import { Navigator } from 'react-router-dom';
+import { NavigationParams, NavigationScreenProp, NavigationState } from "react-navigation";
 
 interface HeaderProps {
   title: string;
@@ -12,12 +15,17 @@ interface HeaderProps {
     regional: string;
   };
   toggleQRCode?: () => any;
+  navigation?: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
-const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode }) => {
+const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation }) => {
+
+  useEffect(() => {
+
+  }, [auth.currentUser])
+
   return (
     <>
-    
       <View
         style={{
           display: "flex",
@@ -36,6 +44,49 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode }) => {
             {matchInfo && matchInfo.alliance}@{matchInfo && matchInfo.regional}{" "}
           </Text>
         </View>
+        {auth.currentUser ? <TouchableOpacity 
+          onPress = { () => {
+            auth.signOut().then(() => {
+              Alert.alert("Signed out!")
+            }).catch((err) => {
+              Alert.alert("Error signing out: " + err.message);
+            });
+          }}
+          style={{
+            marginTop: 10,
+            marginRight: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style = {{
+            fontWeight: '800',
+            fontSize: 16,
+            color: '#0782F9'
+          }}>
+            Logout
+          </Text>
+        </TouchableOpacity> : 
+          <TouchableOpacity 
+          onPress = { () => {
+            navigation?.navigate("Login");
+          }}
+          style={{
+            marginTop: 10,
+            marginRight: 10,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style = {{
+            fontWeight: '800',
+            fontSize: 16,
+            color: '#0782F9'
+          }}>
+            Login
+          </Text>
+          </TouchableOpacity>
+        }
         <TouchableOpacity
           onPress={() => {
             toggleQRCode && toggleQRCode();

@@ -6,10 +6,11 @@ interface Props {
   name: string | undefined;
   onChange: (newVal: number) => void | undefined;
   value: number;
+  rating: boolean;
   //   haptic: boolean;
 }
 
-const Counter: FC<Props> = ({ name, onChange, value}) => {
+const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
@@ -70,6 +71,7 @@ const Counter: FC<Props> = ({ name, onChange, value}) => {
             //   );
           }}
           appearance="outline"
+          disabled={rating && value>=5}
         >
           +
         </Button>

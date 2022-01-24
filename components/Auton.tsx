@@ -47,6 +47,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
         matchInfo={{ teams, alliance, regional }}
         title={"Auton"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
+        navigation = {navigation}
       />
       <ScrollView
          contentContainerStyle={{
@@ -65,6 +66,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
           if(field['type'] == 'counter' || field['type']=='rating') {
             return(
               <Counter 
+                rating={field['type']=="rating"}
                 name={field['name']}  onChange={(val) => {
                 const temp: any[] = [...autonFields];
                 temp[index] = val;
@@ -78,7 +80,13 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
                 const temp: any[] = [...autonFields];
                 temp[index] = val;
                 setAutonFields(temp);
-              }}>{field['name']}</Toggle>
+              }}
+              style = {{
+                padding: 4
+              }}
+              >
+                {field['name']}
+              </Toggle>
             )
           }
           else if(field['type']=='timer'){

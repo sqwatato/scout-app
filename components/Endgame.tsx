@@ -50,6 +50,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
         matchInfo={{ teams, alliance, regional }}
         title={"EndGame"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
+        navigation = {navigation}
       />
       <ScrollView
         contentContainerStyle={{
@@ -63,6 +64,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
           if(field['type'] == 'counter' || field['type']=='rating') {
             return(
               <Counter
+              rating={field['type']=='rating'}
               name={field['name']}
               onChange={(val) => {
                 const temp: any[] = [...postGameFields];
@@ -78,7 +80,8 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
                 const temp: any[] = [...postGameFields];
                 temp[index] = val;
                 setPostGameFields(temp);
-              }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+              }} 
+              style = {{marginTop: "3%", padding : 4}}>{field['name']}</Toggle>
             )
           }
           else if(field['type']=='text') {

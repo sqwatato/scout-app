@@ -20,7 +20,8 @@ import {
   NavigationParams,
 } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { db } from '../firebase'
+import { db, auth } from '../firebase'
+import { Navigate } from 'react-router-dom';
 
 interface QRCodeBottomSheetProps {
   sheetRef?: RefObject<BottomSheetMethods>;
@@ -45,11 +46,15 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
 
+  const isLoggedIn = () => {
+    return auth.currentUser != null;
+  }
+
   const pushData = () => {
     const data = getData();
     let autonFields: any[] = [], teleopFields : any[] = [], endGameFields : any[] = [];
-    const temp = db.collection('years').doc('2022').collection('scouting').get();
-    temp.then((fields) => {
+    const template = db.collection('years').doc('2022').collection('scouting').get();
+    template.then((fields) => {
       autonFields = Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
       teleopFields = Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
       endGameFields = Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
@@ -79,7 +84,8 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
     if (index === 0) setShowQR(false);
     else setShowQR(true);
   }, []);
-  const clearData = () =>{
+  const clearData = () => {
+
     setAutonFields([]);
     setTeleopFields([]);
     setPostGameFields([]);
@@ -170,7 +176,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
             onPress={() => {
               // navigation?.navigate("Home");
               // setLogin(logInUser());
-              pushData();
+              isLoggedIn() ? pushData() : navigation?.navigate("Login");
             }}
           >
           Finish Scout

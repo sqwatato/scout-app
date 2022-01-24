@@ -48,6 +48,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         matchInfo={{ teams, alliance, regional }}
         title={"Teleop"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
+        navigation = {navigation}
       />
       <ScrollView
         contentContainerStyle={{
@@ -61,6 +62,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           if(field['type'] == 'counter' || field['type']=='rating') {
             return(
               <Counter
+              rating={field['type']=='rating'}
               name={field['name']} onChange={(val) => {
                 const temp: any[] = [...teleopFields];
                 temp[index] = val;
@@ -74,7 +76,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
                 const temp: any[] = [...teleopFields];
                 temp[index] = val;
                 setTeleopFields(temp);
-              }} style = {{marginTop: "3%"}}>{field['name']}</Toggle>
+              }} style = {{marginTop: "3%", padding: 4}}>{field['name']}</Toggle>
             )
           }
           else if(field['type']=='timer'){
