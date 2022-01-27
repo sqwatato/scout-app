@@ -41,6 +41,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
     //}
   }, [])
   const sheetRef = useRef<BottomSheet>(null);
+  // Alert.alert(navigation);
   return (
     <>
       <Header

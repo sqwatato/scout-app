@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) => {
-  const [msecs, setTime] = useState(+postFields[fieldIndex]);
+  const [msecs, setTime] = useState(postFields[fieldIndex] ? postFields[fieldIndex] : 0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {

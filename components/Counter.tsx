@@ -1,6 +1,6 @@
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, Input, Layout, Text } from "@ui-kitten/components";
 import React, { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 
 interface Props {
   name: string | undefined;
@@ -47,8 +47,18 @@ const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
               fontSize: 15,
             }}
           >{`${name}: `}</Text>
-          <Text
-            category="h6"
+          <Input
+            // category="h6"
+            onChangeText={(val) => {
+              try {
+                const temp: number = parseInt(val);
+                if(temp >= (rating ? 1 : 0) && temp<=(rating ? 5 : 1000)){
+                  onChange(temp);
+                }
+              } catch(Exception){
+                //onChange(value);
+              };
+            }}
             style={{
               borderColor: "#dde",
               borderWidth: 1,
@@ -59,7 +69,7 @@ const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
             }}
           >
             {value}
-          </Text>
+          </Input>
         </View>
         <Button
           style={[styles.button, styles.pos]}

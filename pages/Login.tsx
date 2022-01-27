@@ -28,15 +28,10 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    useEffect(() => {
-        auth.onAuthStateChanged(user => {
-            if(user) navigation.navigate("Home");
-        });
-    }, [])
     const handleLogin = () => {
         auth.
         signInWithEmailAndPassword(email, password).then(
-            () => Alert.alert("Sign in successful")
+            () => { Alert.alert("Sign in successful"); }
         ).catch((error) => {
             if (error.code === 'auth/invalid-email')
                 Alert.alert('You did not enter a valid Email');
@@ -49,15 +44,23 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
     }
     return(
         <>
-            {/* <Text style = {{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: '900',
-                fontSize: 60
-            }}>
-                Login
-            </Text> */}
+            <View>
+                <TouchableOpacity
+                    onPress = {() => navigation.navigate("Home")}
+                    style = {{
+                        marginTop: 20,
+                        marginLeft: 20,
+                        marginVertical: 20,
+                    }}
+                >
+                    <Text style = {{
+                        fontWeight: '800',
+                        fontSize: 24
+                    }}>
+                        ←
+                    </Text>
+                </TouchableOpacity>
+            </View>
             <KeyboardAvoidingView 
                 style = { styles.container }
                 behavior='padding'

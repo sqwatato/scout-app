@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { Button, Divider, Layout, Text } from "@ui-kitten/components";
 import {
   NavigationParams,
@@ -22,12 +22,13 @@ const Home: React.FC<Props> = ({ navigation }) => {
   const setAuton = useAuton((state) => state.set);
   const setTeleop = useTeleop((state) => state.set);
   const setPostGame = usePostGame((state) => state.set);
-
-  const isLoggedIn = () => {
-    return auth.currentUser != null;
-  }
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+      auth.onAuthStateChanged(user => {
+          if(user) setIsLoggedIn(true);
+          else setIsLoggedIn(false);
+      });
     (async () => {
       try {
         console.log("hello");
@@ -42,11 +43,11 @@ const Home: React.FC<Props> = ({ navigation }) => {
         const pregameData = JSON.parse(pregameStr || "");
         const autonData = JSON.parse(autonStr || "");
         const teleopData = JSON.parse(teleopStr || "");
-        const endgameData = JSON.parse(endgameStr || "");/*
-        const pregameData = JSON.parse("");
-        const autonData = JSON.parse("");
-        const teleopData = JSON.parse("");
-        const endgameData = JSON.parse("");*/
+        const endgameData = JSON.parse(endgameStr || "");
+        // const pregameData = JSON.parse("");
+        // const autonData = JSON.parse("");
+        // const teleopData = JSON.parse("");
+        // const endgameData = JSON.parse("");
 
         setPreGame(pregameData);
         setAuton(autonData);
@@ -136,15 +137,15 @@ const Home: React.FC<Props> = ({ navigation }) => {
           >
             Scout New Match
           </Button>
-          {!isLoggedIn() && <Button 
-            onPress={() =>{
+          {!isLoggedIn ? <Button 
+            onPress={() => {
               navigation.navigate("Login");
             }}
             style={styles.button}
             size="giant"
           >
             Login
-          </Button>}
+          </Button> : <></>} 
           <Button
             onPress={() => {
               console.log(pregame);

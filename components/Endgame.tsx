@@ -109,6 +109,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
             return <Select
               selectedIndex={new IndexPath(field['type'].indexOf(postGameFields[index]))}
               onSelect={(currIndex) =>{
+                Alert.alert(postGameFields[index])
                 const temp: any[] = [...postGameFields];
                 temp[index] = field['type'][parseInt(currIndex.toString())-1];
                 setPostGameFields(temp);

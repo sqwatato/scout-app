@@ -1,5 +1,5 @@
 import { enableScreens } from "react-native-screens";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Home from "./pages/Home";
 import { NavigationContainer } from "@react-navigation/native";
@@ -9,6 +9,7 @@ import * as eva from "@eva-design/eva";
 import QRScanner from "./pages/QRScanner";
 import Login from "./pages/Login";
 import Match from "./pages/Match";
+import { auth } from "./firebase";
 
 console.warn = () => {};
 console.log = () => {};

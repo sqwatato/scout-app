@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { View, TouchableOpacity, Alert } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,9 +20,13 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation }) => {
 
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   useEffect(() => {
-
-  }, [auth.currentUser])
+    auth.onAuthStateChanged(user => {
+        if(user) setLoggedIn(true);
+        else setLoggedIn(false);
+    });
+  })
 
   return (
     <>
@@ -44,10 +48,10 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
             {matchInfo && matchInfo.alliance}@{matchInfo && matchInfo.regional}{" "}
           </Text>
         </View>
-        {auth.currentUser ? <TouchableOpacity 
+        {loggedIn ? <TouchableOpacity 
           onPress = { () => {
             auth.signOut().then(() => {
-              Alert.alert("Signed out!")
+              Alert.alert("Signed out!");
             }).catch((err) => {
               Alert.alert("Error signing out: " + err.message);
             });
@@ -73,20 +77,34 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
           }}
           style={{
             marginTop: 10,
-            marginRight: 10,
+            marginRight: 20,
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           <Text style = {{
-            fontWeight: '800',
+            fontWeight: '700',
             fontSize: 16,
             color: '#0782F9'
           }}>
             Login
           </Text>
+          </TouchableOpacity>}
+          <TouchableOpacity
+              onPress = {() => navigation?.navigate("Home")}
+              style = {{
+                  marginTop: 10,
+                  justifyContent: 'center',
+              }}
+          >
+              <Text style = {{
+                  fontWeight: '700',
+                  fontSize: 16,
+                  color: '#0782F9'
+              }}>
+                  Home
+              </Text>
           </TouchableOpacity>
-        }
         <TouchableOpacity
           onPress={() => {
             toggleQRCode && toggleQRCode();

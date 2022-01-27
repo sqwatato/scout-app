@@ -45,6 +45,7 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
         matchInfo={{ teams, alliance, regional }}
         title={"PreGame"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
+        navigation = {navigation}
       />
 
       <ScrollView
