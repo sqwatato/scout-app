@@ -84,11 +84,30 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
     if (index === 0) setShowQR(false);
     else setShowQR(true);
   }, []);
-  const clearData = () => {
 
-    setAutonFields([]);
-    setTeleopFields([]);
-    setPostGameFields([]);
+  const clearFields = (fields) => {
+    let newFields : any[] = [];
+    fields.map(field => {
+      try {
+        field = field as number;
+        newFields.push(0);
+      } catch(Exception) {
+        try {
+          field = field as boolean;
+          newFields.push(false);
+        } catch(Exception) {
+            field = field as string;
+            newFields.push("");
+        }
+      }
+    });
+    return newFields;
+  }
+
+  const clearData = () => {
+    setAutonFields(clearFields(autonState.autonFields));
+    setTeleopFields(clearFields(teleopState.teleopFields));
+    setPostGameFields(clearFields(postGameState.postGameFields));
   }
    useEffect(() => {
      AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));

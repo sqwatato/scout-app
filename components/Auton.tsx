@@ -26,7 +26,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   const setAutonFields = useAuton((state) => state.setAutonFields);
   const initializeAutonFields = () =>{
     const tempAuton: any[] = [];
-    fields?.map((value)=>{
+    fields?.map((value) => {
         if(value['type']=="string") tempAuton.push("");
         else if(value['type']=="counter") tempAuton.push(0);
         else if(value['type']=="boolean") tempAuton.push(false);
@@ -36,7 +36,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
     return tempAuton;
   }
   useEffect(() =>{
-      if(autonFields.length<fields.length) setAutonFields(initializeAutonFields());
+      if(autonFields.length < fields.length) setAutonFields(initializeAutonFields());
       // Alert.alert(JSON.stringify(autonFields)); 
     //}
   }, [])
