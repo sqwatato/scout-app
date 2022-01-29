@@ -96,7 +96,6 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
           field = field as boolean;
           newFields.push(false);
         } catch(Exception) {
-            field = field as string;
             newFields.push("");
         }
       }
