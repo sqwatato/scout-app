@@ -24,7 +24,7 @@ const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
             //   );
           }}
           appearance="outline"
-          disabled={value <= 0}
+          disabled={value <= (rating ? 1 : 0)}
         >
           -
         </Button>

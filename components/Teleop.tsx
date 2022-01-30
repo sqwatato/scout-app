@@ -29,15 +29,19 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
     if(teleopFields.length==0){
       setTeleopFields(initializeTeleopFields());      
     }
+    //Alert.alert("teleop use effect");
   }, [])
   const initializeTeleopFields = () =>{
     const tempTeleop: any[] = [];
     fields?.map((value) => {
-        if(value['type']=="string") tempTeleop.push("");
-        else if(value['type']=="counter") tempTeleop.push(0);
-        else if(value['type']=="boolean") tempTeleop.push(false);
-        else tempTeleop.push(0);
-
+      if(value['type']=="counter") tempTeleop.push(0);
+      else if(value['type']=='rating') tempTeleop.push(1);
+      else if(value['type']=="boolean") tempTeleop.push(false);
+      else if(value['type'] == 'text' || value['type'] == 'timer') tempTeleop.push("");
+      else if(Array.isArray(value['type']))
+        tempTeleop.push(value['type'][0]);
+      else 
+        tempTeleop.push("");
     });
     return tempTeleop;
   }

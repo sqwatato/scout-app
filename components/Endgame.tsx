@@ -26,13 +26,14 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
   useEffect(() =>{
     if(postGameFields.length<fields.length) setPostGameFields(initializePostGameFields());
-    //Alert.alert(JSON.stringify(postGameFields));
+    //Alert.alert("Endgame useEffect");
   }, [])
   const initializePostGameFields = () =>{
     setPostGameFields([]);
     const tempPostGame: any[] = [];
     fields?.map((value, index)=>{
         if(value['type']=="counter") tempPostGame.push(0);
+        else if(value['type']=='rating') tempPostGame.push(1);
         else if(value['type']=="boolean") tempPostGame.push(false);
         else if(value['type'] == 'text' || value['type'] == 'timer') tempPostGame.push("");
         else if(Array.isArray(value['type'])){
@@ -108,8 +109,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
           else if(Array.isArray(field['type'])){
             return <Select
               selectedIndex={new IndexPath(field['type'].indexOf(postGameFields[index]))}
-              onSelect={(currIndex) =>{
-                Alert.alert(postGameFields[index])
+              onSelect={(currIndex) => {
                 const temp: any[] = [...postGameFields];
                 temp[index] = field['type'][parseInt(currIndex.toString())-1];
                 setPostGameFields(temp);

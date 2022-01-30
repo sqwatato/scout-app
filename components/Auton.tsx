@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { useAuton, usePreGame } from '../Stores';
 import Header from "./Header";
-import {db} from '../firebase';
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View, Alert } from "react-native";
@@ -27,17 +26,19 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
   const initializeAutonFields = () =>{
     const tempAuton: any[] = [];
     fields?.map((value) => {
-        if(value['type']=="string") tempAuton.push("");
-        else if(value['type']=="counter") tempAuton.push(0);
-        else if(value['type']=="boolean") tempAuton.push(false);
-        //else tempAuton.push(0);
-
-    })
+      if(value['type']=="counter") tempAuton.push(0);
+      else if(value['type']=="boolean") tempAuton.push(false);
+      else if(value['type'] == 'text' || value['type'] == 'timer') tempAuton.push("");
+      else if(Array.isArray(value['type']))
+        tempAuton.push(value['type'][0]);
+      else 
+        tempAuton.push("");
+    });
     return tempAuton;
   }
   useEffect(() =>{
       if(autonFields.length < fields.length) setAutonFields(initializeAutonFields());
-      // Alert.alert(JSON.stringify(autonFields)); 
+      // Alert.alert("Auton Use effect");
     //}
   }, [])
   const sheetRef = useRef<BottomSheet>(null);

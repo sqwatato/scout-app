@@ -1,9 +1,9 @@
-import React, { FC, useRef, useState } from "react";
+import React, { FC, useRef, useState, useEffect } from "react";
 import Header from "./Header";
 import { usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, Alert} from "react-native";
 import { IndexPath, Input, Select, SelectItem } from "@ui-kitten/components/ui";
 import {
   NavigationScreenProp,
@@ -37,7 +37,9 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
   const [selectedTeam, setSelectedTeam] = useState<IndexPath>(
     new IndexPath(teamNum ? teams.indexOf(teamNum) : 0)
   );
-
+  useEffect(() => {
+    //Alert.alert("Pregame use effect");
+  });
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
@@ -87,14 +89,14 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
           selectedIndex={selectedTeam}
           onSelect={(index) => {
             if (!Array.isArray(index)) {
-              setTeamNum(254);
+              setTeamNum(teams[index.row]);
               setSelectedTeam(index);
             }
           }}
           value={teamNum || teams[0]}
           label="Team Number"
         >
-          <SelectItem title={254} />
+          <SelectItem title={`${teams[0]}`} />
           <SelectItem title={`${teams[1]}`} />
           <SelectItem title={`${teams[2]}`} />
         </Select>
