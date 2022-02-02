@@ -41,14 +41,14 @@ const Home: React.FC<Props> = ({ navigation }) => {
             AsyncStorage.getItem("@scout_postgame"),
           ]
         );
-        const pregameData = JSON.parse(pregameStr || "");
+        /*const pregameData = JSON.parse(pregameStr || "");
         const autonData = JSON.parse(autonStr || "");
         const teleopData = JSON.parse(teleopStr || "");
-        const endgameData = JSON.parse(endgameStr || "");
-        // const pregameData = JSON.parse("");
-        // const autonData = JSON.parse("");
-        // const teleopData = JSON.parse("");
-        // const endgameData = JSON.parse("");
+        const endgameData = JSON.parse(endgameStr || "");*/
+        const pregameData = JSON.parse("");
+        const autonData = JSON.parse("");
+        const teleopData = JSON.parse("");
+        const endgameData = JSON.parse("");
 
         setPreGame(pregameData);
         setAuton(autonData);
