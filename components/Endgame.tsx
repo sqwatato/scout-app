@@ -32,10 +32,10 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
     setPostGameFields([]);
     const tempPostGame: any[] = [];
     fields?.map((value, index)=>{
-        if(value['type']=="counter") tempPostGame.push(0);
+        if(value['type']=="counter" || value['type']=='timer') tempPostGame.push(0);
         else if(value['type']=='rating') tempPostGame.push(1);
         else if(value['type']=="boolean") tempPostGame.push(false);
-        else if(value['type'] == 'text' || value['type'] == 'timer') tempPostGame.push("");
+        else if(value['type'] == 'text') tempPostGame.push("");
         else if(Array.isArray(value['type'])){
           tempPostGame.push(value['type'][0]);
         }
