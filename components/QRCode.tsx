@@ -68,12 +68,12 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       endGameFields.forEach((field, index) => {
         pushingData[field['name']] = data.postGameFields[index];
       });
-      Alert.alert(JSON.stringify(pushingData));
       db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
       .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
         () => {
           Alert.alert(JSON.stringify("Successfully written!"))
           clearData();
+          navigation?.navigate("PreGame");
         }).catch(err => {
           Alert.alert("Encountered Error: " + JSON.stringify(err.message));
         });

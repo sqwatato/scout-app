@@ -34,7 +34,6 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
     fields?.map((value, index)=>{
         if(value['type']=="counter" || value['type']=='timer'){
           tempPostGame.push(0);
-          Alert.alert(JSON.stringify(value));
         }
         else if(value['type']=='rating') tempPostGame.push(1);
         else if(value['type']=="boolean") tempPostGame.push(false);
