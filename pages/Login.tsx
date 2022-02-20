@@ -31,7 +31,7 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
     const handleLogin = () => {
         auth.
         signInWithEmailAndPassword(email, password).then(
-            () => { Alert.alert("Sign in successful"); navigation.goBack(); }
+            () => { navigation.goBack(); }
         ).catch((error) => {
             if (error.code === 'auth/invalid-email')
                 Alert.alert('You did not enter a valid Email');

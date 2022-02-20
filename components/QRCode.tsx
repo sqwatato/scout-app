@@ -68,6 +68,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       endGameFields.forEach((field, index) => {
         pushingData[field['name']] = data.postGameFields[index];
       });
+      Alert.alert(JSON.stringify(pushingData));
       db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
       .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
         () => {
@@ -86,21 +87,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   }, []);
 
   const clearFields = (fields) => {
-    let newFields : any[] = [];
-    fields.map(field => {
-      try {
-        field = field as number;
-        newFields.push(0);
-      } catch(Exception) {
-        try {
-          field = field as boolean;
-          newFields.push(false);
-        } catch(Exception) {
-            newFields.push("");
-        }
-      }
-    });
-    return newFields;
+    return [];
   }
 
   const clearData = () => {
