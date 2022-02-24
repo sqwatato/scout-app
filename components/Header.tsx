@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { View, TouchableOpacity, Alert } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
+import Toast from 'react-native-toast-message';
 import QRCodeBottomSheet from "./QRCode";
 import { auth } from '../firebase';
 import { Navigator } from 'react-router-dom';
@@ -52,6 +53,11 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
           onPress = { () => {
             auth.signOut().then(() => {
               Alert.alert("Signed out!");
+              Toast.show({
+                type: 'info',
+                text1: 'Alert',
+                text2: 'Signed out!'
+              })
             }).catch((err) => {
               Alert.alert("Error signing out: " + err.message);
             });
@@ -63,13 +69,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
             alignItems: "center",
           }}
         >
-          <Text style = {{
-            fontWeight: '800',
-            fontSize: 16,
-            color: '#0782F9'
-          }}>
-            Logout
-          </Text>
+          <Ionicons name="exit-outline" size={28} color={'#0782F9'} />
         </TouchableOpacity> : 
           <TouchableOpacity 
           onPress = { () => {
@@ -82,13 +82,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
             alignItems: "center",
           }}
         >
-          <Text style = {{
-            fontWeight: '700',
-            fontSize: 16,
-            color: '#0782F9'
-          }}>
-            Login
-          </Text>
+          <Ionicons name="enter-outline" size={28} color={'#0782F9'} />
           </TouchableOpacity>}
           <TouchableOpacity
               onPress = {() => navigation?.navigate("Home")}
@@ -97,13 +91,14 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
                   justifyContent: 'center',
               }}
           >
-              <Text style = {{
-                  fontWeight: '700',
-                  fontSize: 16,
+              {/* <Text style = {{
+                  fontWeight: '900',
+                  fontSize: 24,
                   color: '#0782F9'
               }}>
-                  Home
-              </Text>
+                  ⌂
+              </Text> */}
+              <Ionicons name="home-outline" size={28} color={'#0782F9'} />
           </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {

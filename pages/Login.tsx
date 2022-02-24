@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationState, RouteProp } from "@react-navigation/native";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { NavigationScreenProp, NavigationParams } from "react-navigation";
+import { NavigationState, RouteProp } from "@react-navigation/native";
 import {
   Alert,
   View,
@@ -10,8 +10,10 @@ import {
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { db, auth } from "../firebase";
+import Toast from 'react-native-toast-message';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,6 +37,10 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         Alert.alert("Sign in successful");
+        Toast.show({
+          type: 'info',
+          text1: 'This is an info message'
+        });
         navigation.goBack();
       })
       .catch((error) => {
@@ -67,7 +73,9 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container}
+        behavior={(Platform.OS === 'ios') ? 'padding' : undefined}
+      >
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Enter email"
