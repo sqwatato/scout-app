@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from "react";
 import { View, TouchableOpacity, Alert } from "react-native";
 import { Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
-import Toast from 'react-native-toast-message';
 import QRCodeBottomSheet from "./QRCode";
 import { auth } from '../firebase';
 import { Navigator } from 'react-router-dom';
@@ -24,8 +23,8 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   useEffect(() => {
     auth.onAuthStateChanged(user => {
-        if(user) setLoggedIn(true);
-        else setLoggedIn(false);
+      if (user) setLoggedIn(true);
+      else setLoggedIn(false);
     });
   })
 
@@ -49,15 +48,10 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
             {matchInfo && matchInfo.alliance}@{matchInfo && matchInfo.regional}{" "}
           </Text>
         </View>
-        {loggedIn ? <TouchableOpacity 
-          onPress = { () => {
+        {loggedIn ? <TouchableOpacity
+          onPress={() => {
             auth.signOut().then(() => {
               Alert.alert("Signed out!");
-              Toast.show({
-                type: 'info',
-                text1: 'Alert',
-                text2: 'Signed out!'
-              })
             }).catch((err) => {
               Alert.alert("Error signing out: " + err.message);
             });
@@ -70,36 +64,36 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
           }}
         >
           <Ionicons name="exit-outline" size={28} color={'#0782F9'} />
-        </TouchableOpacity> : 
-          <TouchableOpacity 
-          onPress = { () => {
-            navigation?.navigate("Login");
-          }}
+        </TouchableOpacity> :
+          <TouchableOpacity
+            onPress={() => {
+              navigation?.navigate("Login");
+            }}
+            style={{
+              marginTop: 10,
+              marginRight: 20,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Ionicons name="enter-outline" size={28} color={'#0782F9'} />
+          </TouchableOpacity>}
+        <TouchableOpacity
+          onPress={() => navigation?.navigate("Home")}
           style={{
             marginTop: 10,
-            marginRight: 20,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
           }}
         >
-          <Ionicons name="enter-outline" size={28} color={'#0782F9'} />
-          </TouchableOpacity>}
-          <TouchableOpacity
-              onPress = {() => navigation?.navigate("Home")}
-              style = {{
-                  marginTop: 10,
-                  justifyContent: 'center',
-              }}
-          >
-              {/* <Text style = {{
+          {/* <Text style = {{
                   fontWeight: '900',
                   fontSize: 24,
                   color: '#0782F9'
               }}>
                   ⌂
               </Text> */}
-              <Ionicons name="home-outline" size={28} color={'#0782F9'} />
-          </TouchableOpacity>
+          <Ionicons name="home-outline" size={28} color={'#0782F9'} />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             toggleQRCode && toggleQRCode();

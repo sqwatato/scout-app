@@ -13,7 +13,6 @@ import {
   Platform,
 } from "react-native";
 import { db, auth } from "../firebase";
-import Toast from 'react-native-toast-message';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,10 +36,6 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         Alert.alert("Sign in successful");
-        Toast.show({
-          type: 'info',
-          text1: 'This is an info message'
-        });
         navigation.goBack();
       })
       .catch((error) => {

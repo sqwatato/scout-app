@@ -10,7 +10,7 @@ interface Props {
   //   haptic: boolean;
 }
 
-const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
+const Counter: FC<Props> = ({ name, onChange, value, rating }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
@@ -48,17 +48,7 @@ const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
             }}
           >{`${name}: `}</Text>
           <Input
-            // category="h6"
-            onChangeText={(val) => {
-              try {
-                const temp: number = parseInt(val);
-                if(temp >= (rating ? 1 : 0) && temp<=(rating ? 5 : 1000)){
-                  onChange(temp);
-                }
-              } catch(Exception){
-                //onChange(value);
-              };
-            }}
+            keyboardType="number-pad"
             style={{
               borderColor: "#dde",
               borderWidth: 1,
@@ -75,13 +65,9 @@ const Counter: FC<Props> = ({ name, onChange, value, rating}) => {
           style={[styles.button, styles.pos]}
           onPressIn={() => {
             onChange(value + 1);
-            // haptic &&
-            //   Haptics.notificationAsync(
-            //     Haptics.NotificationFeedbackType.Success
-            //   );
           }}
           appearance="outline"
-          disabled={rating && value>=5}
+          disabled={rating && value >= 5}
         >
           +
         </Button>
