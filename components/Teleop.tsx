@@ -29,7 +29,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
     if(teleopFields.length==0){
       setTeleopFields(initializeTeleopFields());      
     }
-    //Alert.alert("teleop use effect");
+    //("teleop use effect");
   }, [])
   const initializeTeleopFields = () =>{
     const tempTeleop: any[] = [];

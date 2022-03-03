@@ -40,7 +40,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 		if (autonFields.length < fields.length) setAutonFields(initializeAutonFields());
 	}, [])
 	const sheetRef = useRef<BottomSheet>(null);
-	// Alert.alert(navigation);
+	// (navigation);
 	return (
 		<>
 			<Header

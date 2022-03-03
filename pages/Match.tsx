@@ -64,7 +64,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         teams,
       });
     }
-    //Alert.alert("Match use effect");
+    //("Match use effect");
   }, []);
   const fetchData = () => {
     db.collection('years').doc('2022').collection('scouting').get()

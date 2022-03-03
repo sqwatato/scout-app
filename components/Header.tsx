@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import QRCodeBottomSheet from "./QRCode";
 import { auth } from '../firebase';
 import { Navigator } from 'react-router-dom';
+import  Toast  from "react-native-toast-message";
 import { NavigationParams, NavigationScreenProp, NavigationState } from "react-navigation";
 
 interface HeaderProps {
@@ -30,6 +31,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
 
   return (
     <>
+      <Toast position="bottom" bottomOffset={20} autoHide= {true} visibilityTime= {2000} />
       <View
         style={{
           display: "flex",
@@ -51,9 +53,19 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
         {loggedIn ? <TouchableOpacity
           onPress={() => {
             auth.signOut().then(() => {
-              Alert.alert("Signed out!");
+              Toast.show({
+                type: "success",
+                text1: "Successfully signed out!",
+                visibilityTime: 2500,
+                autoHide: true,
+              });
             }).catch((err) => {
-              Alert.alert("Error signing out: " + err.message);
+              Toast.show({
+                type: "error",
+                text1: "Error signing out: " + err.message,
+                visibilityTime: 2500,
+                autoHide: true,
+              });
             });
           }}
           style={{
@@ -68,6 +80,12 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
           <TouchableOpacity
             onPress={() => {
               navigation?.navigate("Login");
+              Toast.show({
+                type: "success",
+                text1: "Successfully signed in!",
+                visibilityTime: 2500,
+                autoHide: true,
+              });
             }}
             style={{
               marginTop: 10,

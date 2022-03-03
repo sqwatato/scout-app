@@ -21,6 +21,7 @@ import {
 } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db, auth } from '../firebase'
+import Toast from "react-native-toast-message";
 import { Navigate } from 'react-router-dom';
 
 interface QRCodeBottomSheetProps {
@@ -52,12 +53,12 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
 
   const pushData = () => {
     const data = getData();
-    let autonFields: any[] = [], teleopFields : any[] = [], endGameFields : any[] = [];
+    let autonFields: any[] = [], teleopFields: any[] = [], endGameFields: any[] = [];
     const template = db.collection('years').doc('2022').collection('scouting').get();
     template.then((fields) => {
-      autonFields = Object.keys(fields.docs[0].data() || {}).map(field => ({name: field, type: (fields.docs[0].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
-      teleopFields = Object.keys(fields.docs[2].data() || {}).map(field => ({name: field, type: (fields.docs[1].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
-      endGameFields = Object.keys(fields.docs[1].data() || {}).map(field => ({name: field, type: (fields.docs[2].data() || {})[field]})).sort((a,b)=> a['name'].localeCompare(b['name']));
+      autonFields = Object.keys(fields.docs[0].data() || {}).map(field => ({ name: field, type: (fields.docs[0].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name']));
+      teleopFields = Object.keys(fields.docs[2].data() || {}).map(field => ({ name: field, type: (fields.docs[1].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name']));
+      endGameFields = Object.keys(fields.docs[1].data() || {}).map(field => ({ name: field, type: (fields.docs[2].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name']));
       let pushingData = {};
       autonFields.forEach((field, index) => {
         pushingData[field['name']] = data.autonFields[index];
@@ -69,16 +70,16 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         pushingData[field['name']] = data.postGameFields[index];
       });
       db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
-      .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
-        () => {
-          Alert.alert(JSON.stringify("Successfully written!"))
-          clearData();
-          navigation?.navigate("PreGame");
-        }).catch(err => {
-          Alert.alert("Encountered Error: " + JSON.stringify(err.message));
-        });
+        .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
+          () => {
+            Toast.show({ type: 'success', text1: "Successfully Saved Data!" })
+            clearData();
+            navigation?.navigate("PreGame");
+          }).catch(err => {
+            Toast.show({ type: 'error', text1: 'Unable to save data. Error: ' + err.message })
+          });
     }).catch((err) => {
-      Alert.alert("Encountered Error: " + JSON.stringify(err.message));
+      Toast.show({ type: 'error', text1: "Encountered Error: " + err.message });
     });
   };
   const handleSheetChanges = useCallback((index: number) => {
@@ -95,15 +96,15 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
     setTeleopFields(clearFields(teleopState.teleopFields));
     setPostGameFields(clearFields(postGameState.postGameFields));
   }
-   useEffect(() => {
-     AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));
-   }, [preGameState]);
+  useEffect(() => {
+    AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));
+  }, [preGameState]);
 
-   useEffect(() => {
-     AsyncStorage.setItem("@scout_auton", JSON.stringify(autonState));
-   }, [autonState]);
+  useEffect(() => {
+    AsyncStorage.setItem("@scout_auton", JSON.stringify(autonState));
+  }, [autonState]);
 
-   useEffect(() => {
+  useEffect(() => {
     AsyncStorage.setItem("@scout_teleop", JSON.stringify(teleopState));
   }, [teleopState]);
 
@@ -184,7 +185,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
               isLoggedIn() ? pushData() : navigation?.navigate("Login");
             }}
           >
-          Finish Scout
+            Finish Scout
           </Button>
         </View>
       </View>

@@ -38,7 +38,7 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
     new IndexPath(teamNum ? teams.indexOf(teamNum) : 0)
   );
   useEffect(() => {
-    //Alert.alert("Pregame use effect");
+    //("Pregame use effect");
   });
   const sheetRef = useRef<BottomSheet>(null);
   return (

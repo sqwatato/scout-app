@@ -13,6 +13,7 @@ import {
   Platform,
 } from "react-native";
 import { db, auth } from "../firebase";
+import Toast from "react-native-toast-message";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,20 +36,26 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        Alert.alert("Sign in successful");
         navigation.goBack();
+        Toast.show({
+          type: "success",
+          text1: "Successfully signed in!",
+          visibilityTime: 2500,
+          autoHide: true,
+        });
       })
       .catch((error) => {
         if (error.code === "auth/invalid-email")
-          Alert.alert("You did not enter a valid Email");
+          Toast.show({type: 'error"', text1: "You did not enter a valid Email"});
         else if (error.code === "auth/user-not-found")
-          Alert.alert("This user could not be found");
+        Toast.show({type: 'error"', text1: "This user could not be found"});
         else if (error.code === "auth/wrong-password")
-          Alert.alert("Wrong password");
+        Toast.show({type: 'error"', text1: "Invalid Password"});
       });
   };
   return (
     <>
+    <Toast position="bottom" bottomOffset={20}/>
       <View>
         <TouchableOpacity
           onPress={() => navigation.goBack()}

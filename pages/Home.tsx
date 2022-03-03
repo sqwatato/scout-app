@@ -25,7 +25,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    //Alert.alert("HOME");
+    //("HOME");
       auth.onAuthStateChanged(user => {
           if(user) setIsLoggedIn(true);
           else setIsLoggedIn(false);

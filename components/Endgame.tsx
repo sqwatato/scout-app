@@ -26,7 +26,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
   useEffect(() =>{
     if(postGameFields.length<fields.length) setPostGameFields(initializePostGameFields());
-    //Alert.alert("Endgame useEffect");
+    //("Endgame useEffect");
   }, [])
   const initializePostGameFields = () =>{
     setPostGameFields([]);
