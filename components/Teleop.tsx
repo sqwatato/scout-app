@@ -25,11 +25,11 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const sheetRef = useRef<BottomSheet>(null);
   const teleopFields = useTeleop((state) => state.teleopFields);
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
+
   useEffect(() =>{
-    if(teleopFields.length==0){
+    if(teleopFields.length == 0){
       setTeleopFields(initializeTeleopFields());      
     }
-    //("teleop use effect");
   }, [])
   const initializeTeleopFields = () =>{
     const tempTeleop: any[] = [];
@@ -85,7 +85,12 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           }
           else if(field['type']=='timer'){
             return (
-              <Stopwatch name={field['name']} onChange={setTeleopFields} fieldIndex={index} postFields={teleopFields} ></Stopwatch>
+              <Stopwatch 
+                name={field['name']} 
+                onChange={setTeleopFields} 
+                fieldIndex={index} 
+                postFields={teleopFields} 
+              />
             )
           }
           else{

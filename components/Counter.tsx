@@ -44,8 +44,9 @@ const Counter: FC<Props> = ({ name, onChange, value, rating }) => {
           <Text
             category="s1"
             style={{
-              fontSize: 15,
+              fontSize: 14,
             }}
+            adjustsFontSizeToFit={true}
           >{`${name}: `}</Text>
           <Input
             keyboardType="number-pad"

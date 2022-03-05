@@ -70,14 +70,27 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         pushingData[field['name']] = data.postGameFields[index];
       });
       db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
-        .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData).then(
-          () => {
-            Toast.show({ type: 'success', text1: "Successfully Saved Data!" })
-            clearData();
-            navigation?.navigate("PreGame");
-          }).catch(err => {
-            Toast.show({ type: 'error', text1: 'Unable to save data. Error: ' + err.message })
+        .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData)
+        .then(() => {
+          let pressed: boolean = false;
+          Toast.show({
+            type: "success",
+            text1: "Successfully Saved Data!",
+            onPress: () => {
+              pressed = true;
+              clearData();
+              navigation?.navigate("PreGame");
+            }
           });
+          if (!pressed) {
+            clearData();
+            setTimeout(() => {
+              navigation?.navigate("PreGame");
+            }, 3000);
+          };
+        }).catch(err => {
+          Toast.show({ type: 'error', text1: 'Unable to save data. Error: ' + err.message })
+        });
     }).catch((err) => {
       Toast.show({ type: 'error', text1: "Encountered Error: " + err.message });
     });
@@ -127,69 +140,72 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
   };
 
   return (
-    <BottomSheet
-      ref={sheetRef}
-      index={0}
-      animateOnMount={false}
-      snapPoints={snapPoints}
-      onChange={handleSheetChanges}
-      style={{
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 5,
-        },
-        shadowOpacity: 0.36,
-        shadowRadius: 6.68,
+    <>
+      <Toast position='top' topOffset={20} />
+      <BottomSheet
+        ref={sheetRef}
+        index={0}
+        animateOnMount={false}
+        snapPoints={snapPoints}
+        onChange={handleSheetChanges}
+        style={{
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 5,
+          },
+          shadowOpacity: 0.36,
+          shadowRadius: 6.68,
 
-        elevation: 11,
-      }}
-    >
-      <View style={styles.contentContainer}>
-        <Text style={{ marginBottom: 20 }}>
-          Scan this QR Code with the Super Scout Scanner
-        </Text>
-        {showQR && (
-          <QRCode
-            value={JSON.stringify(getData())}
-            size={Dimensions.get("screen").width / 1.3}
-          />
-        )}
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            width: Dimensions.get("screen").width / 1.5,
-          }}
-        >
-          <Button
-            style={{ width: "100%", marginVertical: 5 }}
-            appearance="outline"
-            onPress={() => {
-              sheetRef?.current?.close();
-              // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            }}
-          >
-            Continue Scout
-          </Button>
-          <Button
-            status="danger"
-            appearance="outline"
+          elevation: 11,
+        }}
+      >
+        <View style={styles.contentContainer}>
+          <Text style={{ marginBottom: 20 }}>
+            Scan this QR Code with the Super Scout Scanner
+          </Text>
+          {showQR && (
+            <QRCode
+              value={JSON.stringify(getData())}
+              size={Dimensions.get("screen").width / 1.3}
+            />
+          )}
+          <View
             style={{
-              width: "100%",
-            }}
-            onPress={() => {
-              // navigation?.navigate("Home");
-              // setLogin(logInUser());
-              isLoggedIn() ? pushData() : navigation?.navigate("Login");
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              width: Dimensions.get("screen").width / 1.5,
             }}
           >
-            Finish Scout
-          </Button>
+            <Button
+              style={{ width: "100%", marginVertical: 5 }}
+              appearance="outline"
+              onPress={() => {
+                sheetRef?.current?.close();
+                // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              }}
+            >
+              Continue Scout
+            </Button>
+            <Button
+              status="danger"
+              appearance="outline"
+              style={{
+                width: "100%",
+              }}
+              onPress={() => {
+                // navigation?.navigate("Home");
+                // setLogin(logInUser());
+                isLoggedIn() ? pushData() : navigation?.navigate("Login");
+              }}
+            >
+              Finish Scout
+            </Button>
+          </View>
         </View>
-      </View>
-    </BottomSheet>
+      </BottomSheet>
+    </>
   );
 };
 
