@@ -23,6 +23,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	const regional = usePreGame((state) => state.regional);
 	const autonFields = useAuton((state) => state.autonFields);
 	const setAutonFields = useAuton((state) => state.setAutonFields);
+	const setField = useAuton((state) => state.setField);
 	const initializeAutonFields = () => {
 		const tempAuton: any[] = [];
 		fields?.map((value) => {
@@ -91,7 +92,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 					}
 					else if (field['type'] == 'timer') {
 						return (
-							<Stopwatch name={field['name']} onChange={setAutonFields} fieldIndex={index} postFields={autonFields} ></Stopwatch>
+							<Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
 						)
 					}
 					else {

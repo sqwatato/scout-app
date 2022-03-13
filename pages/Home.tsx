@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuton, usePostGame, usePreGame, useTeleop } from "../Stores";
 import { Navigate } from "react-router-dom";
 import { auth } from '../firebase'
+import Toast from 'react-native-toast-message';
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -118,6 +119,8 @@ const Home: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
+    <>
+    <Toast position = 'top' topOffset={20} />
     <Layout style={styles.container}>
       <View style={styles.childContainer}>
         <StatusBar style="auto" />
@@ -161,6 +164,7 @@ const Home: React.FC<Props> = ({ navigation }) => {
         </View>
       </View>
     </Layout>
+    </>
   );
 };
 

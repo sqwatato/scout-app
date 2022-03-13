@@ -46,11 +46,11 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
       })
       .catch((error) => {
         if (error.code === "auth/invalid-email")
-          Toast.show({type: 'error"', text1: "You did not enter a valid Email"});
+          Toast.show({type: 'error', text1: "You did not enter a valid Email"});
         else if (error.code === "auth/user-not-found")
-        Toast.show({type: 'error"', text1: "This user could not be found"});
+          Toast.show({type: 'error', text1: "This user could not be found"});
         else if (error.code === "auth/wrong-password")
-        Toast.show({type: 'error"', text1: "Invalid Password"});
+          Toast.show({type: 'error', text1: "Invalid Password"});
       });
   };
   return (
@@ -85,6 +85,7 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
             onChangeText={(text) => setEmail(text.toLowerCase())}
             style={styles.input}
             autoCorrect
+            keyboardType = "visible-password"
           />
           <TextInput
             placeholder="Password"

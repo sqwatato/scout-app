@@ -1,40 +1,58 @@
+import { Alert } from "react-native";
+import { State } from "react-native-gesture-handler";
 import create from "zustand";
 import { AutonData, PostGameData, PreGameData, TeleopData } from "./types";
 
 type AutonState =| AutonData & {
       setAutonFields: (autonFields: any[]) => any;
+      setField: (index: number, value: any) => any;
       set: (data: AutonData) => any;
     };
 
 export const useAuton = create<AutonState>((set) => ({  
   autonFields: [],
   setAutonFields: (autonFields: any[]) => set({autonFields}),
+  setField: (index: number, value: any) => set(state =>{
+    let temp = [...state.autonFields];
+    temp[index] = value;
+    autonFields: temp;
+  }),
   set,
 }));
 
 type TeleopState =
   | TeleopData & {
       setTeleopFields: (teleopFields: any[]) => any;
+      setField: (index: number, value: any) => any;
       set: (data: TeleopData) => any;
     };
 
 export const useTeleop = create<TeleopState>((set) => ({
   teleopFields: [],
   setTeleopFields: (teleopFields: any[]) => set({teleopFields}),
+  setField: (index: number, value: any) => set(state =>{
+    state.teleopFields[index] = value;
+    Alert.alert(state.teleopFields+"");
+  }),
   set,
 }));
 
 type PostGameState =
   | PostGameData & {
       setPostGameFields: (postGameFields: any[]) => any;
+      setField: (index: number, value: any) => any;
       set: (data: PostGameData) => any;
     };
 
 export const usePostGame = create<PostGameState>((set) => ({
   postGameFields: [],
+  setField: (index: number, value: any) => set(state =>{
+    state.postGameFields[index] = value;
+  }),
   setPostGameFields: (postGameFields: any[]) => set({postGameFields}),
   set,
 }));
+
 
 type PreGameState =
   | PreGameData & {

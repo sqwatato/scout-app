@@ -25,6 +25,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const sheetRef = useRef<BottomSheet>(null);
   const teleopFields = useTeleop((state) => state.teleopFields);
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
+  const setField = useTeleop((state)=> state.setField);
 
   useEffect(() =>{
     if(teleopFields.length == 0){
@@ -87,7 +88,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
             return (
               <Stopwatch 
                 name={field['name']} 
-                onChange={setTeleopFields} 
+                onChange={setField} 
                 fieldIndex={index} 
                 postFields={teleopFields} 
               />

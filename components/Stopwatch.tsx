@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Alert, View } from "react-native";
 
 interface Props {
-  onChange: (temporary: any[]) => void;
+  onChange: (index: number, value: any) => void;
   postFields: any[];
   fieldIndex: number;
   name: string;
@@ -19,9 +19,6 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
       interval = setInterval(() => {
         let newMs = msecs + 100;
         setTime(newMs);
-        const temp: any[] = postFields;
-        temp[fieldIndex] = msecs;
-        onChange(temp);
       }, 100);
     }
     return () => clearInterval(interval);
@@ -32,6 +29,9 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
   };
 
   const handleStartStop = () => {
+    if(isRunning){
+      onChange(fieldIndex, msecs);
+    }
     setIsRunning(!isRunning);
   };
 

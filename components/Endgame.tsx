@@ -24,6 +24,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const regional = usePreGame((state) => state.regional);
   const postGameFields = usePostGame((state) => state.postGameFields);
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
+  const setField = usePostGame((state) => state.setField);
   useEffect(() =>{
     if(postGameFields.length<fields.length) setPostGameFields(initializePostGameFields());
     //("Endgame useEffect");
@@ -107,7 +108,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
           }
           else if(field['type']=='timer'){
             return (
-              <Stopwatch name={field['name']} onChange={setPostGameFields} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
+              <Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
             )
           }
           else if(Array.isArray(field['type'])){

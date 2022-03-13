@@ -58,6 +58,12 @@ const Counter: FC<Props> = ({ name, onChange, value, rating }) => {
               borderRadius: 3,
               // fontSize: 30
             }}
+            onChangeText={(value) => {
+              let newVal : number = parseInt(value);
+              if(newVal) {
+                onChange(Math.min(Math.max(newVal, rating ? 1 : 0), rating ? 5 : 1000));
+              }
+            }}
           >
             {value}
           </Input>
