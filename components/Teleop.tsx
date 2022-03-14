@@ -1,17 +1,17 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Header from "./Header";
-import { usePreGame, useTeleop } from "../Stores";
+import { useTeleop, usePreGame} from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { ScrollView, View, Alert } from "react-native";
-import Counter from "./Counter";
-import { Input, Text, Toggle } from "@ui-kitten/components";
+import { Alert, ScrollView, View } from "react-native";
+import { Button, IndexPath, Input, Select, SelectItem, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
   NavigationState,
   NavigationParams,
 } from "react-navigation";
 import Stopwatch from "./Stopwatch";
+import Counter from "./Counter";
 
 interface TeleopProps {
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
@@ -93,6 +93,23 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
                 postFields={teleopFields} 
               />
             )
+          }
+          else if(Array.isArray(field['type'])){
+            return <Select
+              selectedIndex={new IndexPath(field['type'].indexOf(teleopFields[index]))}
+              onSelect={(currIndex) => {
+                const temp: any[] = [...teleopFields];
+                temp[index] = field['type'][parseInt(currIndex.toString())-1];
+                setTeleopFields(temp);
+              }}
+              label={field['name']}
+              style={{ marginBottom: "3%" }}
+              value={teleopFields[index]}
+            >
+              {field['type'].map((val, currIndex) =>{
+                return <SelectItem title={val}/>
+              })}
+            </Select>
           }
           else{
             return(

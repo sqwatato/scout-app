@@ -83,6 +83,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 								setAutonFields(temp);
 							}}
 								style={{
+									marginTop: "3%",
 									padding: 4,
 								}}
 							>
