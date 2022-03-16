@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import Header from "./Header";
-import { usePostGame, usePreGame} from "../Stores";
+import { usePostGame, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { Alert, ScrollView, View } from "react-native";
@@ -25,38 +25,40 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const postGameFields = usePostGame((state) => state.postGameFields);
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
   const setField = usePostGame((state) => state.setField);
-  useEffect(() =>{
-    if(postGameFields.length<fields.length) setPostGameFields(initializePostGameFields());
+  const [didClimb, setDidClimb] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (postGameFields.length < fields.length) setPostGameFields(initializePostGameFields());
     //("Endgame useEffect");
   }, [])
-  const initializePostGameFields = () =>{
+  const initializePostGameFields = () => {
     setPostGameFields([]);
     const tempPostGame: any[] = [];
-    fields?.map((value, index)=>{
-        if(value['type']=="counter" || value['type']=='timer'){
-          tempPostGame.push(0);
-        }
-        else if(value['type']=='rating') tempPostGame.push(1);
-        else if(value['type']=="boolean") tempPostGame.push(false);
-        else if(value['type'] == 'text') {
-          tempPostGame.push("");
-        }
-        else if(Array.isArray(value['type'])){
-          tempPostGame.push(value['type'][0]);
-        }
-        else {
-          tempPostGame.push("");
-        }
-    },)
+    fields?.map((value, index) => {
+      if (value['type'] == "counter" || value['type'] == 'timer') {
+        tempPostGame.push(0);
+      }
+      else if (value['type'] == 'rating') tempPostGame.push(1);
+      else if (value['type'] == "boolean") tempPostGame.push(false);
+      else if (value['type'] == 'text') {
+        tempPostGame.push("");
+      }
+      else if (Array.isArray(value['type'])) {
+        tempPostGame.push(value['type'][0]);
+      }
+      else {
+        tempPostGame.push("");
+      }
+    })
     return tempPostGame;
   }
   return (
     <>
-    <Header
+      <Header
         matchInfo={{ teams, alliance, regional }}
         title={"EndGame"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
-        navigation = {navigation}
+        navigation={navigation}
       />
       <ScrollView
         contentContainerStyle={{
@@ -66,39 +68,46 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
         }}
         keyboardDismissMode="on-drag"
       >
-      {fields?.map((field, index) => {
-          if(field['type'] == 'counter' || field['type']=='rating') {
-            return(
+        {fields?.map((field, index) => {
+          if (field['type'] == 'counter' || field['type'] == 'rating') {
+            return (
               <Counter
-              rating={field['type']=='rating'}
-              name={field['name']}
-              onChange={(val) => {
-                const temp: any[] = [...postGameFields];
-                temp[index] = val;
-                setPostGameFields(temp);
-              }}
-              value={postGameFields[index]}/>
+                rating={field['type'] == 'rating'}
+                name={field['name']}
+                onChange={(val) => {
+                  const temp: any[] = [...postGameFields];
+                  temp[index] = val;
+                  setPostGameFields(temp);
+                }}
+                value={postGameFields[index]} />
             )
           }
-          else if(field['type']=='boolean'){
-            return(
-              <Toggle checked = {postGameFields[index]} onChange={(val) => {
-                const temp: any[] = [...postGameFields];
-                temp[index] = val;
-                setPostGameFields(temp);
-              }} 
-              style = {{marginTop: "3%", padding : 4}}>{field['name']}</Toggle>
+          else if (field['type'] == 'boolean') {
+            if (field['name'] === 'Fell off rungs' && !didClimb) return;
+            return (
+              <Toggle
+                checked={postGameFields[index]}
+                onChange={(val) => {
+                  const temp: any[] = [...postGameFields];
+                  temp[index] = val;
+                  setPostGameFields(temp);
+                  if (field['name'] === 'Did Climb') setDidClimb(val);
+                }}
+                style={{ marginTop: "3%", padding: 4 }}
+              >
+                {field['name']}
+              </Toggle>
             )
           }
-          else if(field['type']=='text') {
-            return(
+          else if (field['type'] == 'text') {
+            return (
               <Input
                 multiline={true}
                 textStyle={{ minHeight: 64 }}
-                placeholder={field.name+"..."}
+                placeholder={field.name + "..."}
                 label={field['name']}
                 value={postGameFields[index]}
-                onChangeText={(val) => { 
+                onChangeText={(val) => {
                   const temp: any[] = [...postGameFields];
                   temp[index] = val;
                   setPostGameFields(temp);
@@ -106,37 +115,39 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               />
             )
           }
-          else if(field['type']=='timer'){
+          else if (field['type'] == 'timer') {
+            if (field['name'] === 'Climb time' && !didClimb) return;
             return (
               <Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
             )
           }
-          else if(Array.isArray(field['type'])){
+          else if (Array.isArray(field['type'])) {
+            if (field['name'] === 'Climb rung' && !didClimb) return;
             return <Select
               selectedIndex={new IndexPath(field['type'].indexOf(postGameFields[index]))}
               onSelect={(currIndex) => {
                 const temp: any[] = [...postGameFields];
-                temp[index] = field['type'][parseInt(currIndex.toString())-1];
+                temp[index] = field['type'][parseInt(currIndex.toString()) - 1];
                 setPostGameFields(temp);
               }}
               label={field['name']}
               style={{ marginBottom: "3%" }}
               value={postGameFields[index]}
             >
-              {field['type'].map((val, currIndex) =>{
-                return <SelectItem title={val}/>
+              {field['type'].map((val, currIndex) => {
+                return <SelectItem title={val} />
               })}
             </Select>
           }
-          else{
-            return(
+          else {
+            return (
               <Input
                 multiline={true}
                 textStyle={{ minHeight: 64 }}
-                placeholder={field.name+"..."}
+                placeholder={field.name + "..."}
                 label={field['name']}
                 value={postGameFields[index]}
-                onChangeText={(val) => { 
+                onChangeText={(val) => {
                   const temp: any[] = [...postGameFields];
                   temp[index] = val;
                   setPostGameFields(temp);
@@ -144,9 +155,9 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               />
             )
           }
-          
-      })}
-        
+
+        })}
+
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>

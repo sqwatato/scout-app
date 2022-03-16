@@ -24,14 +24,17 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	const autonFields = useAuton((state) => state.autonFields);
 	const setAutonFields = useAuton((state) => state.setAutonFields);
 	const setField = useAuton((state) => state.setField);
+	const [leftTarmac, setLeftTarmac] = useState<boolean>(false);
+
 	const initializeAutonFields = () => {
 		const tempAuton: any[] = [];
-		fields?.map((value) => {
-			if (value['type'] == "counter" || value['type'] == 'timer') tempAuton.push(0);
-			else if (value['type'] == "boolean") tempAuton.push(false);
-			else if (value['type'] == 'text') tempAuton.push("");
-			else if (Array.isArray(value['type']))
-				tempAuton.push(value['type'][0]);
+		fields?.map((field) => {
+			const [name, type] = [field['name'], field['type']];
+			if (type === 'counter' || type === 'timer') tempAuton.push(0);
+			else if (type === 'boolean') tempAuton.push(false);
+			else if (type === 'text') tempAuton.push("");
+			else if (Array.isArray(type))
+				tempAuton.push(type['type'][0]);
 			else
 				tempAuton.push("");
 		});
@@ -64,37 +67,57 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 				keyboardDismissMode="on-drag"
 			>
 				{fields?.map((field, index) => {
-					if (field['type'] == 'counter' || field['type'] == 'rating') {
+					const [name, type] = [field['name'], field['type']];
+					if (type === 'counter' || type === 'rating') {
+						// return (
+						// 	<Counter
+						// 		rating={field['type'] === "rating"}
+						// 		name={name}
+						// 		onChange={(val) => {
+						// 			const temp: any[] = [...autonFields];
+						// 			temp[index] = val;
+						// 			setAutonFields(temp);
+						// 		}}
+						// 		value={autonFields[index]}
+						// 	/>
+						// );
+						if (name === 'Amount Intaken' && !leftTarmac) return;
 						return (
 							<Counter
-								rating={field['type'] == "rating"}
-								name={field['name']} onChange={(val) => {
+								rating={field['type'] === "rating"}
+								name={name}
+								onChange={(val) => {
 									const temp: any[] = [...autonFields];
 									temp[index] = val;
 									setAutonFields(temp);
-								}} value={autonFields[index]} />
-						)
+								}}
+								value={autonFields[index]}
+							/>
+						);
 					}
-					else if (field['type'] == 'boolean') {
+					else if (type === 'boolean') {
 						return (
-							<Toggle checked={autonFields[index]} onChange={(val) => {
-								const temp: any[] = [...autonFields];
-								temp[index] = val;
-								setAutonFields(temp);
-							}}
+							<Toggle
+								checked={autonFields[index]}
+								onChange={(val) => {
+									const temp: any[] = [...autonFields];
+									temp[index] = val;
+									setAutonFields(temp);
+									if (name === 'Left Tarmac') setLeftTarmac(val);
+								}}
 								style={{
 									marginTop: "3%",
 									padding: 4,
 								}}
 							>
-								{field['name']}
+								{name}
 							</Toggle>
-						)
+						);
 					}
-					else if (field['type'] == 'timer') {
+					else if (type === 'timer') {
 						return (
-							<Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
-						)
+							<Stopwatch name={name} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
+						);
 					}
 					else {
 						return (
@@ -102,7 +125,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 								multiline={true}
 								textStyle={{ minHeight: 64 }}
 								placeholder={field.name + "..."}
-								label={field['name']}
+								label={name}
 								value={autonFields[index]}
 								onChangeText={(val) => {
 									const temp: any[] = [...autonFields];

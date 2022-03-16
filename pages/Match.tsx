@@ -7,6 +7,7 @@ import PreGame from "../components/Pregame";
 import Auton from "../components/Auton";
 import Teleop from "../components/Teleop";
 import EndGame from "../components/Endgame";
+import { Alert } from 'react-native';
 import { NavigationScreenProp, NavigationParams } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../firebase";
@@ -66,12 +67,36 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
     }
     //("Match use effect");
   }, []);
+
+  const getData = (field: any) => {
+    if (typeof field === 'object') {
+      return ({
+        name: Object.keys(field)[0].trim(),
+        type: Object.values(field)[0]
+      });
+    }
+    const [name, type] = field.trim().split(':');
+    if (typeof type === 'string') {
+      return ({
+        name: name.trim(),
+        type: type.trim(),
+      });
+    }
+  }
+
   const fetchData = () => {
     db.collection('years').doc('2022').collection('scouting').get()
       .then((fields) => {
-        setAutonFields(Object.keys(fields.docs[0].data() || {}).map(field => ({ name: field, type: (fields.docs[0].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name'])));
-        setEndGameFields(Object.keys(fields.docs[1].data() || {}).map(field => ({ name: field, type: (fields.docs[1].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name'])));
-        setTeleopFields(Object.keys(fields.docs[2].data() || {}).map(field => ({ name: field, type: (fields.docs[2].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name'])));
+        setAutonFields(Object.values(fields.docs[0].data().autonFields || {}).map((field: any) => {
+          return getData(field);
+        }));
+        setEndGameFields(Object.values(fields.docs[1].data().endgameFields || {}).map((field: any) => {
+          return getData(field);
+        }));
+
+        setTeleopFields(Object.values(fields.docs[2].data().teleopFields || {}).map((field: any) => {
+          return getData(field);
+        }));
       }, (err) => { return [] });
   }
 

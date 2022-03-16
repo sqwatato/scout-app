@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import Header from "./Header";
-import { useTeleop, usePreGame} from "../Stores";
+import { useTeleop, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { Alert, ScrollView, View } from "react-native";
@@ -25,23 +25,24 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const sheetRef = useRef<BottomSheet>(null);
   const teleopFields = useTeleop((state) => state.teleopFields);
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
-  const setField = useTeleop((state)=> state.setField);
+  const setField = useTeleop((state) => state.setField);
+  const [playedDefense, setPlayedDefense] = useState<boolean>(false);
 
-  useEffect(() =>{
-    if(teleopFields.length == 0){
-      setTeleopFields(initializeTeleopFields());      
+  useEffect(() => {
+    if (teleopFields.length == 0) {
+      setTeleopFields(initializeTeleopFields());
     }
   }, [])
-  const initializeTeleopFields = () =>{
+  const initializeTeleopFields = () => {
     const tempTeleop: any[] = [];
     fields?.map((value) => {
-      if(value['type']=="counter" || value['type']=="timer") tempTeleop.push(0);
-      else if(value['type']=='rating') tempTeleop.push(1);
-      else if(value['type']=="boolean") tempTeleop.push(false);
-      else if(value['type'] == 'text') tempTeleop.push("");
-      else if(Array.isArray(value['type']))
+      if (value['type'] == "counter" || value['type'] == "timer") tempTeleop.push(0);
+      else if (value['type'] == 'rating') tempTeleop.push(1);
+      else if (value['type'] == "boolean") tempTeleop.push(false);
+      else if (value['type'] == 'text') tempTeleop.push("");
+      else if (Array.isArray(value['type']))
         tempTeleop.push(value['type'][0]);
-      else 
+      else
         tempTeleop.push("");
     });
     return tempTeleop;
@@ -53,7 +54,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         matchInfo={{ teams, alliance, regional }}
         title={"Teleop"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
-        navigation = {navigation}
+        navigation={navigation}
       />
       <ScrollView
         contentContainerStyle={{
@@ -64,62 +65,73 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         keyboardDismissMode="on-drag"
       >
         {fields?.map((field, index) => {
-          if(field['type'] == 'counter' || field['type']=='rating') {
-            return(
-              <Counter
-              rating={field['type']=='rating'}
-              name={field['name']} onChange={(val) => {
-                const temp: any[] = [...teleopFields];
-                temp[index] = val;
-                setTeleopFields(temp);
-              }} value={teleopFields[index]}/>
-            )
-          }
-          else if(field['type']=='boolean'){
-            return(
-              <Toggle checked = {teleopFields[index]} onChange={(val) => {
-                const temp: any[] = [...teleopFields];
-                temp[index] = val;
-                setTeleopFields(temp);
-              }} style = {{marginTop: "3%", padding: 4}}>{field['name']}</Toggle>
-            )
-          }
-          else if(field['type']=='timer'){
+          if (field['type'] == 'counter' || field['type'] == 'rating') {
+            if (field['name'].includes('Defense') && !playedDefense) return;
             return (
-              <Stopwatch 
-                name={field['name']} 
-                onChange={setField} 
-                fieldIndex={index} 
-                postFields={teleopFields} 
+              <Counter
+                rating={field['type'] == 'rating'}
+                name={field['name']}
+                onChange={(val) => {
+                  const temp: any[] = [...teleopFields];
+                  temp[index] = val;
+                  setTeleopFields(temp);
+                }}
+                value={teleopFields[index]}
               />
             )
           }
-          else if(Array.isArray(field['type'])){
+          else if (field['type'] == 'boolean') {
+            return (
+              <Toggle
+                checked={teleopFields[index]}
+                onChange={(val) => {
+                  const temp: any[] = [...teleopFields];
+                  temp[index] = val;
+                  setTeleopFields(temp);
+                  if (field['name'] === 'Played Defense') setPlayedDefense(val);
+                }}
+                style={{ marginTop: "3%", padding: 4 }}
+              >
+                {field['name']}
+              </Toggle>
+            )
+          }
+          else if (field['type'] == 'timer') {
+            return (
+              <Stopwatch
+                name={field['name']}
+                onChange={setField}
+                fieldIndex={index}
+                postFields={teleopFields}
+              />
+            )
+          }
+          else if (Array.isArray(field['type'])) {
             return <Select
               selectedIndex={new IndexPath(field['type'].indexOf(teleopFields[index]))}
               onSelect={(currIndex) => {
                 const temp: any[] = [...teleopFields];
-                temp[index] = field['type'][parseInt(currIndex.toString())-1];
+                temp[index] = field['type'][parseInt(currIndex.toString()) - 1];
                 setTeleopFields(temp);
               }}
               label={field['name']}
               style={{ marginBottom: "3%" }}
               value={teleopFields[index]}
             >
-              {field['type'].map((val, currIndex) =>{
-                return <SelectItem title={val}/>
+              {field['type'].map((val, currIndex) => {
+                return <SelectItem title={val} />
               })}
             </Select>
           }
-          else{
-            return(
+          else {
+            return (
               <Input
                 multiline={true}
                 textStyle={{ minHeight: 64 }}
-                placeholder={field.name+"..."}
+                placeholder={field.name + "..."}
                 label={field['name']}
                 value={teleopFields[index]}
-                onChangeText={(val) => { 
+                onChangeText={(val) => {
                   const temp: any[] = [...teleopFields];
                   temp[index] = val;
                   setTeleopFields(temp);
