@@ -51,14 +51,36 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
     return auth.currentUser != null;
   }
 
+  const dataType = (field: any) => {
+    if (typeof field === 'object') {
+      return ({
+        name: Object.keys(field)[0].trim(),
+        type: Object.values(field)[0]
+      });
+    }
+    const [name, type] = field.trim().split(':');
+    if (typeof type === 'string') {
+      return ({
+        name: name.trim(),
+        type: type.trim(),
+      });
+    }
+  }
   const pushData = () => {
     const data = getData();
     let autonFields: any[] = [], teleopFields: any[] = [], endGameFields: any[] = [];
     const template = db.collection('years').doc('2022').collection('scouting').get();
     template.then((fields) => {
-      autonFields = Object.keys(fields.docs[0].data() || {}).map(field => ({ name: field, type: (fields.docs[0].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name']));
-      teleopFields = Object.keys(fields.docs[2].data() || {}).map(field => ({ name: field, type: (fields.docs[1].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name']));
-      endGameFields = Object.keys(fields.docs[1].data() || {}).map(field => ({ name: field, type: (fields.docs[2].data() || {})[field] })).sort((a, b) => a['name'].localeCompare(b['name']));
+      autonFields = Object.values(fields.docs[0].data().autonFields || {}).map((field: any) => {
+        return dataType(field);
+      });
+      endGameFields = Object.values(fields.docs[1].data().endgameFields || {}).map((field: any) => {
+        return dataType(field);
+      });
+
+      teleopFields = Object.values(fields.docs[2].data().teleopFields || {}).map((field: any) => {
+        return dataType(field);
+      })
       let pushingData = {};
       autonFields.forEach((field, index) => {
         pushingData[field['name']] = data.autonFields[index];
