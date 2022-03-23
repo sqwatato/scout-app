@@ -29,4 +29,8 @@ export interface PostGameData {
   postGameFields: any[];
 }
 
+export interface PitScoutData {
+  pitScoutFields: any[];
+}
+
 export type MatchData = PostGameData | TeleopData | AutonData | PreGameData;

@@ -93,16 +93,17 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         setEndGameFields(Object.values(fields.docs[1].data().endgameFields || {}).map((field: any) => {
           return getData(field);
         }));
-
-        setTeleopFields(Object.values(fields.docs[2].data().teleopFields || {}).map((field: any) => {
+        setTeleopFields(Object.values(fields.docs[3].data().teleopFields || {}).map((field: any) => {
           return getData(field);
         }));
-      }, (err) => { return [] });
+      }, (err) => { return [] }).catch((err) => Alert.alert(err.message));
   }
 
   const AutonComponent = () => <Auton navigation={navigation} fields={autonFields ? autonFields : [{}]} />;
   const EndGameComponent = () => <EndGame navigation={navigation} fields={endgameFields ? endgameFields : [{}]} />;
-  const TeleopComponent = () => <Teleop navigation={navigation} fields={teleopFields ? teleopFields : [{}]} />;
+  const TeleopComponent = () => {
+    return <Teleop navigation={navigation} fields={teleopFields ? teleopFields : [{}]} />;
+  }
   const PreGameComponent = () => <PreGame navigation={navigation} />;
 
   return (

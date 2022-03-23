@@ -1,7 +1,5 @@
-import { Alert } from "react-native";
-import { State } from "react-native-gesture-handler";
 import create from "zustand";
-import { AutonData, PostGameData, PreGameData, TeleopData } from "./types";
+import { AutonData, PitScoutData, PostGameData, PreGameData, TeleopData } from "./types";
 
 type AutonState =| AutonData & {
       setAutonFields: (autonFields: any[]) => any;
@@ -32,7 +30,6 @@ export const useTeleop = create<TeleopState>((set) => ({
   setTeleopFields: (teleopFields: any[]) => set({teleopFields}),
   setField: (index: number, value: any) => set(state =>{
     state.teleopFields[index] = value;
-    Alert.alert(state.teleopFields+"");
   }),
   set,
 }));
@@ -103,4 +100,19 @@ export const usePreGame = create<PreGameState>((set) => ({
   setTeamNum: (teamNum: string | number) => set((state) => ({ teamNum })),
   setMinfo: (minfo: string) => set({ minfo }),
   set,
+}));
+
+type PitScoutState = | PitScoutData & {
+  setPitScoutFields: (pitScoutFields: any[]) => any,
+  setField: (index : number, value : any) => any;
+  set: (data : PitScoutData) => any
+}
+
+export const usePitScout = create<PitScoutState>((set) => ({
+  pitScoutFields: [],
+  setField: (index : number, value : any) => set(state => {
+    state.pitScoutFields[index] = value;
+  }),
+  setPitScoutFields: (pitScoutFields: any[]) => set({pitScoutFields}),
+  set
 }));

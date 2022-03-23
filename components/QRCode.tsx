@@ -218,8 +218,6 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
                 width: "100%",
               }}
               onPress={() => {
-                // navigation?.navigate("Home");
-                // setLogin(logInUser());
                 isLoggedIn() ? pushData() : navigation?.navigate("Login");
               }}
             >

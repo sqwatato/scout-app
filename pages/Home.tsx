@@ -27,13 +27,12 @@ const Home: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     //("HOME");
-      auth.onAuthStateChanged(user => {
-          if(user) setIsLoggedIn(true);
-          else setIsLoggedIn(false);
-      });
+    auth.onAuthStateChanged(user => {
+      if (user) setIsLoggedIn(true);
+      else setIsLoggedIn(false);
+    });
     (async () => {
       try {
-        console.log("hello");
         const [pregameStr, autonStr, teleopStr, endgameStr] = await Promise.all(
           [
             AsyncStorage.getItem("@scout_pregame"),
@@ -110,8 +109,6 @@ const Home: React.FC<Props> = ({ navigation }) => {
     const teleopData = JSON.stringify(teleopEmpty);
     const endgameData = JSON.stringify(endEmpty);
 
-    // console.log("im stupid" + pregameData);
-
     AsyncStorage.setItem("@scout_pregame", JSON.stringify(pregameData));
     AsyncStorage.setItem("@scout_auton", JSON.stringify(autonData));
     AsyncStorage.setItem("@scout_teleop", JSON.stringify(teleopData));
@@ -120,50 +117,60 @@ const Home: React.FC<Props> = ({ navigation }) => {
 
   return (
     <>
-    <Toast position = 'top' topOffset={20} />
-    <Layout style={styles.container}>
-      <View style={styles.childContainer}>
-        <StatusBar style="auto" />
-        <View>
-          <Text category="h1" style={{}}>
-            Scout App
-          </Text>
-          <Divider style={{ width: 40 }} />
+      <Toast position='top' topOffset={20} />
+      <Layout style={styles.container}>
+        <View style={styles.childContainer}>
+          <StatusBar style="auto" />
+          <View>
+            <Text category="h1" style={{}}>
+              Scout App
+            </Text>
+            <Divider style={{ width: 40 }} />
+          </View>
+          <View>
+            <Button
+              onPress={() => {
+                clearData();
+                navigation.navigate("QRScanner");
+              }}
+              style={styles.button}
+              size="giant"
+            >
+              Scout New Match
+            </Button>
+            <Button
+              onPress={() => {
+                navigation.navigate("PitScout");
+              }}
+              style={[styles.button, { shadowOpacity: 0 }]}
+              appearance="outline"
+              size="giant"
+            >
+              Pit Scout
+            </Button>
+            {!isLoggedIn ? <Button
+              onPress={() => {
+                navigation.navigate("Login");
+              }}
+              style={styles.button}
+              size="giant"
+            >
+              Login
+            </Button> : <></>}
+            <Button
+              onPress={() => {
+                console.log(pregame);
+                navigation.navigate("Match");
+              }}
+              style={[styles.button, { shadowOpacity: 0 }]}
+              appearance="outline"
+              size="giant"
+            >
+              Continue Scouting
+            </Button>
+          </View>
         </View>
-        <View>
-          <Button
-            onPress={() => {
-              clearData();
-              navigation.navigate("QRScanner");
-            }}
-            style={styles.button}
-            size="giant"
-          >
-            Scout New Match
-          </Button>
-          {!isLoggedIn ? <Button 
-            onPress={() => {
-              navigation.navigate("Login");
-            }}
-            style={styles.button}
-            size="giant"
-          >
-            Login
-          </Button> : <></>} 
-          <Button
-            onPress={() => {
-              console.log(pregame);
-              navigation.navigate("Match");
-            }}
-            style={[styles.button, { shadowOpacity: 0 }]}
-            appearance="outline"
-            size="giant"
-          >
-            Continue Scouting
-          </Button>
-        </View>
-      </View>
-    </Layout>
+      </Layout>
     </>
   );
 };

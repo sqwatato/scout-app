@@ -9,11 +9,12 @@ import * as eva from "@eva-design/eva";
 import QRScanner from "./pages/QRScanner";
 import Login from "./pages/Login";
 import Match from "./pages/Match";
+import PitScout from './pages/PitScout';
 import { auth } from "./firebase";
 
-console.warn = () => {};
-console.log = () => {};
-console.error = () => {};
+console.warn = () => { };
+// console.log = () => { };
+console.error = () => { };
 
 enableScreens();
 const Stack = createNativeStackNavigator();
@@ -33,8 +34,8 @@ export default function App() {
             name="QRScanner"
             component={QRScanner}
           />
-          <Stack.Screen 
-            options={{headerShown: false}}
+          <Stack.Screen
+            options={{ headerShown: false }}
             name="Login"
             component={Login}
           />
@@ -42,6 +43,10 @@ export default function App() {
             options={{ headerShown: false }}
             name="Match"
             component={Match}
+          />
+          <Stack.Screen
+            name="PitScout"
+            component={PitScout}
           />
         </Stack.Navigator>
       </NavigationContainer>
