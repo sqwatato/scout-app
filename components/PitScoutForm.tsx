@@ -28,9 +28,9 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         if (pitScoutFields.length === 0) {
             (async () => {
                 setPitScoutFields(await initalizePitScoutFields());
-                setLoading(false);
             })();
         }
+        setLoading(false);
     }, [])
 
     const initalizePitScoutFields = async () => {
@@ -166,6 +166,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     {regionals.map(r => <SelectItem title={r} />)}
                 </Select>
                 {pitScoutFields.map((field: any, index: number) => {
+                    if (field['name'] === 'Robot Pic') return;
                     if (Array.isArray(field['value'])) {
                         return (
                             // render select

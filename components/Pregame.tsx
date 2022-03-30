@@ -38,6 +38,7 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
     new IndexPath(teamNum ? teams.indexOf(teamNum) : 0)
   );
 
+
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
@@ -69,6 +70,7 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
           placeholder="Regional"
           value={`${regional}`}
           label="Regional"
+          disabled={true}
           onChangeText={(nextValue) => setRegional(nextValue)}
         />
         <Select
@@ -83,14 +85,21 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
           <SelectItem title="Blue" />
           <SelectItem title="Red" />
         </Select>
-        <Input
-          style={{ marginBottom: "3%" }}
-          placeholder="Team Number"
-          keyboardType="number-pad"
-          value={`${teamNum}`}
+        <Select
+          selectedIndex={selectedTeam}
+          onSelect={(index) => {
+            if (!Array.isArray(index)) {
+              setTeamNum(teams[index.row]);
+              setSelectedTeam(index);
+            }
+          }}
+          value={teamNum || teams[0]}
           label="Team Number"
-          onChangeText={(nextValue) => setTeamNum(nextValue)}
-        />
+        >
+          <SelectItem title={`${teams[0]}`} />
+          <SelectItem title={`${teams[1]}`} />
+          <SelectItem title={`${teams[2]}`} />
+        </Select>
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>

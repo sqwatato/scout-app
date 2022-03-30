@@ -29,11 +29,11 @@ export default function App() {
             name="Home"
             component={Home}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             options={{ headerShown: false }}
             name="QRScanner"
             component={QRScanner}
-          /> */}
+          />
           <Stack.Screen
             options={{ headerShown: false }}
             name="Login"
