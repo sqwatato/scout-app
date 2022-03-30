@@ -116,7 +116,6 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
             )
           }
           else if (field['type'] == 'timer') {
-            if (field['name'] === 'Climb time' && !didClimb) return;
             return (
               <Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
             )

@@ -45,15 +45,11 @@ const Home: React.FC<Props> = ({ navigation }) => {
         const autonData = JSON.parse(autonStr || "");
         const teleopData = JSON.parse(teleopStr || "");
         const endgameData = JSON.parse(endgameStr || "");*/
-        const pregameData = JSON.parse("");
-        const autonData = JSON.parse("");
-        const teleopData = JSON.parse("");
-        const endgameData = JSON.parse("");
 
-        setPreGame(pregameData);
-        setAuton(autonData);
-        setTeleop(teleopData);
-        setPostGame(endgameData);
+        setPreGame(JSON.parse(""));
+        setAuton(JSON.parse(""));
+        setTeleop(JSON.parse(""));
+        setPostGame(JSON.parse(""));
       } catch (e) {
         console.log(e);
       }
@@ -138,16 +134,6 @@ const Home: React.FC<Props> = ({ navigation }) => {
             >
               Scout New Match
             </Button>
-            <Button
-              onPress={() => {
-                navigation.navigate("PitScout");
-              }}
-              style={[styles.button, { shadowOpacity: 0 }]}
-              appearance="outline"
-              size="giant"
-            >
-              Pit Scout
-            </Button>
             {!isLoggedIn ? <Button
               onPress={() => {
                 navigation.navigate("Login");
@@ -159,7 +145,16 @@ const Home: React.FC<Props> = ({ navigation }) => {
             </Button> : <></>}
             <Button
               onPress={() => {
-                console.log(pregame);
+                navigation.navigate("PitScout");
+              }}
+              style={[styles.button, { shadowOpacity: 0 }]}
+              appearance="outline"
+              size="giant"
+            >
+              Pit Scout
+            </Button>
+            <Button
+              onPress={() => {
                 navigation.navigate("Match");
               }}
               style={[styles.button, { shadowOpacity: 0 }]}

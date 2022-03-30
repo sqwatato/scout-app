@@ -78,7 +78,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         return dataType(field);
       });
 
-      teleopFields = Object.values(fields.docs[2].data().teleopFields || {}).map((field: any) => {
+      teleopFields = Object.values(fields.docs[3].data().teleopFields || {}).map((field: any) => {
         return dataType(field);
       })
       let pushingData = {};
@@ -92,32 +92,17 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         pushingData[field['name']] = data.postGameFields[index];
       });
       pushingData['matchNum'] = preGameState.matchNum;
-      db.collection('years').doc('2022').collection('regionals').doc(data.regional.toLowerCase())
-        .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + "").set(pushingData)
-        .then(() => {
-          let pressed: boolean = false;
-          Toast.show({
-            type: "success",
-            text1: "Successfully Saved Data!",
-            onPress: () => {
-              pressed = true;
-              clearData();
-              navigation?.navigate("PreGame");
-            }
-          });
-          if (!pressed) {
-            clearData();
-            setTimeout(() => {
-              navigation?.navigate("PreGame");
-            }, 3000);
-          };
-        }).catch(err => {
-          Toast.show({ type: 'error', text1: 'Unable to save data. Error: ' + err.message })
-        });
+      let valid: boolean = true;
+      const path = db.collection('years').doc('2022').collection('regionals').doc('cafr')
+        .collection("teams").doc(data.teamNum + "").collection("matches");
+      if (valid) {
+        path.doc(preGameState.matchNum + '').set(pushingData);
+        Toast.show({ type: 'success', text1: 'Successfully data' });
+      }
     }).catch((err) => {
-      Toast.show({ type: 'error', text1: "Encountered Error: " + err.message });
+      Toast.show({ type: 'error', text1: err.message });
     });
-  };
+  }
   const handleSheetChanges = useCallback((index: number) => {
     if (index === 0) setShowQR(false);
     else setShowQR(true);
@@ -156,7 +141,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       alliance: preGameState.alliance,
       matchNum: preGameState.matchNum,
       minfo: preGameState.minfo,
-      regional: preGameState.regional,
+      regional: 'cafr',
       teamNum: preGameState.teamNum,
       teams: preGameState.teams,
     };
@@ -228,7 +213,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       </BottomSheet>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

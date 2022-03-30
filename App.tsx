@@ -13,7 +13,7 @@ import PitScout from './pages/PitScout';
 import { auth } from "./firebase";
 
 console.warn = () => { };
-// console.log = () => { };
+console.log = () => { };
 console.error = () => { };
 
 enableScreens();
@@ -29,11 +29,11 @@ export default function App() {
             name="Home"
             component={Home}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             options={{ headerShown: false }}
             name="QRScanner"
             component={QRScanner}
-          />
+          /> */}
           <Stack.Screen
             options={{ headerShown: false }}
             name="Login"
@@ -47,6 +47,7 @@ export default function App() {
           <Stack.Screen
             name="PitScout"
             component={PitScout}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -3,7 +3,7 @@ import Header from "./Header";
 import { usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { ScrollView, View, Alert} from "react-native";
+import { ScrollView, View, Alert } from "react-native";
 import { IndexPath, Input, Select, SelectItem } from "@ui-kitten/components/ui";
 import {
   NavigationScreenProp,
@@ -37,9 +37,7 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
   const [selectedTeam, setSelectedTeam] = useState<IndexPath>(
     new IndexPath(teamNum ? teams.indexOf(teamNum) : 0)
   );
-  useEffect(() => {
-    //("Pregame use effect");
-  });
+
   const sheetRef = useRef<BottomSheet>(null);
   return (
     <>
@@ -47,7 +45,7 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
         matchInfo={{ teams, alliance, regional }}
         title={"PreGame"}
         toggleQRCode={() => sheetRef.current?.snapTo(1)}
-        navigation = {navigation}
+        navigation={navigation}
       />
 
       <ScrollView
@@ -85,21 +83,14 @@ const PreGame: FC<PreGameProps> = ({ navigation }) => {
           <SelectItem title="Blue" />
           <SelectItem title="Red" />
         </Select>
-        <Select
-          selectedIndex={selectedTeam}
-          onSelect={(index) => {
-            if (!Array.isArray(index)) {
-              setTeamNum(teams[index.row]);
-              setSelectedTeam(index);
-            }
-          }}
-          value={teamNum || teams[0]}
+        <Input
+          style={{ marginBottom: "3%" }}
+          placeholder="Team Number"
+          keyboardType="number-pad"
+          value={`${teamNum}`}
           label="Team Number"
-        >
-          <SelectItem title={`${teams[0]}`} />
-          <SelectItem title={`${teams[1]}`} />
-          <SelectItem title={`${teams[2]}`} />
-        </Select>
+          onChangeText={(nextValue) => setTeamNum(nextValue)}
+        />
       </ScrollView>
       <QRCodeBottomSheet sheetRef={sheetRef} navigation={navigation} />
     </>

@@ -12,6 +12,7 @@
       "package": "com.mvrt.scout",
       "versionCode": 1
     },
-    "sdkVersion": "42.0.0"
+    "sdkVersion": "42.0.0",
+    "plugins": []
   }
 }
