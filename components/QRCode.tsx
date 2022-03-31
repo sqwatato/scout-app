@@ -97,7 +97,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         .collection("teams").doc(data.teamNum + "").collection("matches");
       if (valid) {
         path.doc(preGameState.matchNum + '').set(pushingData);
-        Toast.show({ type: 'success', text1: 'Successfully data' });
+        Toast.show({ type: 'success', text1: 'Successfully saved data' });
       }
     }).catch((err) => {
       Toast.show({ type: 'error', text1: err.message });

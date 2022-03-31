@@ -5,8 +5,9 @@ import { Ionicons } from "@expo/vector-icons";
 import QRCodeBottomSheet from "./QRCode";
 import { auth } from '../firebase';
 import { Navigator } from 'react-router-dom';
-import  Toast  from "react-native-toast-message";
+import Toast from "react-native-toast-message";
 import { NavigationParams, NavigationScreenProp, NavigationState } from "react-navigation";
+import { usePreGame } from "../Stores";
 
 interface HeaderProps {
   title: string;
@@ -22,6 +23,7 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation }) => {
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const teamNum = usePreGame((state) => state.teamNum);
   useEffect(() => {
     auth.onAuthStateChanged(user => {
       if (user) setLoggedIn(true);
@@ -31,7 +33,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
 
   return (
     <>
-      <Toast position="bottom" bottomOffset={20} autoHide= {true} visibilityTime= {2000} />
+      <Toast position="bottom" bottomOffset={20} autoHide={true} visibilityTime={2000} />
       <View
         style={{
           display: "flex",
@@ -46,7 +48,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
         <View>
           <Text category="h1">{title}</Text>
           <Text category="s1">
-            Team: {matchInfo && matchInfo.teams[0]}, &nbsp;
+            Team: {matchInfo && teamNum}, &nbsp;
             {matchInfo && matchInfo.alliance}@{matchInfo && matchInfo.regional}{" "}
           </Text>
         </View>
