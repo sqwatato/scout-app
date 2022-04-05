@@ -97,7 +97,10 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         .collection("teams").doc(data.teamNum + "").collection("matches");
       if (valid) {
         path.doc(preGameState.matchNum + '').set(pushingData);
-        Toast.show({ type: 'success', text1: 'Successfully data' });
+        Toast.show({ type: 'success', text1: 'Successfully saved data!' });
+        setTimeout(()=>{
+          navigation?.navigate("Home");
+        }, 2000);
       }
     }).catch((err) => {
       Toast.show({ type: 'error', text1: err.message });
@@ -141,7 +144,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
       alliance: preGameState.alliance,
       matchNum: preGameState.matchNum,
       minfo: preGameState.minfo,
-      regional: 'cafr',
+      regional: preGameState.regional,
       teamNum: preGameState.teamNum,
       teams: preGameState.teams,
     };

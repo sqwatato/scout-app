@@ -5,7 +5,6 @@ import { Button, IndexPath, Input, Select, SelectItem, Spinner, Toggle } from '@
 import { usePitScout } from "../Stores";
 import Counter from "./Counter";
 import Toast from 'react-native-toast-message';
-import { Camera } from 'expo-camera';
 
 interface PitScoutProps {
     navigation: any,

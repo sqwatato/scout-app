@@ -54,7 +54,7 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
           category="h6"
           style={{ marginVertical: 10, fontWeight: "200", fontSize: 20 }}
         >
-          {`${msecs} ms`}
+          {`${msecs/1000} s`}
         </Text>
         <View
           style={{
