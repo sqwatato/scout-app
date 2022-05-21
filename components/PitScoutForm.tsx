@@ -109,7 +109,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
             .collection('regionals')
             .doc(regional)
             .collection('teams')
-            .doc(`${teamNum}`)
+            .doc(teamNum + "")
             .collection('pitScoutData')
             .doc('pitScoutAnswers')
             .set(answers).then(() => {
@@ -117,6 +117,8 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     type: 'success',
                     text1: 'Successfully saved data!'
                 });
+                clearData();
+                navigation?.goBack();
             }).catch((err) => {
                 Toast.show({
                     type: 'error',
@@ -230,7 +232,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                 value={pitScoutFields[index]['value']}
                             />
                         );
-                    } else {
+                    } else if (field['value'] === 'short') {
                         // if (field['name'] === 'Robot Pic') {
                         //     return (
                         //         <Button
@@ -265,6 +267,27 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                     setPitScoutFields(temp);
                                     if (field['name'] === 'Team Number') setTeamNum(parseInt(val));
                                     setHasData(true);
+                                }}
+                            />
+                        );
+                    } else {
+                        return (
+                            <Input
+                                multiline={true}
+                                textStyle={{ minHeight: 28 }}
+                                placeholder={field.name + "..."}
+                                label={field['name']}
+                                value={pitScoutFields[index]['value']}
+                                onChangeText={(val) => {
+                                    const newField = {
+                                        "name": field['name'],
+                                        "value": val
+                                    }
+                                    const temp: any[] = [...pitScoutFields];
+                                    temp[index] = newField;
+                                    setPitScoutFields(temp);
+                                    setHasData(true);
+                                    if (field['name'] === 'Team Number') setTeamNum(parseInt(val));
                                 }}
                             />
                         );

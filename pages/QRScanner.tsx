@@ -1,7 +1,7 @@
 import { Button, Modal, Card, Text } from "@ui-kitten/components";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Vibration, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   NavigationParams,
@@ -32,6 +32,7 @@ const QRScanner: FC<Props> = ({ navigation }) => {
     setData(data);
 
     setVisible(true);
+    Vibration.vibrate(100)
   };
 
   useEffect(() => {

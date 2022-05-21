@@ -3,7 +3,6 @@ import { Text, TouchableOpacity, View, Alert, Image } from 'react-native';
 import { Camera, Constants } from 'expo-camera';
 import { Ionicons } from "@expo/vector-icons";
 import { usePitScout } from '../Stores';
-import { DefaultMessageNotificationLevels } from 'discord.js/typings/enums';
 
 interface CameraProps {
     navigation: any,
