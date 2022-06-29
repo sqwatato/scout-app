@@ -134,12 +134,11 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-        })}
-        tabBarOptions={{
+          headerShown: false,
           activeTintColor: "#598BFF",
           inactiveTintColor: "gray",
-          style: { height: 90 },
-        }}
+          style: { height: 90 }
+        })}
       >
         <Tab.Screen name="PreGame" component={PreGameComponent} />
         <Tab.Screen name="Auton" component={AutonComponent} />
