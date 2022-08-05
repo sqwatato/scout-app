@@ -19,6 +19,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
     const [teamNum, setTeamNum] = useState<number>(1);
     const [hasData, setHasData] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
+    const [image, setImage] = useState<string>('');
 
     useEffect(() => {
         (async () => {
@@ -135,6 +136,11 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         return auth.currentUser != null;
     }
 
+    const handlePictureCapture = (data: any) => {
+        setImage(data.uri);
+        Alert.alert(image);
+    }
+
     return (!loading ?
         <>
             <Toast position="top" topOffset={20} />
@@ -167,7 +173,6 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     {regionals.map(r => <SelectItem title={r} />)}
                 </Select>
                 {pitScoutFields.map((field: any, index: number) => {
-                    if (field['name'] === 'Robot Pic') return;
                     if (Array.isArray(field['value'])) {
                         return (
                             // render select
@@ -233,23 +238,6 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                             />
                         );
                     } else if (field['value'] === 'short') {
-                        // if (field['name'] === 'Robot Pic') {
-                        //     return (
-                        //         <Button
-                        //             style={{
-                        //                 marginTop: '5%',
-                        //                 width: '100%',
-                        //             }}
-                        //             appearance="outline"
-                        //             onPress={() => {
-                        //                 navigation?.navigate('PitScoutCamera', { index });
-                        //             }}
-                        //         >
-                        //             Take Photo!
-                        //         </Button>
-                        //          camera no work :(
-                        //     );
-                        // }
                         return (
                             <Input
                                 multiline={false}
@@ -293,6 +281,21 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                         );
                     }
                 })}
+                <Button
+                    style={{
+                        marginTop: '5%',
+                        width: '100%',
+                    }}
+                    appearance="outline"
+                    onPress={() => {
+                        navigation?.navigate('PitScoutCamera', {
+                            year: new Date().getFullYear(),
+                            teamNum,
+                        });
+                    }}
+                >
+                    Take Photo!
+                </Button>
                 <Button
                     status="danger"
                     style={{

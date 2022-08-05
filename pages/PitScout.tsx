@@ -4,40 +4,23 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "react-native-screens/native-stack";
 import PitScoutForm from '../components/PitScoutForm';
 import PitScoutCamera from '../components/PitScoutCamera';
+import { Button } from '@ui-kitten/components';
 
 const Stack = createNativeStackNavigator();
 
 const PitScout: FC<any> = ({ navigation }) => {
     return (
-        <>
-            <TouchableOpacity
-                onPress={() => navigation?.goBack()}
-                style={{
-                    marginTop: 25,
-                    marginLeft: 20,
-                }}
-            >
-                <Text
-                    style={{
-                        fontWeight: "700",
-                        fontSize: 24,
-                    }}
-                >
-                    ←
-                </Text>
-            </TouchableOpacity>
-            <Stack.Navigator initialRouteName='PitScoutForm'>
-                <Stack.Screen
-                    component={PitScoutForm}
-                    name='PitScoutForm'
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    component={PitScoutCamera}
-                    name='PitScoutCamera'
-                />
-            </Stack.Navigator>
-        </>
+        <Stack.Navigator initialRouteName='PitScoutForm'>
+            <Stack.Screen
+                component={PitScoutForm}
+                name='PitScoutForm'
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                component={PitScoutCamera}
+                name='PitScoutCamera'
+            />
+        </Stack.Navigator>
     );
 }
 
