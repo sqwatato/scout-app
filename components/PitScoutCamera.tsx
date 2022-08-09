@@ -36,7 +36,7 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
             const blob = await response.blob();
             const imgRef = storage.ref().child(`robotImages/${year}/${teamNum}`);
             // Alert.alert(`Image base 64: ${data.base64}`);
-            // await imgRef.put(blob);
+            await imgRef.put(blob);
             Toast.show({ type: 'success', text1: 'Successfully stored Image' });
         }
     }
