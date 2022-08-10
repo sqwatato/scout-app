@@ -1,10 +1,10 @@
-import { Text, TouchableOpacity, View, Alert, Image } from 'react-native';
+import { Text, TouchableOpacity, View, Modal, Image, Alert } from 'react-native';
 import React, { FC, useState, useEffect } from 'react';
 import { Camera } from 'expo-camera';
 import { Ionicons } from "@expo/vector-icons";
 import { usePitScout } from '../Stores';
 import { storage } from '../firebase';
-import { Spinner } from '@ui-kitten/components';
+import { Button, Spinner } from '@ui-kitten/components';
 import Toast from 'react-native-toast-message';
 
 interface CameraProps {
@@ -29,16 +29,14 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
     }, []);
 
     const takePicture = async () => {
-        if (camera) {
-            const data = await camera.takePictureAsync({ base64: true });
-            setImage(data.uri);
-            const response = await fetch(data.uri);
-            const blob = await response.blob();
-            const imgRef = storage.ref().child(`robotImages/${year}/${teamNum}`);
-            // Alert.alert(`Image base 64: ${data.base64}`);
-            await imgRef.put(blob);
-            Toast.show({ type: 'success', text1: 'Successfully stored Image' });
-        }
+        Alert.alert('hi');
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const imgRef = storage.ref().child(`robotImages/${year}/${teamNum}`);
+        // Alert.alert(`Image base 64: ${data.base64}`);
+        await imgRef.put(blob);
+        Toast.show({ type: 'success', text1: 'Successfully stored Image' });
+        setImage('');
     }
 
     if (hasPermission === null) {
@@ -50,15 +48,58 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
 
     if (image.length > 0) {
         return (
-            <View
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                }}
-            >
-                <Image source={{ uri: image }} style={{ maxWidth: '100%', maxHeight: undefined, aspectRatio: 1 }} />
-            </View>
+            <>
+                <Toast position='top' topOffset={20} />
+                <View
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                    }}
+                >
+                    <Image source={{ uri: image }} style={{ maxWidth: '100%', maxHeight: undefined, aspectRatio: 1 }} />
+                    <View>
+                        <Modal
+                            animationType='slide'
+                            transparent={true}
+                            visible={true}
+                        >
+                            <View
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    flex: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <View style={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'flex-end'
+                                }}>
+                                    <Button
+                                        style={{}}
+                                        onPress={() => {
+                                            setImage('');
+                                        }}
+                                    >
+                                        Retake Photo
+                                    </Button>
+                                    <Button
+                                        style={{}}
+                                        onPress={() => {
+                                            takePicture();
+                                        }}
+                                    >
+                                        Upload Photo
+                                    </Button>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                </View>
+            </>
         );
     }
 
@@ -80,8 +121,11 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
                     />
                 </View>
                 <TouchableOpacity
-                    onPress={() => {
-                        takePicture();
+                    onPress={async () => {
+                        if (camera) {
+                            const data = await camera.takePictureAsync({ base64: true });
+                            setImage(data.uri);
+                        }
                     }}
                 >
                     <Ionicons
