@@ -4,7 +4,7 @@ import Header from "./Header";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
 import { ScrollView, View, Alert } from "react-native";
-import { Input, Text, Toggle } from "@ui-kitten/components";
+import { Button, Input, Text, Toggle } from "@ui-kitten/components";
 import Counter from "./Counter";
 import {
 	NavigationScreenProp,
@@ -12,6 +12,7 @@ import {
 	NavigationParams,
 } from "react-navigation";
 import Stopwatch from "./Stopwatch";
+import Toast from "react-native-toast-message";
 interface AutonProps {
 	navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
 	fields: any[];

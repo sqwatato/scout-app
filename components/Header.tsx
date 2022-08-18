@@ -135,4 +135,4 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
   );
 };
 
-export default Header;
+export default React.memo(Header);

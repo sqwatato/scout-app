@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { usePitScout } from '../Stores';
 import { storage } from '../firebase';
 import { Button, Spinner } from '@ui-kitten/components';
-import Toast from 'react-native-toast-message';
 
 interface CameraProps {
     navigation: any,
@@ -14,7 +13,7 @@ interface CameraProps {
 
 const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
 
-    const { year, teamNum } = route?.params;
+    const { year, teamNum, regional } = route?.params;
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
     const [hasPermission, setHasPermission] = useState<boolean>(false);
@@ -29,13 +28,11 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
     }, []);
 
     const takePicture = async () => {
-        Alert.alert('hi');
         const response = await fetch(image);
         const blob = await response.blob();
-        const imgRef = storage.ref().child(`robotImages/${year}/${teamNum}`);
-        // Alert.alert(`Image base 64: ${data.base64}`);
+        const imgRef = storage.ref().child(`robotImages/${year}/${regional}/${teamNum}`);
         await imgRef.put(blob);
-        Toast.show({ type: 'success', text1: 'Successfully stored Image' });
+        Alert.alert('Upload Successful!');
         setImage('');
     }
 
@@ -49,7 +46,6 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
     if (image.length > 0) {
         return (
             <>
-                <Toast position='top' topOffset={20} />
                 <View
                     style={{
                         width: '100%',
@@ -105,7 +101,6 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
 
     return (
         <>
-            <Toast position='top' topOffset={20} />
             <View style={{ flex: 1 }}>
                 <View
                     style={{

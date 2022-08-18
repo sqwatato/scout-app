@@ -15,8 +15,8 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
     const [regionals, setRegionals] = useState<string[]>(['cafr']);
-    const [regional, setRegional] = useState<string>('cafr');
-    const [teamNum, setTeamNum] = useState<number>(1);
+    const [regional, setRegional] = useState<string>();
+    const [teamNum, setTeamNum] = useState<number>();
     const [hasData, setHasData] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [image, setImage] = useState<string>('');
@@ -95,7 +95,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
     }
 
     const pushData = async () => {
-        if (isNaN(teamNum)) {
+        if (teamNum && isNaN(teamNum)) {
             Alert.alert('Enter valid team number');
             return;
         }
@@ -162,7 +162,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     Clear Data
                 </Button> : <></>}
                 <Select
-                    selectedIndex={new IndexPath(regionals.indexOf(regional))}
+                    selectedIndex={new IndexPath(regionals.indexOf(regional || ''))}
                     label={'Select Regional'}
                     onSelect={(currIndex) => {
                         setRegional(regionals[parseInt(currIndex.toString()) - 1]);
@@ -288,10 +288,19 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     }}
                     appearance="outline"
                     onPress={() => {
-                        navigation?.navigate('PitScoutCamera', {
-                            year: new Date().getFullYear(),
-                            teamNum,
-                        });
+                        if (teamNum && isNaN(teamNum)) {
+                            Alert.alert("Enter a valid team number");
+                        }
+                        else if (!regional) {
+                            Alert.alert("Enter a valid regional");
+                        }
+                        else {
+                            navigation?.navigate('PitScoutCamera', {
+                                year: new Date().getFullYear(),
+                                regional,
+                                teamNum,
+                            });
+                        }
                     }}
                 >
                     Take Photo!
