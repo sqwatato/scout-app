@@ -143,7 +143,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     return (!loading ?
         <>
-            <Toast position="top" topOffset={20} />
+            <Toast position="bottom" bottomOffset={20} />
             <ScrollView
                 contentContainerStyle={{
                     display: "flex",
@@ -288,11 +288,17 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     }}
                     appearance="outline"
                     onPress={() => {
-                        if (teamNum && isNaN(teamNum)) {
-                            Alert.alert("Enter a valid team number");
+                        if (!teamNum || isNaN(teamNum)) {
+                            Toast.show({
+                                type: 'error',
+                                text1: "Enter a valid team number"
+                            })
                         }
-                        else if (!regional) {
-                            Alert.alert("Enter a valid regional");
+                        else if (!regional || regional=="Option 0") {
+                            Toast.show({
+                                type: 'error',
+                                text1: "Enter a valid regional"
+                            })
                         }
                         else {
                             navigation?.navigate('PitScoutCamera', {

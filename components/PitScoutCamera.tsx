@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { usePitScout } from '../Stores';
 import { storage } from '../firebase';
 import { Button, Spinner } from '@ui-kitten/components';
-
+import Toast from 'react-native-toast-message';
 interface CameraProps {
     navigation: any,
     route: any
@@ -32,7 +32,11 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
         const blob = await response.blob();
         const imgRef = storage.ref().child(`robotImages/${year}/${regional}/${teamNum}`);
         await imgRef.put(blob);
-        Alert.alert('Upload Successful!');
+        Toast.show({
+            type: "success",
+            text1: "Successfully uploaded data!"
+        })
+        Alert.alert("Successfully uploaded data");
         setImage('');
     }
 
@@ -101,6 +105,7 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
 
     return (
         <>
+            <Toast position="top" topOffset={40}/>
             <View style={{ flex: 1 }}>
                 <View
                     style={{
