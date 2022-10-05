@@ -10,27 +10,28 @@ interface Props {
 }
 
 const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) => {
-  const [msecs, setTime] = useState(postFields[fieldIndex] ? postFields[fieldIndex] : 0);
+  const [secs, setTime] = useState(postFields[fieldIndex] ? parseFloat(postFields[fieldIndex]) : 0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     let interval: any = undefined;
     if (isRunning) {
       interval = setInterval(() => {
-        let newMs = msecs + 100;
-        setTime(newMs);
+        let newS = secs + 0.1;
+        setTime(newS);
       }, 100);
     }
     return () => clearInterval(interval);
-  }, [isRunning, msecs]);
+  }, [isRunning, secs]);
 
   const handleReset = () => {
     setTime(0);
+    onChange(fieldIndex, 0);
   };
 
   const handleStartStop = () => {
     if(isRunning){
-      onChange(fieldIndex, msecs);
+      onChange(fieldIndex, secs);
     }
     setIsRunning(!isRunning);
   };
@@ -54,7 +55,7 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
           category="h6"
           style={{ marginVertical: 10, fontWeight: "200", fontSize: 20 }}
         >
-          {`${msecs/1000} s`}
+          {`${secs.toFixed(1)} s`}
         </Text>
         <View
           style={{
