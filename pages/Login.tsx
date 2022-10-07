@@ -46,34 +46,52 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
       })
       .catch((error) => {
         if (error.code === "auth/invalid-email")
-          Toast.show({type: 'error', text1: "You did not enter a valid Email"});
+          Toast.show({ type: 'error', text1: "You did not enter a valid Email" });
         else if (error.code === "auth/user-not-found")
-          Toast.show({type: 'error', text1: "This user could not be found"});
+          Toast.show({ type: 'error', text1: "This user could not be found" });
         else if (error.code === "auth/wrong-password")
-          Toast.show({type: 'error', text1: "Invalid Password"});
+          Toast.show({ type: 'error', text1: "Invalid Password" });
       });
   };
   return (
     <>
-    <Toast position="bottom" bottomOffset={20}/>
-      <View>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
+      <Toast position="bottom" bottomOffset={20} />
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{
+          marginTop: 20,
+          marginLeft: 20,
+        }}
+      >
+        <Text
           style={{
-            marginTop: 20,
-            marginLeft: 20,
-            marginVertical: 20,
+            fontWeight: "800",
+            fontSize: 24,
           }}
         >
-          <Text
-            style={{
-              fontWeight: "800",
-              fontSize: 24,
-            }}
-          >
-            ←
-          </Text>
-        </TouchableOpacity>
+          ←
+        </Text>
+      </TouchableOpacity>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <View
+          style={{
+            marginTop: '4%',
+            backgroundColor: '#2f064b',
+            height: '24%',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Text style={{ color: '#ffc400', fontWeight: '800', fontSize: '20%' }}>Login Page</Text>
+        </View>
       </View>
       <KeyboardAvoidingView style={styles.container}
         behavior={(Platform.OS === 'ios') ? 'padding' : undefined}
@@ -85,7 +103,7 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
             onChangeText={(text) => setEmail(text.toLowerCase())}
             style={styles.input}
             autoCorrect
-            keyboardType = "visible-password"
+            keyboardType="visible-password"
           />
           <TextInput
             placeholder="Password"
@@ -118,7 +136,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   input: {
-    backgroundColor: "white",
+    backgroundColor: "#956996",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
