@@ -14,7 +14,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
-    const [regionals, setRegionals] = useState<string[]>(['cafr']);
+    const [regionals, setRegionals] = useState<string[]>(['cacg']);
     const [regional, setRegional] = useState<string>();
     const [teamNum, setTeamNum] = useState<number>();
     const [hasData, setHasData] = useState<boolean>(false);

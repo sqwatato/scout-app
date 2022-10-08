@@ -90,7 +90,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
             pushingData[field['name']] = data.postGameFields[index];
         });
         pushingData['matchNum'] = preGameState.matchNum;
-        await db.collection('years').doc('2022').collection('regionals').doc('cafr')
+        await db.collection('years').doc('2022').collection('regionals').doc(preGameState.regional)
             .collection("teams").doc(data.teamNum + "").collection("matches").doc(preGameState.matchNum + '').set(pushingData);
         Toast.show({ type: 'success', text1: 'Successfully saved data!' });
         setTimeout(() => {
