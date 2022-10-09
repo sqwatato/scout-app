@@ -28,7 +28,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
     auth.onAuthStateChanged(user => {
       if (user) setLoggedIn(true);
       else setLoggedIn(false);
-    });
+    }, []);
   })
 
   return (
