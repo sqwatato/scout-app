@@ -25,7 +25,9 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	const autonFields = useAuton((state) => state.autonFields);
 	const setAutonFields = useAuton((state) => state.setAutonFields);
 	const setField = useAuton((state) => state.setField);
-	const [leftTarmac, setLeftTarmac] = useState<boolean>(false);
+	const [didCharge, setDidCharge] = useState<boolean>(false);
+	const [engaged, setEngaged] = useState<boolean>(false);
+	const [docked, setDocked] = useState<boolean>(false);
 
 	const initializeAutonFields = () => {
 		const tempAuton: any[] = [];
@@ -43,7 +45,11 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	}
 	useEffect(() => {
 		if (autonFields.length < fields.length) setAutonFields(initializeAutonFields());
-	}, [])
+	}, []);
+
+	// useEffect(() => {
+	// 	Alert.alert(JSON.stringify(autonFields));
+	// }, [autonFields])
 	const sheetRef = useRef<BottomSheet>(null);
 	// (navigation);
 	return (
@@ -58,14 +64,13 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 				contentContainerStyle={{
 					display: "flex",
 					flexDirection: "column",
-					padding: "10%",
+					padding: "5% 10% 10% 10%",
 					width: '100%',
-					height: '100%',
 					justifyContent: 'center',
-					alignItems: 'center'
+					alignItems: 'center',
 					// backgroundColor: 'red'
 				}}
-				keyboardDismissMode="on-drag"
+			// keyboardDismissMode="on-drag"
 			>
 				{fields?.map((field, index) => {
 					const [name, type] = [field['name'], field['type']];
@@ -82,7 +87,6 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						// 		value={autonFields[index]}
 						// 	/>
 						// );
-						if (name === 'Amount Intaken' && !leftTarmac) return;
 						return (
 							<Counter
 								rating={field['type'] === "rating"}
@@ -97,14 +101,21 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						);
 					}
 					else if (type === 'boolean') {
+						if (!didCharge && (name === 'Docked' || name === 'Engaged')) return;
 						return (
 							<Toggle
 								checked={autonFields[index]}
 								onChange={(val) => {
 									const temp: any[] = [...autonFields];
+									if (name === 'Did Charge') setDidCharge(val);
+									else if (name === 'Engaged') {
+										setEngaged(val);
+										setDocked(val);
+										temp[index - 1] = val;
+									}
+									else if (name === 'Docked') setDocked(val);
 									temp[index] = val;
 									setAutonFields(temp);
-									if (name === 'Left Tarmac') setLeftTarmac(val);
 								}}
 								style={{
 									marginTop: "3%",

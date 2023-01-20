@@ -25,7 +25,10 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
   const postGameFields = usePostGame((state) => state.postGameFields);
   const setPostGameFields = usePostGame((state) => state.setPostGameFields);
   const setField = usePostGame((state) => state.setField);
-  const [didClimb, setDidClimb] = useState<boolean>(false);
+  const [didCharge, setDidCharge] = useState<boolean>(false);
+  const [engaged, setEngaged] = useState<boolean>(false);
+  const [docked, setDocked] = useState<boolean>(false);
+
 
   useEffect(() => {
     if (postGameFields.length < fields.length) setPostGameFields(initializePostGameFields());
@@ -83,17 +86,26 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
             )
           }
           else if (field['type'] == 'boolean') {
-            if (field['name'] === 'Fell off rungs' && !didClimb) return;
+            if (!didCharge && (field['name'] === 'Docked' || field['name'] === 'Engaged')) return;
             return (
               <Toggle
                 checked={postGameFields[index]}
                 onChange={(val) => {
                   const temp: any[] = [...postGameFields];
+                  if (field['name'] === 'Did Charge') setDidCharge(val);
+                  else if (field['name'] === 'Engaged') {
+                    setEngaged(val);
+                    setDocked(val);
+                    temp[index - 1] = val;
+                  }
+                  else if (field['name'] === 'Docked') setDocked(val);
                   temp[index] = val;
                   setPostGameFields(temp);
-                  if (field['name'] === 'Did Climb') setDidClimb(val);
                 }}
-                style={{ marginTop: "3%", padding: 4 }}
+                style={{
+                  marginTop: "3%",
+                  padding: 4,
+                }}
               >
                 {field['name']}
               </Toggle>
@@ -115,13 +127,13 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
               />
             )
           }
-          else if (field['type'] == 'timer') {
+          else if (field['type'] == 'timer' && didCharge) {
             return (
               <Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={postGameFields} ></Stopwatch>
             )
           }
           else if (Array.isArray(field['type'])) {
-            if (field['name'] === 'Climb rung' && !didClimb) return;
+            // if (field['name'] === 'Climb rung' && !didClimb) return;
             return <Select
               selectedIndex={new IndexPath(field['type'].indexOf(postGameFields[index]))}
               onSelect={(currIndex) => {
