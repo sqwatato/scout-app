@@ -26,8 +26,6 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	const setAutonFields = useAuton((state) => state.setAutonFields);
 	const setField = useAuton((state) => state.setField);
 	const [didCharge, setDidCharge] = useState<boolean>(false);
-	const [engaged, setEngaged] = useState<boolean>(false);
-	const [docked, setDocked] = useState<boolean>(false);
 
 	const initializeAutonFields = () => {
 		const tempAuton: any[] = [];
@@ -101,19 +99,25 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						);
 					}
 					else if (type === 'boolean') {
-						if (!didCharge && (name === 'Docked' || name === 'Engaged')) return;
+						if (!didCharge && (name === 'Auton Docked' || name === 'Auton Engaged')) return;
 						return (
 							<Toggle
 								checked={autonFields[index]}
 								onChange={(val) => {
 									const temp: any[] = [...autonFields];
-									if (name === 'Did Charge') setDidCharge(val);
-									else if (name === 'Engaged') {
-										setEngaged(val);
-										setDocked(val);
-										temp[index - 1] = val;
+									if (name === 'Auton Did Charge'){
+										setDidCharge(val);
+										if(!val){
+											fields.forEach((value, i)=>{
+												if(value['name'].indexOf("Docked")>-1 || value['name'].indexOf("Engaged")>-1){
+													temp[i] = false;
+												}
+												if(value['name'].indexOf("Charge Time")>-1){
+													temp[i] = 0;
+												}
+											})
+										}
 									}
-									else if (name === 'Docked') setDocked(val);
 									temp[index] = val;
 									setAutonFields(temp);
 								}}
@@ -127,9 +131,11 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						);
 					}
 					else if (type === 'timer') {
-						return (
-							<Stopwatch name={name} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
-						);
+						if(didCharge){
+							return (
+								<Stopwatch name={name} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
+							);
+						}
 					}
 					else {
 						return (
