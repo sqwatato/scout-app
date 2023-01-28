@@ -12,6 +12,7 @@ import { NavigationScreenProp, NavigationParams } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../firebase";
 
+
 const Tab = createBottomTabNavigator();
 
 type RootStackParamList = {
@@ -43,7 +44,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         setTeleopValues([]);
         setPostGameValues([]);
     }
-
+    
     useEffect(() => {
         fetchData();
         if (route?.params?.data) {
@@ -97,9 +98,9 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         });
     }
 
-    const AutonComponent = () => <Auton navigation={navigation} fields={autonFields ? autonFields : [{}]} />;
-    const EndGameComponent = () => <EndGame navigation={navigation} fields={endgameFields ? endgameFields : [{}]} />;
-    const TeleopComponent = () => <Teleop navigation={navigation} fields={teleopFields ? teleopFields : [{}]} />;
+    const AutonComponent = () => <Auton navigation={navigation} fields={autonFields ? autonFields : []} />;
+    const EndGameComponent = () => <EndGame navigation={navigation} fields={endgameFields ? endgameFields : []} />;
+    const TeleopComponent = () => <Teleop navigation={navigation} fields={teleopFields ? teleopFields : []} />;
     const PreGameComponent = () => <PreGame navigation={navigation} />;
 
     return (

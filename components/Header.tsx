@@ -29,7 +29,7 @@ const Header: FC<HeaderProps> = ({ title, matchInfo, toggleQRCode, navigation })
       if (user) setLoggedIn(true);
       else setLoggedIn(false);
     });
-  })
+  }, [])
 
   return (
     <>
