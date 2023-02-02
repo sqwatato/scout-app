@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { db, auth } from "../firebase";
 import Toast from "react-native-toast-message";
+import { Input } from "@ui-kitten/components";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +45,7 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
           autoHide: true,
         });
       })
-      .catch((error) => {
+      .catch((error) => { 
         if (error.code === "auth/invalid-email")
           Toast.show({type: 'error', text1: "You did not enter a valid Email"});
         else if (error.code === "auth/user-not-found")
@@ -79,7 +80,24 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
         behavior={(Platform.OS === 'ios') ? 'padding' : undefined}
       >
         <View style={styles.inputContainer}>
-          <TextInput
+          <Input 
+            label={'Email'}  
+            placeholder="Enter email"
+            value={email.toLowerCase()}
+            onChangeText={(text) => setEmail(text.toLowerCase())}
+            style={styles.input}
+            autoCorrect
+            keyboardType = "visible-password"
+          />
+          <Input 
+            label={'Password'}  
+            placeholder="Enter password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          />
+         {/* <TextInput
             placeholder="Enter email"
             value={email.toLowerCase()}
             onChangeText={(text) => setEmail(text.toLowerCase())}
@@ -93,7 +111,7 @@ const Login: FC<MatchProps> = ({ route, navigation }) => {
             onChangeText={(text) => setPassword(text)}
             style={styles.input}
             secureTextEntry
-          />
+          /> */}
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => handleLogin()} style={styles.button}>
