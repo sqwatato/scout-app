@@ -27,6 +27,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
   const setField = useTeleop((state) => state.setField);
   const [playedDefense, setPlayedDefense] = useState<boolean>(false);
+  const [gamePiece, setGamePiece] = useState("");
 
   useEffect(() => {
     if (teleopFields.length == 0) {
@@ -64,17 +65,30 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         }}
         keyboardDismissMode="on-drag"
       >
+      <Text category='h3'> Game piece type  </Text>
+      {gamePiece.match("Cone") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> ⚠️	</Button> : <Button onPress={()=>{setGamePiece('Cone')}} appearance="outline"> ⚠️	 </Button>}
+      {gamePiece.match("Cube") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> 🟪 </Button> : <Button onPress={()=>{setGamePiece('Cube')}} appearance="outline"> 🟪 </Button>}
+      
         {fields?.map((field, index) => {
+          if(gamePiece == "") return;
+          if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
           if (field['type'] == 'counter' || field['type'] == 'rating') {
             if (field['name'].includes('Defense') && !playedDefense) return;
+            var name=field['name'].substring(field['name'].indexOf("Teleop") + 6);
+            // console.log(name.substring(name.indexOf('Teleop') + 6));
+         //   var name = "";
+         //   if(isCone)  name = field['name'].substring(0, name.indexOf('Cone')) + field['name'].substring(name.indexOf('Cone') + 5);
+         //   else if(!isCone)  name = field['name'].substring(0, name.indexOf('Cube')) + field['name'].substring(name.indexOf('Cube') + 5);
             return (
               <Counter
                 rating={field['type'] == 'rating'}
-                name={field['name']}
+                name={name}
                 onChange={(val) => {
                   const temp: any[] = [...teleopFields];
                   temp[index] = val;
                   setTeleopFields(temp);
+                  setTimeout(()=>{setGamePiece("")}, 250);
                 }}
                 value={teleopFields[index]}
               />

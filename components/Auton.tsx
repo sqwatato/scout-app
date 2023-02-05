@@ -26,6 +26,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	const setAutonFields = useAuton((state) => state.setAutonFields);
 	const setField = useAuton((state) => state.setField);
 	const [leftTarmac, setLeftTarmac] = useState<boolean>(false);
+	const [gamePiece, setGamePiece] = useState("");
 
 	const initializeAutonFields = () => {
 		const tempAuton: any[] = [];
@@ -59,17 +60,22 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 					display: "flex",
 					flexDirection: "column",
 					padding: "10%",
-					width: '100%',
-					height: '100%',
-					justifyContent: 'center',
-					alignItems: 'center'
-					// backgroundColor: 'red'
 				}}
 				keyboardDismissMode="on-drag"
 			>
+				
 				{fields?.map((field, index) => {
 					const [name, type] = [field['name'], field['type']];
 					if (type === 'counter' || type === 'rating') {
+						if(index == 1) return (
+							<>
+							{gamePiece.match("Cone") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> ⚠️	 </Button> : <Button onPress={()=>{setGamePiece('Cone')}} appearance="outline">⚠️ </Button>}
+							{gamePiece.match("Cube") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> 🟪 </Button> : <Button onPress={()=>{setGamePiece('Cube')}} appearance="outline"> 🟪 </Button>}
+							</>
+						)
+						if(gamePiece == "") return;
+          				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
 						// return (
 						// 	<Counter
 						// 		rating={field['type'] === "rating"}
@@ -82,8 +88,9 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						// 		value={autonFields[index]}
 						// 	/>
 						// );
-						if (name === 'Amount Intaken' && !leftTarmac) return;
+					//	if (name === 'Amount Intaken' && !leftTarmac) return;
 						return (
+							<>
 							<Counter
 								rating={field['type'] === "rating"}
 								name={name}
@@ -91,9 +98,11 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 									const temp: any[] = [...autonFields];
 									temp[index] = val;
 									setAutonFields(temp);
+									setTimeout(()=>{setGamePiece("")}, 250);
 								}}
 								value={autonFields[index]}
 							/>
+							</>
 						);
 					}
 					else if (type === 'boolean') {
