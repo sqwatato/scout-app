@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useTeleop, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { Alert, ScrollView, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import { Button, IndexPath, Input, Select, SelectItem, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
@@ -73,6 +73,38 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           if(gamePiece == "") return;
           if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
+          if(field['type'] === 'button') {
+						if(gamePiece == "") return;
+          				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
+						var labelname=field['name'].substring(field['name'].indexOf("Teleop") + 6);
+						if(gamePiece.match('Cone')) {
+							if(labelname.indexOf('Cone') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cone")) + labelname.substring(labelname.indexOf('Cone') + 5);}
+						}
+						if(gamePiece.match('Cube')) {
+							if(labelname.indexOf('Cube') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cube")) + labelname.substring(labelname.indexOf('Cube') + 5);}
+						}
+            let num = teleopFields[index];
+            if(num=="") num=0;
+						return(
+							<View>
+								<Pressable onPress={()=>{
+									const temp: any[] = [...teleopFields];
+									temp[index] = temp[index] + 1;
+									setTeleopFields(temp);
+									setTimeout(()=>{setGamePiece("")}, 250);
+								}} style={({pressed}) => [
+									{
+									  backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white',
+                    padding: 20,
+                    margin: 5,
+									}, 
+								  ]}><Text>{labelname} ({num})</Text></Pressable>
+							</View>
+						)
+					}
           if (field['type'] == 'counter' || field['type'] == 'rating') {
             if (field['name'].includes('Defense') && !playedDefense) return;
             var name=field['name'].substring(field['name'].indexOf("Teleop") + 6);
