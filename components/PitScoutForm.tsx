@@ -37,10 +37,10 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         const prompts: any[] = []
         await db
             .collection('years')
-            .doc('2022')
+            .doc(`${new Date().getFullYear()}`)
             .collection('scouting')
             .doc('pitScouting').get().then((data) => {
-                let arr = data.data()?.pitScoutingQuestions;
+                let arr = data.data()?.pitscoutingQuestions;
                 arr.forEach((field: object | string, index: number) => {
                     if (typeof field === 'object') {
                         let key: string = Object.keys(field)[0];
