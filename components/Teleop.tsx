@@ -73,7 +73,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           if(gamePiece == "") return;
           if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
-          if(field['type'] === 'button') {
+          if(field['type'] === 'button..') {
 						if(gamePiece == "") return;
           				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
@@ -105,7 +105,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
 							</View>
 						)
 					}
-          if (field['type'] == 'counter' || field['type'] == 'rating') {
+          if (field['type'] == 'counter' || field['type'] == 'rating' || field['type'] == 'button') {
             if (field['name'].includes('Defense') && !playedDefense) return;
             var name=field['name'].substring(field['name'].indexOf("Teleop") + 6);
             // console.log(name.substring(name.indexOf('Teleop') + 6));
@@ -122,7 +122,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
                   setTeleopFields(temp);
                   setTimeout(()=>{setGamePiece("")}, 250);
                 }}
-                value={teleopFields[index]}
+                value={teleopFields[index] == '' ? 0 : teleopFields[index]}
               />
             )
           }
