@@ -73,7 +73,7 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 				
 				{fields?.map((field, index) => {
 					const [name, type] = [field['name'], field['type']];
-					if(type === 'button no lol') {
+					/*if(type === 'button no lol') {
 						if(gamePiece == "") return;
           				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
@@ -113,8 +113,8 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 								}}> + </Button>
 							</View>
 						)
-					}
-					if (type === 'counter' || type === 'rating' || type === 'button') {
+					}*/
+					if (type === 'counter' || type === 'rating') {
 						if(gamePiece == "") return;
           				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;

@@ -73,7 +73,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           if(gamePiece == "") return;
           if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
-          if(field['type'] === 'button..') {
+          /*if(field['type'] === 'button..') {
 						if(gamePiece == "") return;
           				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
@@ -104,8 +104,8 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
 								  ]}><Text>{labelname} ({num})</Text></Pressable>
 							</View>
 						)
-					}
-          if (field['type'] == 'counter' || field['type'] == 'rating' || field['type'] == 'button') {
+					}*/
+          if (field['type'] == 'counter' || field['type'] == 'rating') {
             if (field['name'].includes('Defense') && !playedDefense) return;
             var name=field['name'].substring(field['name'].indexOf("Teleop") + 6);
             // console.log(name.substring(name.indexOf('Teleop') + 6));
