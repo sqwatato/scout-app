@@ -86,7 +86,11 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
     }
 
     const fetchData = async () => {
+<<<<<<< HEAD
         const scoutingDocs = db.collection('years').doc(`${new Date().getFullYear()}`).collection('scouting');
+=======
+        const scoutingDocs = db.collection('years').doc('2023').collection('scouting');
+>>>>>>> teleopAuton2023
         await scoutingDocs.doc('auton').get().then((autonData) => {
             setAutonFields(Object.values(autonData.data()?.autonFields || {}).map((field: any) => getData(field)));
         });

@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useTeleop, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { Alert, ScrollView, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import { Button, IndexPath, Input, Select, SelectItem, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
@@ -27,6 +27,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
   const setField = useTeleop((state) => state.setField);
   const [playedDefense, setPlayedDefense] = useState<boolean>(false);
+  const [gamePiece, setGamePiece] = useState("");
 
   useEffect(() => {
     if (teleopFields.length == 0) {
@@ -64,19 +65,64 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         }}
         keyboardDismissMode="on-drag"
       >
+      <Text category='h3'> Game piece type  </Text>
+      {gamePiece.match("Cone") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> ⚠️	</Button> : <Button onPress={()=>{setGamePiece('Cone')}} appearance="outline"> ⚠️	 </Button>}
+      {gamePiece.match("Cube") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> 🟪 </Button> : <Button onPress={()=>{setGamePiece('Cube')}} appearance="outline"> 🟪 </Button>}
+      
         {fields?.map((field, index) => {
-          if (field['type'] == 'counter' || field['type'] == 'rating') {
+          if(gamePiece == "") return;
+          if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
+          if(field['type'] === 'button..') {
+						if(gamePiece == "") return;
+          				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
+						var labelname=field['name'].substring(field['name'].indexOf("Teleop") + 6);
+						if(gamePiece.match('Cone')) {
+							if(labelname.indexOf('Cone') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cone")) + labelname.substring(labelname.indexOf('Cone') + 5);}
+						}
+						if(gamePiece.match('Cube')) {
+							if(labelname.indexOf('Cube') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cube")) + labelname.substring(labelname.indexOf('Cube') + 5);}
+						}
+            let num = teleopFields[index];
+            if(num=="") num=0;
+						return(
+							<View>
+								<Pressable onPress={()=>{
+									const temp: any[] = [...teleopFields];
+									temp[index] = temp[index] + 1;
+									setTeleopFields(temp);
+									setTimeout(()=>{setGamePiece("")}, 250);
+								}} style={({pressed}) => [
+									{
+									  backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white',
+                    padding: 20,
+                    margin: 5,
+									}, 
+								  ]}><Text>{labelname} ({num})</Text></Pressable>
+							</View>
+						)
+					}
+          if (field['type'] == 'counter' || field['type'] == 'rating' || field['type'] == 'button') {
             if (field['name'].includes('Defense') && !playedDefense) return;
+            var name=field['name'].substring(field['name'].indexOf("Teleop") + 6);
+            // console.log(name.substring(name.indexOf('Teleop') + 6));
+         //   var name = "";
+         //   if(isCone)  name = field['name'].substring(0, name.indexOf('Cone')) + field['name'].substring(name.indexOf('Cone') + 5);
+         //   else if(!isCone)  name = field['name'].substring(0, name.indexOf('Cube')) + field['name'].substring(name.indexOf('Cube') + 5);
             return (
               <Counter
                 rating={field['type'] == 'rating'}
-                name={field['name']}
+                name={name}
                 onChange={(val) => {
                   const temp: any[] = [...teleopFields];
                   temp[index] = val;
                   setTeleopFields(temp);
+                  setTimeout(()=>{setGamePiece("")}, 250);
                 }}
-                value={teleopFields[index]}
+                value={teleopFields[index] == '' ? 0 : teleopFields[index]}
               />
             )
           }

@@ -3,7 +3,7 @@ import { useAuton, usePreGame } from '../Stores';
 import Header from "./Header";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { ScrollView, View, Alert } from "react-native";
+import { ScrollView, View, Alert, Pressable } from "react-native";
 import { Button, Input, Text, Toggle } from "@ui-kitten/components";
 import Counter from "./Counter";
 import {
@@ -25,7 +25,8 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 	const autonFields = useAuton((state) => state.autonFields);
 	const setAutonFields = useAuton((state) => state.setAutonFields);
 	const setField = useAuton((state) => state.setField);
-	const [didCharge, setDidCharge] = useState<boolean>(false);
+	const [ didCharge, setDidCharge ] = useState(false);
+	const [ gamePiece, setGamePiece ] = useState("");
 
 	const initializeAutonFields = () => {
 		const tempAuton: any[] = [];
@@ -62,18 +63,71 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 				contentContainerStyle={{
 					display: "flex",
 					flexDirection: "column",
-					padding: "5% 10% 10% 10%",
-					width: '100%',
-					justifyContent: 'center',
-					alignItems: 'center',
-					// backgroundColor: 'red'
+					padding: "10%",
 				}}
 			// keyboardDismissMode="on-drag"
 			>
+		
+		{gamePiece.match("Cone") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> ⚠️	</Button> : <Button onPress={()=>{setGamePiece('Cone')}} appearance="outline"> ⚠️	 </Button>}
+      	{gamePiece.match("Cube") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> 🟪 </Button> : <Button onPress={()=>{setGamePiece('Cube')}} appearance="outline"> 🟪 </Button>}			
+				
 				{fields?.map((field, index) => {
 					const [name, type] = [field['name'], field['type']];
-					if (type === 'counter' || type === 'rating') {
-						// return (
+					if(type === 'button no lol') {
+						if(gamePiece == "") return;
+          				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
+						var labelname=field['name'].substring(field['name'].indexOf("Auton") + 5);
+						if(gamePiece.match('Cone')) {
+							if(labelname.indexOf('Cone') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cone")) + labelname.substring(labelname.indexOf('Cone') + 5);}
+						}
+						if(gamePiece.match('Cube')) {
+							if(labelname.indexOf('Cube') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cube")) + labelname.substring(labelname.indexOf('Cube') + 5);}
+						}
+						let num = autonFields[index];
+            			if(num=="") num=0;
+						return(
+							<View style={{display: "flex", flexDirection: "row",}}>
+								<Button style={{padding: 20, margin: 5,}} appearance="outline" onPress={()=>{
+									const temp: any[] = [...autonFields];
+									if(temp[index] > 0) temp[index] = temp[index] - 1;
+									setAutonFields(temp);
+									setTimeout(()=>{setGamePiece("")}, 250);
+								}}> - </Button>
+								<Pressable onPress={()=>{
+									
+								}} style={({pressed}) => [
+									{
+									  backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white',
+									  padding: 20,
+									  margin: 5,
+									},
+								  ]}><Text>{labelname} ({num})</Text></Pressable>
+								  <Button style={{padding: 20, margin: 5,}} appearance="outline" onPress={()=>{
+									const temp: any[] = [...autonFields];
+									temp[index] = temp[index] + 1;
+									setAutonFields(temp);
+									setTimeout(()=>{setGamePiece("")}, 250);
+								}}> + </Button>
+							</View>
+						)
+					}
+					if (type === 'counter' || type === 'rating' || type === 'button') {
+						if(gamePiece == "") return;
+          				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
+						var labelname=field['name'].substring(field['name'].indexOf("Auton") + 5);
+						if(gamePiece.match('Cone')) {
+							if(labelname.indexOf('Cone') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cone")) + labelname.substring(labelname.indexOf('Cone') + 4);}
+						}
+						if(gamePiece.match('Cube')) {
+							if(labelname.indexOf('Cube') != -1) {
+							labelname=labelname.substring(0, labelname.indexOf("Cube")) + labelname.substring(labelname.indexOf('Cube') + 4);}
+						}
+												// return (
 						// 	<Counter
 						// 		rating={field['type'] === "rating"}
 						// 		name={name}
@@ -85,17 +139,22 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						// 		value={autonFields[index]}
 						// 	/>
 						// );
+					//	if (name === 'Amount Intaken' && !leftTarmac) return;
 						return (
+							<>
+							{console.log(autonFields[index])}
 							<Counter
 								rating={field['type'] === "rating"}
-								name={name}
+								name={labelname}
 								onChange={(val) => {
 									const temp: any[] = [...autonFields];
 									temp[index] = val;
 									setAutonFields(temp);
+									setTimeout(()=>{setGamePiece("")}, 250);
 								}}
-								value={autonFields[index]}
+								value={autonFields[index] == '' ? 0 : autonFields[index]}
 							/>
+							</>
 						);
 					}
 					else if (type === 'boolean') {
