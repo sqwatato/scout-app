@@ -10,7 +10,7 @@ type AutonState =| AutonData & {
 export const useAuton = create<AutonState>((set) => ({  
   autonFields: [],
   setAutonFields: (autonFields: any[]) => set({autonFields}),
-  setField: (index: number, value: any) => set(state =>{
+  setField: (index: number, value: any) => set(state => {
     let temp = [...state.autonFields];
     temp[index] = value;
     autonFields: temp;
