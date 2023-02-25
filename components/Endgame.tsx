@@ -29,6 +29,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
 
 
   useEffect(() => {
+    Alert.alert("HI mihir endgame");
     if (postGameFields.length < fields.length) setPostGameFields(initializePostGameFields());
     //("Endgame useEffect");
   }, [])
@@ -36,7 +37,7 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
     setPostGameFields([]);
     const tempPostGame: any[] = [];
     fields?.map((value, index) => {
-      if (value['type'] == "counter" || value['type'] == 'timer') {
+      if (value['type'] == "counter"|| value['type'] == 'timer') {
         tempPostGame.push(0);
       }
       else if (value['type'] == 'rating') tempPostGame.push(1);
