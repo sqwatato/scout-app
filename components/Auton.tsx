@@ -73,52 +73,11 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 				
 				{fields?.map((field, index) => {
 					const [name, type] = [field['name'], field['type']];
-					/*if(type === 'button no lol') {
-						if(gamePiece == "") return;
-          				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
-          				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
-						var labelname=field['name'].substring(field['name'].indexOf("Auton") + 5);
-						if(gamePiece.match('Cone')) {
-							if(labelname.indexOf('Cone') != -1) {
-							labelname=labelname.substring(0, labelname.indexOf("Cone")) + labelname.substring(labelname.indexOf('Cone') + 5);}
-						}
-						if(gamePiece.match('Cube')) {
-							if(labelname.indexOf('Cube') != -1) {
-							labelname=labelname.substring(0, labelname.indexOf("Cube")) + labelname.substring(labelname.indexOf('Cube') + 5);}
-						}
-						let num = autonFields[index];
-            			if(num=="") num=0;
-						return(
-							<View style={{display: "flex", flexDirection: "row",}}>
-								<Button style={{padding: 20, margin: 5,}} appearance="outline" onPress={()=>{
-									const temp: any[] = [...autonFields];
-									if(temp[index] > 0) temp[index] = temp[index] - 1;
-									setAutonFields(temp);
-									setTimeout(()=>{setGamePiece("")}, 250);
-								}}> - </Button>
-								<Pressable onPress={()=>{
-									
-								}} style={({pressed}) => [
-									{
-									  backgroundColor: pressed ? 'rgb(210, 230, 255)' : 'white',
-									  padding: 20,
-									  margin: 5,
-									},
-								  ]}><Text>{labelname} ({num})</Text></Pressable>
-								  <Button style={{padding: 20, margin: 5,}} appearance="outline" onPress={()=>{
-									const temp: any[] = [...autonFields];
-									temp[index] = temp[index] + 1;
-									setAutonFields(temp);
-									setTimeout(()=>{setGamePiece("")}, 250);
-								}}> + </Button>
-							</View>
-						)
-					}*/
 					if (type === 'counter' || type === 'rating') {
 						if(gamePiece == "") return;
           				if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           				if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
-						var labelname=field['name'].substring(field['name'].indexOf("Auton") + 5);
+						var labelname=field['name'];
 						if(gamePiece.match('Cone')) {
 							if(labelname.indexOf('Cone') != -1) {
 							labelname=labelname.substring(0, labelname.indexOf("Cone")) + labelname.substring(labelname.indexOf('Cone') + 4);}
@@ -127,22 +86,8 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 							if(labelname.indexOf('Cube') != -1) {
 							labelname=labelname.substring(0, labelname.indexOf("Cube")) + labelname.substring(labelname.indexOf('Cube') + 4);}
 						}
-												// return (
-						// 	<Counter
-						// 		rating={field['type'] === "rating"}
-						// 		name={name}
-						// 		onChange={(val) => {
-						// 			const temp: any[] = [...autonFields];
-						// 			temp[index] = val;
-						// 			setAutonFields(temp);
-						// 		}}
-						// 		value={autonFields[index]}
-						// 	/>
-						// );
-					//	if (name === 'Amount Intaken' && !leftTarmac) return;
 						return (
 							<>
-							{console.log(autonFields[index])}
 							<Counter
 								rating={field['type'] === "rating"}
 								name={labelname}
@@ -158,7 +103,9 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						);
 					}
 					else if (type === 'boolean') {
-						if (!didCharge && (name === 'Auton Docked' || name === 'Auton Engaged')) return;
+						if (!didCharge && (name === 'Auton Docked' || name === 'Auton Engaged')){
+							return;
+						}
 						return (
 							<Toggle
 								checked={autonFields[index]}
@@ -190,11 +137,10 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 						);
 					}
 					else if (type === 'timer') {
-						if(didCharge){
-							return (
-								<Stopwatch name={name} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
-							);
-						}
+						if(!didCharge) return;
+						return (
+							<Stopwatch name={name} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
+						);
 					}
 					else {
 						return (

@@ -75,7 +75,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
           if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
           if (field['type'] == 'counter' || field['type'] == 'rating') {
             if (field['name'].includes('Defense') && !playedDefense) return;
-            var name=field['name'].substring(field['name'].indexOf("Teleop") + 6);
+            var name=field['name'];
 
             return (
               <Counter

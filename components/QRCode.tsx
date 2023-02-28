@@ -95,6 +95,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         Toast.show({ type: 'success', text1: 'Successfully saved data!' });
         setTimeout(() => {
             navigation?.navigate("Home");
+            clearData();
         }, 2000);
     }
     const handleSheetChanges = useCallback((index: number) => {
