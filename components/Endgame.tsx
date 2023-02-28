@@ -29,7 +29,6 @@ const EndGame: FC<EndGameProps> = ({ navigation, fields }) => {
 
 
   useEffect(() => {
-    Alert.alert("HI mihir endgame");
     if (postGameFields.length < fields.length) setPostGameFields(initializePostGameFields());
     //("Endgame useEffect");
   }, [])

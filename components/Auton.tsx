@@ -43,7 +43,6 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 		return tempAuton;
 	}
 	useEffect(() => {
-		Alert.alert("HI mihir auton");
 		if (autonFields.length < fields.length) setAutonFields(initializeAutonFields());
 	}, []);
 

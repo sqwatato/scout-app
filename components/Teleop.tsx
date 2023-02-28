@@ -30,7 +30,6 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const [gamePiece, setGamePiece] = useState("");
 
   useEffect(() => {
-    Alert.alert("HI mihir teleop");
     if (teleopFields.length == 0) {
       setTeleopFields(initializeTeleopFields());
     }
