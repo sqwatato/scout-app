@@ -102,45 +102,44 @@ const Auton: FC<AutonProps> = ({ navigation, fields }) => {
 							</>
 						);
 					}
-					else if (type === 'boolean') {
-						if (!didCharge && (name === 'Auton Docked' || name === 'Auton Engaged')){
-							return;
-						}
+					else if (field['type'] == 'boolean') {
+						if (!didCharge && (field['name'] === 'Auton Docked' || field['name'] === 'Auton Engaged')) return;
 						return (
-							<Toggle
-								checked={autonFields[index]}
-								onChange={(val) => {
-									const temp: any[] = [...autonFields];
-									if (name === 'Auton Did Charge'){
-										setDidCharge(val);
-										if(!val){
-											fields.forEach((value, i)=>{
-												if(value['name'].indexOf("Docked")>-1 || value['name'].indexOf("Engaged")>-1){
-													temp[i] = false;
-												}
-												if(value['name'].indexOf("Charge Time")>-1){
-													temp[i] = 0;
-												}
-											})
-										}
+						  <Toggle
+							checked={autonFields[index]}
+							onChange={(val) => {
+								const temp: any[] = [...autonFields];
+								if (field['name'] === 'Auton Did Charge'){
+									setDidCharge(val);
+									if(!val){
+										fields.forEach((value, i)=>{
+											if(value['name'].indexOf("Docked")>-1 || value['name'].indexOf("Engaged")>-1){
+												temp[i] = false;
+											}
+											if(value['name'].indexOf("Charge Time")>-1){
+												temp[i] = 0;
+											}
+										})
 									}
-									temp[index] = val;
-									setAutonFields(temp);
-								}}
-								style={{
-									marginTop: "3%",
-									padding: 4,
-								}}
-							>
-								{name}
-							</Toggle>
-						);
-					}
-					else if (type === 'timer') {
-						if(!didCharge) return;
-						return (
-							<Stopwatch name={name} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
-						);
+								}
+								temp[index] = val;
+								setAutonFields(temp);
+							}}
+							style={{
+							  marginTop: "3%",
+							  padding: 4,
+							}}
+						  >
+							{field['name']}
+						  </Toggle>
+						)
+					  }
+					else if (field['type'] == 'timer') {
+						if(didCharge){
+						  return (
+							<Stopwatch name={field['name']} onChange={setField} fieldIndex={index} postFields={autonFields} ></Stopwatch>
+						  )
+						}
 					}
 					else {
 						return (
