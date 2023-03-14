@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { ScrollView, Text, Alert, View } from 'react-native';
+import { ScrollView, Text, Alert, View, TouchableOpacity } from 'react-native';
 import { auth, db } from '../firebase';
 import { Button, IndexPath, Input, Select, SelectItem, Spinner, Toggle } from '@ui-kitten/components';
 import { usePitScout } from "../Stores";
@@ -152,6 +152,22 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                 }}
                 keyboardDismissMode="on-drag"
             >
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        marginVertical: 10,
+                        marginBottom: 10,
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontWeight: "800",
+                            fontSize: 24,
+                        }}
+                    >
+                        ←
+                    </Text>
+                </TouchableOpacity>
                 {hasData ? <Button
                     style={{ width: "100%", marginVertical: 5 }}
                     appearance="outline"
@@ -294,7 +310,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                 text1: "Enter a valid team number"
                             })
                         }
-                        else if (!regional || regional=="Option 0") {
+                        else if (!regional || regional == "Option 0") {
                             Toast.show({
                                 type: 'error',
                                 text1: "Enter a valid regional"
