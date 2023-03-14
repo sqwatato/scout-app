@@ -13,7 +13,7 @@ const PitScout: FC<any> = ({ navigation }) => {
         <Stack.Navigator initialRouteName='PitScoutForm'>
             <Stack.Screen
                 component={PitScoutForm}
-                name='PitScoutFormJay'
+                name='PitScoutForm'
                 options={{ headerShown: false }}
             />
             <Stack.Screen

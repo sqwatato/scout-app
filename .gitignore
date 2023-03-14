@@ -14,9 +14,7 @@ web-build/
 .env.test.local
 .env.production.local
 
-# jayden modal messing around stuff
-fix-modal.patch
-PitScoutFormJay.tsx
+
 
 # macOS
 .DS_Store
