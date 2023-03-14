@@ -40,7 +40,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
             .doc(`${new Date().getFullYear()}`)
             .collection('scouting')
             .doc('pitScouting').get().then((data) => {
-                let arr = data.data()?.pitscoutingQuestions;
+                let arr = data.data()?.pitScoutingQuestions;
                 arr.forEach((field: object | string, index: number) => {
                     if (typeof field === 'object') {
                         let key: string = Object.keys(field)[0];

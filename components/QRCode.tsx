@@ -95,6 +95,7 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         Toast.show({ type: 'success', text1: 'Successfully saved data!' });
         setTimeout(() => {
             navigation?.navigate("Home");
+            clearData();
         }, 2000);
     }
     const handleSheetChanges = useCallback((index: number) => {
@@ -102,14 +103,10 @@ const QRCodeBottomSheet: FC<QRCodeBottomSheetProps> = ({
         else setShowQR(true);
     }, []);
 
-    const clearFields = (fields) => {
-        return [];
-    }
-
     const clearData = () => {
-        setAutonFields(clearFields(autonState.autonFields));
-        setTeleopFields(clearFields(teleopState.teleopFields));
-        setPostGameFields(clearFields(postGameState.postGameFields));
+        setAutonFields([]);
+        setTeleopFields([]);
+        setPostGameFields([]);
     }
     useEffect(() => {
         AsyncStorage.setItem("@scout_pregame", JSON.stringify(preGameState));

@@ -3,7 +3,7 @@ import Header from "./Header";
 import { useTeleop, usePreGame } from "../Stores";
 import BottomSheet from "@gorhom/bottom-sheet";
 import QRCodeBottomSheet from "./QRCode";
-import { Alert, ScrollView, View } from "react-native";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import { Button, IndexPath, Input, Select, SelectItem, Text, Toggle } from "@ui-kitten/components";
 import {
   NavigationScreenProp,
@@ -27,6 +27,7 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
   const setTeleopFields = useTeleop((state) => state.setTeleopFields);
   const setField = useTeleop((state) => state.setField);
   const [playedDefense, setPlayedDefense] = useState<boolean>(false);
+  const [gamePiece, setGamePiece] = useState("");
 
   useEffect(() => {
     if (teleopFields.length == 0) {
@@ -64,19 +65,29 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
         }}
         keyboardDismissMode="on-drag"
       >
+      <Text category='h3'> Game piece type  </Text>
+      {gamePiece.match("Cone") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> ⚠️	</Button> : <Button onPress={()=>{setGamePiece('Cone')}} appearance="outline"> ⚠️	 </Button>}
+      {gamePiece.match("Cube") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> 🟪 </Button> : <Button onPress={()=>{setGamePiece('Cube')}} appearance="outline"> 🟪 </Button>}
+      
         {fields?.map((field, index) => {
+          if(gamePiece == "") return;
+          if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
+          if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
           if (field['type'] == 'counter' || field['type'] == 'rating') {
             if (field['name'].includes('Defense') && !playedDefense) return;
+            var name=field['name'];
+
             return (
               <Counter
                 rating={field['type'] == 'rating'}
-                name={field['name']}
+                name={name}
                 onChange={(val) => {
                   const temp: any[] = [...teleopFields];
                   temp[index] = val;
                   setTeleopFields(temp);
+                  setTimeout(()=>{setGamePiece("")}, 250);
                 }}
-                value={teleopFields[index]}
+                value={teleopFields[index] == '' ? 0 : teleopFields[index]}
               />
             )
           }

@@ -126,7 +126,6 @@ const Home: React.FC<Props> = ({ navigation }) => {
           <View>
             <Button
               onPress={() => {
-                clearData();
                 navigation.navigate("QRScanner");
               }}
               style={styles.button}

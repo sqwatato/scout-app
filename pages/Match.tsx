@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationState, RouteProp } from "@react-navigation/native";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { usePreGame, useAuton, useTeleop, usePostGame } from "../Stores";
 import PreGame from "../components/Pregame";
@@ -11,6 +11,7 @@ import { Alert } from 'react-native';
 import { NavigationScreenProp, NavigationParams } from "react-navigation";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../firebase";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +44,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         setTeleopValues([]);
         setPostGameValues([]);
     }
-
+    
     useEffect(() => {
         fetchData();
         if (route?.params?.data) {
@@ -97,10 +98,10 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         });
     }
 
-    const AutonComponent = () => <Auton navigation={navigation} fields={autonFields ? autonFields : [{}]} />;
-    const EndGameComponent = () => <EndGame navigation={navigation} fields={endgameFields ? endgameFields : [{}]} />;
-    const TeleopComponent = () => <Teleop navigation={navigation} fields={teleopFields ? teleopFields : [{}]} />;
-    const PreGameComponent = () => <PreGame navigation={navigation} />;
+    const AutonComponent = useCallback(() => <Auton navigation={navigation} fields={autonFields ? autonFields : []} />, [autonFields]);
+    const EndGameComponent = useCallback(() => <EndGame navigation={navigation} fields={endgameFields ? endgameFields : []} />, [endgameFields]);
+    const TeleopComponent = useCallback(() => <Teleop navigation={navigation} fields={teleopFields ? teleopFields : []} />, [teleopFields]);
+    const PreGameComponent = useCallback(() => <PreGame navigation={navigation} />, []);
 
     return (
         <>
@@ -139,7 +140,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
                 })}
             >
                 <Tab.Screen name="PreGame" component={PreGameComponent} />
-                <Tab.Screen name="Auton" component={AutonComponent} />
+                <Tab.Screen name="Auton" component={AutonComponent}/>
                 <Tab.Screen name="Teleop" component={TeleopComponent} />
                 <Tab.Screen name="EndGame" component={EndGameComponent} />
             </Tab.Navigator>
