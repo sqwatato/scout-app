@@ -46,7 +46,7 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
     }
     
     useEffect(() => {
-        fetchData();
+        hardCode();
         if (route?.params?.data) {
             clearData();
             const matchInfo: string = route.params.data;
@@ -85,6 +85,14 @@ const Match: FC<MatchProps> = ({ route, navigation }) => {
         }
     }
 
+    const hardCode = () =>{
+        const autonStuff = ["Mobility: boolean", "Auton Upper Cone: counter", "Auton Upper Cone Missed: counter", "Auton Mid Cone: counter", "Auton Mid Cone Missed: counter", "Auton Lower Cone: counter", "Auton Lower Cone Missed: counter", "Auton Upper Cube: counter", "Auton Upper Cube Missed: counter", "Auton Mid Cube: counter", "Auton Mid Cube Missed: counter", "Auton Lower Cube: counter", "Auton Lower Cube Missed: counter", "Auton Did Charge: boolean", "Auton Docked: boolean", "Auton Engaged: boolean", "Auton Charge Time: timer"]
+        setAutonFields(autonStuff.map((field: any) => getData(field)));
+        const teleopStuff = ["Teleop Upper Cone: counter", "Teleop Upper Cone Missed: counter", "Teleop Mid Cone: counter", "Teleop Mid Cone Missed: counter", "Teleop Lower Cone: counter", "Teleop Lower Cone Missed: counter", "Teleop Upper Cube: counter", "Teleop Upper Cube Missed: counter", "Teleop Mid Cube: counter", "Teleop Mid Cube Missed: counter", "Teleop Lower Cube: counter", "Teleop Lower Cube Missed: counter", "Played Defense: boolean"]
+        setTeleopFields(teleopStuff.map((field: any) => getData(field)));
+        const endgameStuff = ["Parked: boolean", "Endgame Did Charge: boolean", "Endgame Docked: boolean", "Endgame Engaged: boolean", "Tipped: boolean", "Comments: text"]
+        setEndGameFields(endgameStuff.map((field: any) => getData(field)));
+    }
     const fetchData = async () => {
         const scoutingDocs = db.collection('years').doc(`${new Date().getFullYear()}`).collection('scouting');
         await scoutingDocs.doc('auton').get().then((autonData) => {

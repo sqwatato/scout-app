@@ -10,6 +10,9 @@ interface PitScoutProps {
     navigation: any,
 }
 
+//keyboard avoiding view
+import KeyboardAvoidingWrapper from "./KeyboardAvoidingWrapper";
+
 const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
@@ -142,20 +145,13 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
     }
 
     return (!loading ?
-        <>
+        <KeyboardAvoidingWrapper>
+            <View style={{width: "90%", paddingLeft: "10%"}}>
             <Toast position="bottom" bottomOffset={20} />
-            <ScrollView
-                contentContainerStyle={{
-                    display: "flex",
-                    flexDirection: "column",
-                    padding: "10%",
-                }}
-                keyboardDismissMode="on-drag"
-            >
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={{
-                        marginVertical: 10,
+                        marginVertical: 40,
                         marginBottom: 10,
                     }}
                 >
@@ -340,8 +336,8 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                 >
                     Finish Scout
                 </Button>
-            </ScrollView>
-        </> :
+            </View>
+        </KeyboardAvoidingWrapper> :
         <View
             style={{
                 display: 'flex',
