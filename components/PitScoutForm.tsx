@@ -14,12 +14,20 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
-    const [regionals, setRegionals] = useState<string[]>(['cacg']);
-    const [regional, setRegional] = useState<string>();
-    const [teamNum, setTeamNum] = useState<number>();
+    const [regionals, setRegionals] = useState<string[]>(['casf']);
+    const [regional, setRegional] = useState<string>('casf');
+   // const [teamNum, setTeamNum] = useState<number>();
     const [hasData, setHasData] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [image, setImage] = useState<string>('');
+    const [levels, setLevels] = React.useState([
+        new IndexPath(0),
+        new IndexPath(1),
+        new IndexPath(2),
+      ]);
+      const [teams, setTeams] = useState<Object[]>([{name: '', value: false}]);
+      const [team, setTeam] = useState<string>('115');
+      const [finishTeam, setFinishTeam] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -30,14 +38,23 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                 setPitScoutFields(await initalizePitScoutFields());
             })();
         }
+        (async () => {
+            setTeams(await getTeams());
+        })();
         setLoading(false);
     }, [])
+
+    useEffect(() => {
+        (async () => {
+            setTeams(await getTeams());
+        })();
+    }, [finishTeam])
 
     const initalizePitScoutFields = async () => {
         const prompts: any[] = []
         await db
             .collection('years')
-            .doc('2022')
+            .doc('2023')
             .collection('scouting')
             .doc('pitScouting').get().then((data) => {
                 let arr = data.data()?.pitScoutingQuestions;
@@ -94,15 +111,47 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         return regionals;
     }
 
+    const getTeams = async () => {
+        const prompts: any[] = []
+        await db
+            .collection('years')
+            .doc('2023')
+            .collection('regionals')
+            .doc('idbo')
+            .collection('teams').doc("pitscoutChecklist").get().then((data) => {
+                let arr = data.data();
+                arr = Object.entries(arr);
+                arr?.map((field, index: number) => {
+                    let data = {
+                        name: field[0],
+                        value: field[1],
+                    } 
+                    {prompts.push(data)}
+                });
+            });
+        setHasData(false);
+        setFinishTeam(false);
+        return prompts;
+    }
+
     const pushData = async () => {
-        if (teamNum && isNaN(teamNum)) {
-            Alert.alert('Enter valid team number');
-            return;
-        }
+        // if (team && isNaN(Number(team))) {
+        //     Alert.alert('Enter valid team number');
+        //     return;
+        // }
         let answers: any = {};
         pitScoutFields.forEach((field) => {
             if (typeof field['value'] === 'object') answers[field['name']] = field['selected'];
             else answers[field['name']] = field['value'];
+        });
+        
+        let teamNew: any = {};
+        let temp = [...teams];
+        const newVal = {name: team, value: true}
+        temp[temp.findIndex(i => i.name === team)] = newVal;
+        setTeams(temp);
+        temp.forEach((field) => {
+            teamNew[field['name']] = field['value'];
         });
         db
             .collection('years')
@@ -110,15 +159,34 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
             .collection('regionals')
             .doc(regional)
             .collection('teams')
-            .doc(teamNum + "")
+            .doc(team)
             .collection('pitScoutData')
             .doc('pitScoutAnswers')
             .set(answers).then(() => {
                 Toast.show({
                     type: 'success',
                     text1: 'Successfully saved data!'
-                });
+                })
                 clearData();
+            }).catch((err) => {
+                Toast.show({
+                    type: 'error',
+                    text1: err.message
+                })
+            });
+            
+            db
+            .collection('years')
+            .doc('2023')
+            .collection('regionals')
+            .doc('idbo')
+            .collection('teams').doc("pitscoutChecklist")
+            .set(teamNew).then(() => {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Successfully saved data!'
+                });
+                setFinishTeam(true);
                 navigation?.goBack();
             }).catch((err) => {
                 Toast.show({
@@ -126,6 +194,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     text1: err.message
                 })
             });
+
     }
 
     const clearData = async () => {
@@ -172,8 +241,58 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                 >
                     {regionals.map(r => <SelectItem title={r} />)}
                 </Select>
+                <Select
+                    selectedIndex={new IndexPath(teams.indexOf(team || ''))}
+                    label={'Select Team'}
+                    onSelect={(currIndex) => {
+                        setTeam(teams[parseInt(currIndex.toString()) - 1].name);
+                    }}
+                    placeholder="Select Team"
+                    style={{ marginBottom: '4%' }}
+                    value={team}
+                >
+                    {teams.map(r => <SelectItem title={r.name} disabled={r.value}/>)}
+                </Select>
                 {pitScoutFields.map((field: any, index: number) => {
                     if (Array.isArray(field['value'])) {
+                        if(field['name'].indexOf(":") != -1) {
+                            const levelsValues = levels.map((indexpath, index) => {
+                                return field['value'][indexpath.row];
+                              });
+                            return(
+                                <>
+                                {levels.map((index)=>{<Text> {index.row} </Text>})}
+                                <Select
+                                multiSelect={true}
+                                selectedIndex={levels}
+                                onSelect={(currIndex) => {
+                                    setLevels(currIndex);
+                                    const temp: any[] = [...pitScoutFields];
+                                    const currLevel = temp[index];
+                                    const newLevelsValues = currIndex.map((indexpath, index) => {
+                                        return field['value'][indexpath.row];
+                                      });
+                                    const newField = {
+                                        "name": field['name'],
+                                        "value": field['value'],
+                                        "selected": newLevelsValues.join(', '),
+                                    }
+                                    temp[index] = newField;
+                                    setPitScoutFields(temp);
+                                    setHasData(true);
+                                }}
+                              value={levelsValues.join(', ')}
+                              label={field['name'].substring(0, field['name'].indexOf(':'))}
+                              style={{ marginBottom: "3%" }}
+                            >
+                                {field['value'].map((val: any) => {
+                                    return <SelectItem title={val} />
+                                })}
+                            </Select>
+                                </>
+                            )
+                        }
+                        else {
                         return (
                             // render select
                             <Select
@@ -199,7 +318,8 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                 })}
                             </Select>
                         );
-                    } else if (typeof field['value'] === 'boolean') {
+                    }} 
+                    else if (typeof field['value'] === 'boolean') {
                         // render toggle
                         return (
                             <Toggle
@@ -238,6 +358,10 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                             />
                         );
                     } else if (field['value'] === 'short') {
+                        if (field['name'] === 'Team Number'){
+                            return;
+                        }
+                        else {
                         return (
                             <Input
                                 multiline={false}
@@ -253,12 +377,19 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                     const temp: any[] = [...pitScoutFields];
                                     temp[index] = newField;
                                     setPitScoutFields(temp);
-                                    if (field['name'] === 'Team Number') setTeamNum(parseInt(val));
+                                    
                                     setHasData(true);
                                 }}
                             />
                         );
-                    } else {
+                        }
+                    } else if(field['value'] === 'multiselect') {
+                    
+                    }
+                    else {
+                        if (field['name'] === 'Team Number') {
+                            return;
+                        }
                         return (
                             <Input
                                 multiline={true}
@@ -275,7 +406,6 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                     temp[index] = newField;
                                     setPitScoutFields(temp);
                                     setHasData(true);
-                                    if (field['name'] === 'Team Number') setTeamNum(parseInt(val));
                                 }}
                             />
                         );

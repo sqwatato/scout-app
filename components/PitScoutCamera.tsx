@@ -54,10 +54,10 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
                     style={{
                         width: '100%',
                         height: '100%',
-                        display: 'flex',
+                        flex: 1,
                     }}
                 >
-                    <Image source={{ uri: image }} style={{ maxWidth: '100%', maxHeight: undefined, aspectRatio: 1 }} />
+                    <Image source={{ uri: image }} style={{ flex: 1 }} />
                     <View>
                         <Modal
                             animationType='slide'
@@ -70,16 +70,17 @@ const PitScoutCamera: FC<CameraProps> = ({ navigation, route }) => {
                                     flexDirection: 'column',
                                     flex: 1,
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'flex-end'
                                 }}
                             >
                                 <View style={{
                                     display: 'flex',
                                     flexDirection: 'row',
-                                    justifyContent: 'flex-end'
+                                    justifyContent: 'flex-end',
+                                    marginBottom: 5,
                                 }}>
                                     <Button
-                                        style={{}}
+                                        style={{marginRight: 4}}
                                         onPress={() => {
                                             setImage('');
                                         }}
