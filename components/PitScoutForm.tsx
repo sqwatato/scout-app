@@ -17,8 +17,9 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
-    const [regionals, setRegionals] = useState<string[]>(['idbo']);
-    const [regional, setRegional] = useState<string>('idbo');
+    const [regionals, setRegionals] = useState<string[]>(['cur']);
+    const [regional, setRegional] = useState<string>('cur');
+    const year = new Date().getFullYear();
    // const [teamNum, setTeamNum] = useState<number>();
     const [hasData, setHasData] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -118,11 +119,11 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         const prompts: any[] = []
         await db
             .collection('years')
-            .doc('2023')
+            .doc(year+'')
             .collection('regionals')
-            .doc('idbo')
-            .collection('teams').doc("pitscoutChecklist").get().then((data) => {
-                let arr = data.data();
+            .doc(regional)
+            .collection('teamChecklist').doc("teams").get().then((data) => {
+                let arr: any = data.data();
                 arr = Object.entries(arr);
                 arr?.map((field, index: number) => {
                     let data = {
@@ -151,7 +152,7 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         let teamNew: any = {};
         let temp = [...teams];
         const newVal = {name: team, value: true}
-        temp[temp.findIndex(i => i.name === team)] = newVal;
+        temp[temp.findIndex(i => i["name"] === team)] = newVal;
         setTeams(temp);
         temp.forEach((field) => {
             teamNew[field['name']] = field['value'];
@@ -180,10 +181,10 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
             
             db
             .collection('years')
-            .doc('2023')
+            .doc(year+'')
             .collection('regionals')
-            .doc('idbo')
-            .collection('teams').doc("pitscoutChecklist")
+            .doc(regional)
+            .collection('teamChecklist').doc("teams")
             .set(teamNew).then(() => {
                 Toast.show({
                     type: 'success',
@@ -257,13 +258,13 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                     selectedIndex={new IndexPath(teams.indexOf(team || ''))}
                     label={'Select Team'}
                     onSelect={(currIndex) => {
-                        setTeam(teams[parseInt(currIndex.toString()) - 1].name);
+                        setTeam(teams[parseInt(currIndex.toString()) - 1]["name"]);
                     }}
                     placeholder="Select Team"
                     style={{ marginBottom: '4%' }}
                     value={team}
                 >
-                    {teams.map(r => <SelectItem title={r.name} disabled={r.value}/>)}
+                    {teams.map(r => <SelectItem title={r["name"]} disabled={r["value"]}/>)}
                 </Select>
                 {pitScoutFields.map((field: any, index: number) => {
                     if (Array.isArray(field['value'])) {

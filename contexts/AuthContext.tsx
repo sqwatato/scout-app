@@ -27,7 +27,7 @@ const useAuth = () => {
     return useContext(AuthContext);
 };
 
-const AuthProvider: FC = ({ children }) => {
+const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<firebase.User | null>();
     const [loading, setLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
@@ -69,5 +69,6 @@ const AuthProvider: FC = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
 
 export { AuthProvider, useAuth };
