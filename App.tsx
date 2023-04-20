@@ -10,6 +10,7 @@ import QRScanner from "./pages/QRScanner";
 import Login from "./pages/Login";
 import Match from "./pages/Match";
 import PitScout from './pages/PitScout';
+import Comment from "./components/Comment";
 import { auth } from "./firebase";
 
 console.warn = () => { };
@@ -47,6 +48,11 @@ export default function App() {
           <Stack.Screen
             name="PitScout"
             component={PitScout}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={Comment}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

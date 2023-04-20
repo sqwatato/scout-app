@@ -14,8 +14,9 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
-    const [regionals, setRegionals] = useState<string[]>(['casf']);
-    const [regional, setRegional] = useState<string>('casf');
+    const [regionals, setRegionals] = useState<string[]>(['cur']);
+    const [regional, setRegional] = useState<string>('cur');
+    const year = new Date().getFullYear();
    // const [teamNum, setTeamNum] = useState<number>();
     const [hasData, setHasData] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -115,11 +116,11 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         const prompts: any[] = []
         await db
             .collection('years')
-            .doc('2023')
+            .doc(year+'')
             .collection('regionals')
-            .doc('idbo')
-            .collection('teams').doc("pitscoutChecklist").get().then((data) => {
-                let arr = data.data();
+            .doc(regional)
+            .collection('teamChecklist').doc("teams").get().then((data) => {
+                let arr: any = data.data();
                 arr = Object.entries(arr);
                 arr?.map((field, index: number) => {
                     let data = {
@@ -130,7 +131,6 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                 });
             });
         setHasData(false);
-        setFinishTeam(false);
         return prompts;
     }
 

@@ -163,6 +163,16 @@ const Home: React.FC<Props> = ({ navigation }) => {
             >
               Continue Scouting
             </Button>
+            <Button
+              onPress={() => {
+                navigation.navigate("Comment");
+              }}
+              style={[styles.button, { shadowOpacity: 0 }]}
+              appearance="outline"
+              size="giant"
+            >
+              Add comment
+            </Button>
           </View>
         </View>
       </Layout>
