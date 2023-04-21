@@ -134,7 +134,6 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                 });
             });
         setHasData(false);
-        setFinishTeam(false);
         return prompts;
     }
 
