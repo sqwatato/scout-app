@@ -26,8 +26,8 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
     const [image, setImage] = useState<string>('');
     const [levels, setLevels] = React.useState([
         new IndexPath(0),
-        new IndexPath(1),
-        new IndexPath(2),
+        new IndexPath(-1),
+        new IndexPath(-1),
       ]);
       const [teams, setTeams] = useState<Object[]>([{name: '', value: false}]);
       const [team, setTeam] = useState<string>('115');
@@ -289,13 +289,13 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
                                     const newField = {
                                         "name": field['name'],
                                         "value": field['value'],
-                                        "selected": newLevelsValues.join(', '),
+                                        "selected": newLevelsValues.join(' '),
                                     }
                                     temp[index] = newField;
                                     setPitScoutFields(temp);
                                     setHasData(true);
                                 }}
-                              value={levelsValues.join(', ')}
+                              value={levelsValues.join(' ')}
                               label={field['name'].substring(0, field['name'].indexOf(':'))}
                               style={{ marginBottom: "3%" }}
                             >
