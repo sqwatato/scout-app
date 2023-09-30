@@ -14,8 +14,8 @@ interface CommentProps {
 
 const Comment: FC<CommentProps> = ({ navigation }) => {
 
-    const [regionals, setRegionals] = useState<string[]>(['cur']);
-    const [regional, setRegional] = useState<string>('cur');
+    const [regionals, setRegionals] = useState<string[]>(['cc']);
+    const [regional, setRegional] = useState<string>('cc');
     const [hasData, setHasData] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [teams, setTeams] = useState<Object[]>([{name: '', value: false}]);
@@ -106,6 +106,7 @@ const Comment: FC<CommentProps> = ({ navigation }) => {
 
     return (!loading ?
         <>
+            <View style={{width: "90%", paddingLeft: "10%"}}>
             <Toast position="bottom" bottomOffset={20} />
             <ScrollView
                 contentContainerStyle={{
@@ -116,6 +117,22 @@ const Comment: FC<CommentProps> = ({ navigation }) => {
                 }}
                 keyboardDismissMode="on-drag"
             >
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={{
+                        marginVertical: 40,
+                        marginBottom: 10,
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontWeight: "800",
+                            fontSize: 24,
+                        }}
+                    >
+                        ←
+                    </Text>
+                </TouchableOpacity>
                 <Select
                     selectedIndex={new IndexPath(regionals.indexOf(regional || ''))}
                     label={'Select Regional'}
@@ -176,6 +193,7 @@ const Comment: FC<CommentProps> = ({ navigation }) => {
                     Add Comment
                 </Button>
             </ScrollView>
+            </View>
         </> :
         <View
             style={{
@@ -187,6 +205,7 @@ const Comment: FC<CommentProps> = ({ navigation }) => {
         >
             <Spinner />
         </View>
+        
     );
 }
 

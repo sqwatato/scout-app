@@ -17,8 +17,8 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
 
     const pitScoutFields = usePitScout((state) => state.pitScoutFields);
     const setPitScoutFields = usePitScout((state) => state.setPitScoutFields);
-    const [regionals, setRegionals] = useState<string[]>(['cur']);
-    const [regional, setRegional] = useState<string>('cur');
+    const [regionals, setRegionals] = useState<string[]>(['cc']);
+    const [regional, setRegional] = useState<string>('cc');
     const year = new Date().getFullYear();
    // const [teamNum, setTeamNum] = useState<number>();
     const [hasData, setHasData] = useState<boolean>(false);
@@ -52,8 +52,11 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         (async () => {
             setTeams(await getTeams());
         })();
-    }, [finishTeam])
+    }, [finishTeam, regional])
 
+    useEffect(() => {
+        setTeams
+    })
     const initalizePitScoutFields = async () => {
         const prompts: any[] = []
         await db
@@ -136,7 +139,6 @@ const PitScoutForm: FC<PitScoutProps> = ({ navigation }) => {
         setHasData(false);
         return prompts;
     }
-
     const pushData = async () => {
         // if (team && isNaN(Number(team))) {
         //     Alert.alert('Enter valid team number');
