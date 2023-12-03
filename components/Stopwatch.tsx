@@ -1,5 +1,5 @@
 import { Button, Text } from "@ui-kitten/components";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { Alert, View } from "react-native";
 
 interface Props {
@@ -12,29 +12,66 @@ interface Props {
 const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) => {
   const [secs, setTime] = useState(postFields[fieldIndex] ? parseFloat(postFields[fieldIndex]) : 0);
   const [isRunning, setIsRunning] = useState(false);
+  const startTimeRef = useRef(0);
+  const pauseTimeRef = useRef(0);
+  const totalTimeRef = useRef(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
-  useEffect(() => {
-    let interval: any = undefined;
-    if (isRunning) {
-      interval = setInterval(() => {
-        let newS = secs + 0.1;
-        setTime(newS);
-      }, 100);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning, secs]);
+  const handleStart = () => {
+    startTimeRef.current = performance.now();
+    setIsRunning(true);
+  };
+
+  const handleStop = () => {
+    pauseTimeRef.current = performance.now();
+    totalTimeRef.current += pauseTimeRef.current - startTimeRef.current;
+    setIsRunning(false);
+  };
 
   const handleReset = () => {
-    setTime(0);
-    onChange(fieldIndex, 0);
+    setElapsedTime(0);
+    setIsRunning(false);
+    startTimeRef.current = 0;
+    pauseTimeRef.current = 0;
+    totalTimeRef.current = 0;
   };
 
-  const handleStartStop = () => {
-    if(isRunning){
-      onChange(fieldIndex, secs);
+  const tick = () => {
+    if (isRunning) {
+      const currentTime = performance.now();
+      const elapsedTimeWithoutPause = currentTime - startTimeRef.current;
+      const totalElapsedTime = elapsedTimeWithoutPause + totalTimeRef.current;
+      setElapsedTime(totalElapsedTime);
     }
-    setIsRunning(!isRunning);
   };
+
+  React.useEffect(() => {
+    const interval = setInterval(tick, 100);
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  // useEffect(() => {
+  //   let interval: any = undefined;
+  //   if (isRunning) {
+  //     interval = setInterval(() => {
+  //       let newS = secs + 0.1;
+  //       setTime(newS);
+  //     }, 100);
+  //   }
+  //   return () => clearInterval(interval);
+  // }, [isRunning, secs]);
+
+  // const handleReset = () => {
+  //   setTime(0);
+  //   onChange(fieldIndex, 0);
+  // };
+
+  // const handleStartStop = () => {
+  //   if(isRunning){
+  //     onChange(fieldIndex, secs);
+  //   }
+  //   setIsRunning(!isRunning);
+  // };
 
   return (
     <View
@@ -55,7 +92,7 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
           category="h6"
           style={{ marginVertical: 10, fontWeight: "200", fontSize: 20 }}
         >
-          {`${secs.toFixed(1)} s`}
+          {`${(elapsedTime/1000).toFixed(1)} s`}
         </Text>
         <View
           style={{
@@ -64,7 +101,7 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
         >
           {isRunning ? (
             <Button
-              onPress={handleStartStop}
+              onPress={handleStop}
               status="danger"
               style={{ margin: "1%" }}
               appearance="outline"
@@ -73,7 +110,7 @@ const Stopwatch: React.FC<Props> = ({ onChange, postFields, fieldIndex, name }) 
             </Button>
           ) : (
             <Button
-              onPress={handleStartStop}
+              onPress={handleStart}
               status="success"
               style={{ margin: "1%" }}
               appearance="outline"
