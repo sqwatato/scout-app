@@ -70,7 +70,6 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
       {gamePiece.match("Cube") ? <Button onPress={()=>{setGamePiece('')}} appearance="filled"> 🟪 </Button> : <Button onPress={()=>{setGamePiece('Cube')}} appearance="outline"> 🟪 </Button>}
       
         {fields?.map((field, index) => {
-          if(gamePiece == "") return;
           if(field['name'].includes('Cube') && !gamePiece.match("Cube")) return;
           if(field['name'].includes('Cone') && !gamePiece.match("Cone")) return;
           if (field['type'] == 'counter' || field['type'] == 'rating') {
@@ -99,7 +98,6 @@ const Teleop: FC<TeleopProps> = ({ navigation, fields }) => {
                   const temp: any[] = [...teleopFields];
                   temp[index] = val;
                   setTeleopFields(temp);
-                  if (field['name'] === 'Played Defense') setPlayedDefense(val);
                 }}
                 style={{ marginTop: "3%", padding: 4 }}
               >
